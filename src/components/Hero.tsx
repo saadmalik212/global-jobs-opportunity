@@ -8,10 +8,9 @@ const STATS = [
 export default function Hero() {
   return (
     <section className="relative overflow-hidden">
-      {/* Your photo from /public — rename the file to match the src below,
-          or edit the src to match whatever you named it. */}
+     
       <img
-        src="/hero-photo.jpg"
+        src="/cover-bg.webp"
         alt=""
         className="absolute inset-0 h-full w-full object-cover"
       />

@@ -15,12 +15,6 @@ export default function Navbar() {
           >
             Browse jobs
           </Link>
-          <Link
-            href="/admin"
-            className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary-dark"
-          >
-            Admin panel
-          </Link>
         </nav>
       </div>
     </header>
