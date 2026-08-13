@@ -10,6 +10,24 @@ export default function Navbar() {
         </Link>
         <nav className="flex items-center gap-5">
           <Link
+            href="/about"
+            className="hidden text-sm font-medium text-ink/80 hover:text-primary sm:block"
+          >
+            About Us
+          </Link>
+          <Link
+            href="/contact"
+            className="hidden text-sm font-medium text-ink/80 hover:text-primary sm:block"
+          >
+            Contact
+          </Link>
+           <Link
+            href="/terms-and-conditions"
+            className="hidden text-sm font-medium text-ink/80 hover:text-primary sm:block"
+          >
+            Terms & Conditions
+          </Link>
+          <Link
             href="/#jobs"
             className="hidden text-sm font-medium text-ink/80 hover:text-primary sm:block"
           >

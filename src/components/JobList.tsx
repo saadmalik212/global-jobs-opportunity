@@ -4,15 +4,9 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Sidebar from "./Sidebar";
 import JobCard from "./JobCard";
+import WhatsAppBanner from "./WhatsAppBanner";
 import { fetchJobs } from "@/lib/jobs";
 import { Job, JobFilters } from "@/lib/types";
-
-const EMPTY_FILTERS: JobFilters = {
-  cities: [],
-  countries: [],
-  remoteOnly: false,
-  internshipOnly: false,
-};
 
 function jobMatches(job: Job, filters: JobFilters): boolean {
   const haystack = `${job.title} ${job.location} ${job.jobType} ${job.experience}`.toLowerCase();
@@ -38,11 +32,18 @@ function jobMatches(job: Job, filters: JobFilters): boolean {
 export default function JobList() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState<JobFilters>(EMPTY_FILTERS);
 
-  // Reads ?job=<id> from a shared direct link, e.g. yoursite.com/?job=abc123
   const searchParams = useSearchParams();
   const targetJobId = searchParams.get("job");
+  const initialCity = searchParams.get("city");
+  const initialCountry = searchParams.get("country");
+
+  const [filters, setFilters] = useState<JobFilters>(() => ({
+    cities: initialCity ? [initialCity] : [],
+    countries: initialCountry ? [initialCountry] : [],
+    remoteOnly: false,
+    internshipOnly: false,
+  }));
 
   useEffect(() => {
     fetchJobs()
@@ -55,8 +56,6 @@ export default function JobList() {
     [jobs, filters]
   );
 
-  // Once jobs are loaded, scroll straight to the shared job — other jobs
-  // stay visible above/below it, only the scroll position changes.
   useEffect(() => {
     if (!targetJobId || loading) return;
     const el = document.getElementById(`job-${targetJobId}`);
@@ -67,9 +66,16 @@ export default function JobList() {
 
   return (
     <section id="jobs" className="mx-auto grid max-w-7xl gap-6 px-5 py-12 sm:px-8 lg:grid-cols-[280px_1fr]">
-      <Sidebar filters={filters} onChange={setFilters} />
+      <div>
+        <h2 className="mb-3 font-display text-lg font-bold text-ink">
+          Find the Right Job Faster with Smart Filters
+        </h2>
+        <Sidebar filters={filters} onChange={setFilters} />
+      </div>
 
       <div>
+        <WhatsAppBanner />
+
         <div className="mb-4 flex items-center justify-between">
           <h2 className="font-display text-xl font-bold text-ink">
             Latest openings

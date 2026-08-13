@@ -7,7 +7,7 @@ const STATS = [
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative overflow-hidden pt-10">
      
       <img
         src="/cover-bg.webp"

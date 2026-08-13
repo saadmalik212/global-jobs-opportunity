@@ -10,10 +10,10 @@
   --color-surface: #ffffff;      /* card surfaces */
   --color-ink: #17231d;          /* primary text */
   --color-muted: #6f6a61;        /* secondary text */
-  --color-primary: #0b6e4f;      /* emerald — growth / opportunity */
-  --color-primary-dark: #084c37;
+  --color-primary: #f4c430;       /* emerald — growth / opportunity */
+--color-primary-dark: #c99a00;
   --color-primary-light: #e4f3ec;
-  --color-accent: #e2a63b;       /* warm amber — highlight / CTA */
+  --color-accent: #ff3b30;       /* warm amber — highlight / CTA */
   --color-border: #ece3d6;
 
   --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
