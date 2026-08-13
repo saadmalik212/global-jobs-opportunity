@@ -1,0 +1,15 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /jobs/{jobId} {
+      // Anyone can view job posts on the public site.
+      allow read: if true;
+
+      // Only a signed-in admin (created manually in Firebase Auth) can
+      // create, edit, or delete job posts.
+      allow write: if request.auth != null;
+    }
+  }
+}
