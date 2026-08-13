@@ -65,7 +65,7 @@ export default function JobList() {
   }, [targetJobId, loading, visibleJobs]);
 
   return (
-    <section id="jobs" className="mx-auto grid max-w-7xl gap-6 px-5 py-12 sm:px-8 lg:grid-cols-[280px_1fr]">
+    <section id="jobs" className="scroll-mt-24 mx-auto grid max-w-7xl gap-6 px-5 py-12 sm:px-8 lg:grid-cols-[280px_1fr]">
       <div>
         <h2 className="mb-3 font-display text-lg font-bold text-ink">
           Find the Right Job Faster with Smart Filters
