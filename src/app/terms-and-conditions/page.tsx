@@ -17,12 +17,12 @@ export default function TermsAndConditions() {
               Terms &amp; Conditions
             </h1>
 
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--color-surface)]/70">
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--color-surface)]">
               These terms explain the rules and conditions for using Global
               Jobs Opportunity and our job discovery services.
             </p>
 
-            <p className="mt-5 text-sm text-[var(--color-surface)]/50">
+            <p className="mt-5 text-sm text-[var(--color-surface)]">
               Effective Date: August 13, 2026
             </p>
           </div>
