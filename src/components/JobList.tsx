@@ -8,6 +8,13 @@ import WhatsAppBanner from "./WhatsAppBanner";
 import { fetchJobs } from "@/lib/jobs";
 import { Job, JobFilters } from "@/lib/types";
 
+const EMPTY_FILTERS: JobFilters = {
+  cities: [],
+  countries: [],
+  remoteOnly: false,
+  internshipOnly: false,
+};
+
 function jobMatches(job: Job, filters: JobFilters): boolean {
   const haystack = `${job.title} ${job.location} ${job.jobType} ${job.experience}`.toLowerCase();
 
@@ -32,24 +39,34 @@ function jobMatches(job: Job, filters: JobFilters): boolean {
 export default function JobList() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState<JobFilters>(EMPTY_FILTERS);
 
   const searchParams = useSearchParams();
   const targetJobId = searchParams.get("job");
-  const initialCity = searchParams.get("city");
-  const initialCountry = searchParams.get("country");
-
-  const [filters, setFilters] = useState<JobFilters>(() => ({
-    cities: initialCity ? [initialCity] : [],
-    countries: initialCountry ? [initialCountry] : [],
-    remoteOnly: false,
-    internshipOnly: false,
-  }));
+  const cityParam = searchParams.get("city");
+  const countryParam = searchParams.get("country");
 
   useEffect(() => {
     fetchJobs()
       .then(setJobs)
       .finally(() => setLoading(false));
   }, []);
+
+  // Keep the sidebar in sync with the footer's "Most Demand Cities/Countries"
+  // links — this re-runs every time the URL's ?city= or ?country= changes,
+  // even if the JobList component itself never unmounts (e.g. clicking a
+  // different footer link while already on the home page).
+  useEffect(() => {
+    if (!cityParam) return;
+    setFilters((prev) => ({ ...prev, cities: [cityParam] }));
+    document.getElementById("jobs")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [cityParam]);
+
+  useEffect(() => {
+    if (!countryParam) return;
+    setFilters((prev) => ({ ...prev, countries: [countryParam] }));
+    document.getElementById("jobs")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [countryParam]);
 
   const visibleJobs = useMemo(
     () => jobs.filter((job) => jobMatches(job, filters)),
@@ -65,7 +82,7 @@ export default function JobList() {
   }, [targetJobId, loading, visibleJobs]);
 
   return (
-    <section id="jobs" className="scroll-mt-24 mx-auto grid max-w-7xl gap-6 px-5 py-12 sm:px-8 lg:grid-cols-[280px_1fr]">
+    <section id="jobs" className="mx-auto grid max-w-7xl gap-6 px-5 py-12 sm:px-8 lg:grid-cols-[280px_1fr]">
       <div>
         <h2 className="mb-3 font-display text-lg font-bold text-ink">
           Find the Right Job Faster with Smart Filters

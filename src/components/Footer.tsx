@@ -3,16 +3,16 @@ import Logo from "./Logo";
 import { PAKISTAN_DEMAND_CITIES, TARGET_COUNTRIES } from "@/lib/constants";
 
 const SOCIAL_LINKS = [
-  { label: "LinkedIn", href: "#" },
-  { label: "Instagram", href: "#" },
-  { label: "Facebook", href: "#" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/global-jobs-opportunity-b807623ba/" },
+  { label: "Instagram", href: "https://www.instagram.com/globaljobsopportunity/" },
+  { label: "Facebook", href: "https://www.facebook.com/globaljobsopportunity/" },
 ];
 
 const QUICK_LINKS = [
   { label: "Browse Jobs", href: "/#jobs" },
   { label: "About Us", href: "/about" },
   { label: "Contact", href: "/contact" },
-  { label: "Terms & Conditions", href: "/terms-and-condition" },
+  { label: "Terms & Conditions", href: "/terms-and-conditions" },
 ];
 
 export default function Footer() {
@@ -23,7 +23,7 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <Logo size="sm" />
             <p className="mt-3 text-sm text-muted">
-              Verified job listings across Pakistan and abroad, updated every day.
+              Verified job listings across World Wide, updated every day.
             </p>
           </div>
 
