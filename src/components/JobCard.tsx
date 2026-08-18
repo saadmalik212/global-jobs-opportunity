@@ -1,10 +1,10 @@
+import Link from "next/link";
 import { Job } from "@/lib/types";
 import { timeAgo } from "@/lib/timeAgo";
 import { buildApplyHref } from "@/lib/applyLink";
 
 interface Props {
   job: Job;
-
   highlighted?: boolean;
 }
 
@@ -47,7 +47,7 @@ export default function JobCard({ job, highlighted = false }: Props) {
       </p>
 
       {job.applyLink && (
-        <p className="text-sm text-ink/85">
+        <p className="mb-2 text-sm text-ink/85">
           <span className="font-semibold text-ink">Apply Now: </span>
           <a
             href={buildApplyHref(job.applyLink)}
@@ -59,6 +59,13 @@ export default function JobCard({ job, highlighted = false }: Props) {
           </a>
         </p>
       )}
+
+      <Link
+        href={`/jobs/${job.id}`}
+        className="text-xs font-medium text-muted underline decoration-dotted hover:text-primary"
+      >
+        View full details →
+      </Link>
     </article>
   );
 }

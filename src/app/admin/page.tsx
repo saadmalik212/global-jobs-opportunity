@@ -30,10 +30,9 @@ export default function AdminDashboard() {
     }
   }
 
-  // Every job gets a shareable link back to the public site, scrolled
-  // straight to that job — e.g. https://yoursite.com/?job=abc123
-  async function handleCopyLink(id: string) {
-    const url = `${window.location.origin}/?job=${id}`;
+
+async function handleCopyLink(id: string) {
+    const url = `${window.location.origin}/jobs/${id}`;
     try {
       await navigator.clipboard.writeText(url);
       setCopiedId(id);
