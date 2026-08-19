@@ -9,6 +9,7 @@ const navLinks = [
   { href: "/contact", label: "Contact" },
   { href: "/terms-and-conditions", label: "Terms & Conditions" },
   { href: "/#jobs", label: "Browse jobs" },
+  { label: "Blog", href: "/blog" },
 ];
 
 export default function Navbar() {

@@ -12,6 +12,7 @@ const QUICK_LINKS = [
   { label: "Browse Jobs", href: "/#jobs" },
   { label: "About Us", href: "/about" },
   { label: "Contact", href: "/contact" },
+  { label: "Blog", href: "/blog" },
   { label: "Terms & Conditions", href: "/terms-and-conditions" },
 ];
 

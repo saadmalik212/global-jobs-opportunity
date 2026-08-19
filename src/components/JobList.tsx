@@ -45,6 +45,7 @@ export default function JobList() {
   const targetJobId = searchParams.get("job");
   const cityParam = searchParams.get("city");
   const countryParam = searchParams.get("country");
+  const remoteParam = searchParams.get("remote");
 
   useEffect(() => {
     fetchJobs()
@@ -52,10 +53,6 @@ export default function JobList() {
       .finally(() => setLoading(false));
   }, []);
 
-  // Keep the sidebar in sync with the footer's "Most Demand Cities/Countries"
-  // links — this re-runs every time the URL's ?city= or ?country= changes,
-  // even if the JobList component itself never unmounts (e.g. clicking a
-  // different footer link while already on the home page).
   useEffect(() => {
     if (!cityParam) return;
     setFilters((prev) => ({ ...prev, cities: [cityParam] }));
@@ -67,6 +64,12 @@ export default function JobList() {
     setFilters((prev) => ({ ...prev, countries: [countryParam] }));
     document.getElementById("jobs")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [countryParam]);
+
+  useEffect(() => {
+    if (remoteParam !== "true") return;
+    setFilters((prev) => ({ ...prev, remoteOnly: true }));
+    document.getElementById("jobs")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [remoteParam]);
 
   const visibleJobs = useMemo(
     () => jobs.filter((job) => jobMatches(job, filters)),
