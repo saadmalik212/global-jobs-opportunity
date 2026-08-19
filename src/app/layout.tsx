@@ -4,6 +4,7 @@ import { SITE_URL } from "@/lib/constants";
 import { getOrganizationSchema, getWebsiteSchema } from "@/lib/schema";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { siteKeywords } from "@/lib/seoKeywords";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -16,20 +17,8 @@ export const metadata: Metadata = {
   description:
     "Find the latest jobs, remote jobs, international career opportunities, and hiring listings from companies worldwide. Explore jobs by country, city, industry, and job type.",
 
-  keywords: [
-    "global jobs",
-    "latest jobs",
-    "international jobs",
-    "remote jobs",
-    "work from home jobs",
-    "career opportunities",
-    "job opportunities",
-    "jobs worldwide",
-    "international career opportunities",
-    "online jobs",
-    "job portal",
-    "jobs abroad",
-  ],
+  
+ keywords: siteKeywords,
 
   authors: [
     {
@@ -96,7 +85,6 @@ export const metadata: Metadata = {
     address: false,
   },
   verification: {
-    // Add your verification codes here
     // google: "your-google-verification-code",
     // yandex: "your-yandex-verification-code",
   },
@@ -119,14 +107,14 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className="bg-canvas font-body text-ink antialiased">
-        {/* Organization Schema */}
+       
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(organizationSchema),
           }}
         />
-        
+
         {/* Website Schema */}
         <script
           type="application/ld+json"

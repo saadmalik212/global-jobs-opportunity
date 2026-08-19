@@ -7,7 +7,6 @@ import { buildApplyHref } from "@/lib/applyLink";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import { getBreadcrumbSchema } from "@/lib/schema";
 
-
 export const dynamic = "force-dynamic";
 
 interface Props {
@@ -20,27 +19,31 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: `Job not found — ${SITE_NAME}` };
   }
 
-  const description = `${job.title} in ${job.location}. ${job.experience || "Experience varies"} • ${job.jobType || "Various"}. Apply now on ${SITE_NAME}.`;
+  const description = `Apply for ${job.title} in ${job.location}. ${job.experience || "Experience varies"} • ${job.jobType || "Various"}. Discover remote & global career opportunities on ${SITE_NAME}.`;
 
   return {
     title: `${job.title} — ${job.location} | ${SITE_NAME}`,
     description,
+    // Expanded dynamic keywords for better Search Coverage
     keywords: [
       job.title,
-      job.location,
-      job.jobType,
-      "job opportunity",
+      `${job.title} jobs`,
+      `${job.title} in ${job.location}`,
+      `${job.location} job opportunities`,
+      `${job.jobType} hiring`,
+      "remote job opportunity",
       "apply now",
+      "careers 2026",
     ],
     alternates: { 
       canonical: `${SITE_URL}/jobs/${job.id}`,
     },
     openGraph: {
-      title: job.title,
+      title: `${job.title} — ${job.location}`,
       description,
       url: `${SITE_URL}/jobs/${job.id}`,
       siteName: SITE_NAME,
-      type: "website",
+      type: "article",
       images: [
         {
           url: `${SITE_URL}/og-image.png`,
@@ -52,7 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: job.title,
+      title: `${job.title} — ${job.location}`,
       description,
       images: [`${SITE_URL}/og-image.png`],
     },
@@ -76,17 +79,29 @@ export default async function JobDetailPage({ params }: Props) {
     .toLowerCase()
     .includes("remote");
 
-  // Google for Jobs structured data — this is what makes the listing
-  // eligible to show up in Google's dedicated job search results.
+  // Properly formatted description for Google Schema Parsing
+  const fullDescriptionHtml = `
+    <p><strong>Job Title:</strong> ${job.title}</p>
+    <p><strong>Location:</strong> ${job.location}</p>
+    <p><strong>Experience:</strong> ${job.experience}</p>
+    <h3>Requirements:</h3>
+    <ul>
+      ${job.requirements.map((r) => `<li><strong>${r.title}:</strong> ${r.details}</li>`).join("")}
+    </ul>
+    <p>${job.noticeLine}</p>
+  `.replace(/\s+/g, ' ').trim();
+
+  // Expiry date calculation (Default: 30 days after creation if not specified)
+  const createdDate = new Date(job.createdAt);
+  const validThroughDate = new Date(createdDate.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
+
   const jsonLd = {
     "@context": "https://schema.org/",
     "@type": "JobPosting",
     title: job.title,
-    description: [
-      ...job.requirements.map((r) => `${r.title}: ${r.details}`),
-      job.noticeLine,
-    ].join(". "),
-    datePosted: new Date(job.createdAt).toISOString(),
+    description: fullDescriptionHtml,
+    datePosted: createdDate.toISOString(),
+    validThrough: validThroughDate,
     employmentType: guessEmploymentType(job.jobType),
     hiringOrganization: {
       "@type": "Organization",
@@ -94,6 +109,10 @@ export default async function JobDetailPage({ params }: Props) {
       sameAs: SITE_URL,
     },
     jobLocationType: isRemote ? "TELECOMMUTE" : undefined,
+    applicantLocationRequirements: isRemote ? {
+      "@type": "Country",
+      name: "WORLDWIDE"
+    } : undefined,
     jobLocation: isRemote
       ? undefined
       : {
@@ -103,11 +122,9 @@ export default async function JobDetailPage({ params }: Props) {
             addressLocality: job.location,
           },
         },
-    baseSalary: undefined,
     directApply: true,
   };
 
-  // Breadcrumb schema for navigation and SEO
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: "Home", url: SITE_URL },
     { name: "Jobs", url: `${SITE_URL}/#jobs` },
@@ -118,13 +135,11 @@ export default async function JobDetailPage({ params }: Props) {
     <section className="mx-auto max-w-2xl px-5 py-12 sm:px-8">
       <script
         type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
       <script
         type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
