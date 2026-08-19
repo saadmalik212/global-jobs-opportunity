@@ -3,7 +3,7 @@ import Logo from "./Logo";
 import { PAKISTAN_DEMAND_CITIES, TARGET_COUNTRIES } from "@/lib/constants";
 
 const SOCIAL_LINKS = [
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/global-jobs-opportunity-b807623ba/" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/muhammad-saad-b807623ba/" },
   { label: "Instagram", href: "https://www.instagram.com/globaljobsopportunity/" },
   { label: "Facebook", href: "https://www.facebook.com/globaljobsopportunity/" },
 ];

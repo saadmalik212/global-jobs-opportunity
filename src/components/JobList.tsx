@@ -12,6 +12,7 @@ const EMPTY_FILTERS: JobFilters = {
   cities: [],
   countries: [],
   remoteOnly: false,
+  onsiteOnly: false,
   internshipOnly: false,
 };
 
@@ -31,6 +32,10 @@ function jobMatches(job: Job, filters: JobFilters): boolean {
   }
 
   if (filters.remoteOnly && !haystack.includes("remote")) return false;
+  if (
+    filters.onsiteOnly &&
+    !haystack.replace(/[-\s]/g, "").includes("onsite")
+  ) return false;
   if (filters.internshipOnly && !haystack.includes("intern")) return false;
 
   return true;
@@ -67,7 +72,7 @@ export default function JobList() {
 
   useEffect(() => {
     if (remoteParam !== "true") return;
-    setFilters((prev) => ({ ...prev, remoteOnly: true }));
+    setFilters((prev) => ({ ...prev, remoteOnly: true, onsiteOnly: false }));
     document.getElementById("jobs")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [remoteParam]);
 
@@ -116,7 +121,7 @@ export default function JobList() {
           </div>
         ) : visibleJobs.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-border bg-surface p-10 text-center text-muted">
-            Koi job filters se match nahi hui — filters clear kar ke dubara try karein.
+            No jobs match your selected filters. Please clear the filters and try another.
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2">

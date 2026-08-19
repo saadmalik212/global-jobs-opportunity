@@ -24,13 +24,20 @@ export default function Sidebar({ filters, onChange }: Props) {
   }
 
   function clearAll() {
-    onChange({ cities: [], countries: [], remoteOnly: false, internshipOnly: false });
+    onChange({
+      cities: [],
+      countries: [],
+      remoteOnly: false,
+      onsiteOnly: false,
+      internshipOnly: false,
+    });
   }
 
   const hasActiveFilters =
     filters.cities.length > 0 ||
     filters.countries.length > 0 ||
     filters.remoteOnly ||
+    filters.onsiteOnly ||
     filters.internshipOnly;
 
   return (
@@ -110,16 +117,37 @@ export default function Sidebar({ filters, onChange }: Props) {
         </div>
       </fieldset>
 
-      {/* Remote / Internship */}
+      {/* Work location / Internship */}
       <fieldset className="space-y-2 border-t border-border pt-4">
         <label className="flex cursor-pointer items-center gap-2 text-sm font-medium text-ink">
           <input
             type="checkbox"
             checked={filters.remoteOnly}
-            onChange={() => onChange({ ...filters, remoteOnly: !filters.remoteOnly })}
+            onChange={() =>
+              onChange({
+                ...filters,
+                remoteOnly: !filters.remoteOnly,
+                onsiteOnly: false,
+              })
+            }
             className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
           />
           Remote
+        </label>
+        <label className="flex cursor-pointer items-center gap-2 text-sm font-medium text-ink">
+          <input
+            type="checkbox"
+            checked={filters.onsiteOnly}
+            onChange={() =>
+              onChange({
+                ...filters,
+                onsiteOnly: !filters.onsiteOnly,
+                remoteOnly: false,
+              })
+            }
+            className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+          />
+          Onsite
         </label>
         <label className="flex cursor-pointer items-center gap-2 text-sm font-medium text-ink">
           <input

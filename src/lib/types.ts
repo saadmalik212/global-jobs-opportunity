@@ -23,5 +23,6 @@ export interface JobFilters {
   cities: string[];
   countries: string[];
   remoteOnly: boolean;
+  onsiteOnly: boolean;
   internshipOnly: boolean;
 }
