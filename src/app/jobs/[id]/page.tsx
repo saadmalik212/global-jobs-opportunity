@@ -172,7 +172,11 @@ export default async function JobDetailPage({ params }: Props) {
             {job.requirements.map((req, i) => (
               <li key={i} className="text-sm text-ink/85">
                 <span className="font-semibold text-ink">{req.title}: </span>
-                {req.details}
+                <ul className="ml-5 list-disc space-y-1">
+                  {req.details.split(/\r?\n/).filter((line) => line.trim()).map((line, lineIndex) => (
+                    <li key={lineIndex}>{line.trim()}</li>
+                  ))}
+                </ul>
               </li>
             ))}
           </ul>
