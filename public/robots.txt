@@ -1,0 +1,25 @@
+# Global Jobs Opportunity - robots.txt
+# Generated for search engine crawlers
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /.next
+Disallow: /api/webhooks
+
+# Allow specific crawlers additional access
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Slow down aggressive crawlers
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+# Sitemap location
+Sitemap: https://globaljobsopportunity.com/sitemap.xml

@@ -20,5 +20,5 @@ export const DEFAULT_NOTICE_LINE =
   "Before applying, please carefully review all the job requirements";
 
 export const SITE_NAME = "Global Jobs Opportunity";
-export const SITE_TAGLINE = "Job ke liye, HR Posting Partner.com";
+export const SITE_TAGLINE = "Job ke liye, globaljobsopportunity.com";
 export const SITE_URL = "https://globaljobsopportunity.com";

@@ -1,4 +1,30 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { SITE_URL } from "@/lib/constants";
+
+export const metadata: Metadata = {
+  title: "Terms & Conditions | Global Jobs Opportunity",
+  description:
+    "Read the terms and conditions for using Global Jobs Opportunity. Understand the rules and conditions for accessing our job discovery platform.",
+  keywords: [
+    "terms and conditions",
+    "terms of service",
+    "legal",
+    "job platform terms",
+  ],
+  alternates: {
+    canonical: `${SITE_URL}/terms-and-conditions`,
+  },
+  robots: {
+    index: false, // Optional: exclude from search if it's legal/admin content
+  },
+  openGraph: {
+    type: "website",
+    title: "Terms & Conditions | Global Jobs Opportunity",
+    description: "Terms and Conditions for Global Jobs Opportunity",
+    url: `${SITE_URL}/terms-and-conditions`,
+  },
+};
 
 export default function TermsAndConditions() {
   return (
@@ -350,32 +376,7 @@ export default function TermsAndConditions() {
         </div>
       </section>
 
-      {/* Bottom Navigation */}
-      <section className="border-t border-[var(--color-border)] bg-[var(--color-surface)]">
-        <div className="mx-auto flex max-w-5xl flex-wrap justify-center gap-x-8 gap-y-3 px-6 py-8 text-sm text-[var(--color-muted)] sm:px-8">
-          <Link
-            href="/about"
-            className="transition hover:text-[var(--color-primary-dark)]"
-          >
-            About Us
-          </Link>
-
-        
-          <Link
-            href="/contact"
-            className="transition hover:text-[var(--color-primary-dark)]"
-          >
-            Contact Us
-          </Link>
-
-          <Link
-            href="/#jobs"
-            className="transition hover:text-[var(--color-primary-dark)]"
-          >
-            Browse Jobs
-          </Link>
-        </div>
-      </section>
+    
     </main>
   );
 }

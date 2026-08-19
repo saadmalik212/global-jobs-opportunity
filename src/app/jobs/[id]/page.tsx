@@ -5,6 +5,7 @@ import { fetchJob } from "@/lib/jobs";
 import { timeAgo } from "@/lib/timeAgo";
 import { buildApplyHref } from "@/lib/applyLink";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
+import { getBreadcrumbSchema } from "@/lib/schema";
 
 
 export const dynamic = "force-dynamic";
@@ -24,13 +25,36 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${job.title} — ${job.location} | ${SITE_NAME}`,
     description,
-    alternates: { canonical: `${SITE_URL}/jobs/${job.id}` },
+    keywords: [
+      job.title,
+      job.location,
+      job.jobType,
+      "job opportunity",
+      "apply now",
+    ],
+    alternates: { 
+      canonical: `${SITE_URL}/jobs/${job.id}`,
+    },
     openGraph: {
       title: job.title,
       description,
       url: `${SITE_URL}/jobs/${job.id}`,
       siteName: SITE_NAME,
       type: "website",
+      images: [
+        {
+          url: `${SITE_URL}/og-image.png`,
+          width: 1200,
+          height: 630,
+          alt: job.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: job.title,
+      description,
+      images: [`${SITE_URL}/og-image.png`],
     },
   };
 }
@@ -83,12 +107,25 @@ export default async function JobDetailPage({ params }: Props) {
     directApply: true,
   };
 
+  // Breadcrumb schema for navigation and SEO
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: "Home", url: SITE_URL },
+    { name: "Jobs", url: `${SITE_URL}/#jobs` },
+    { name: job.title, url: `${SITE_URL}/jobs/${job.id}` },
+  ]);
+
   return (
     <section className="mx-auto max-w-2xl px-5 py-12 sm:px-8">
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <Link href="/#jobs" className="mb-6 inline-block text-sm text-muted hover:text-primary">

@@ -1,5 +1,36 @@
-
+import type { Metadata } from "next";
 import Link from "next/link";
+import { SITE_URL, SITE_NAME } from "@/lib/constants";
+
+export const metadata: Metadata = {
+  title: "About Us | Global Jobs Opportunity",
+  description:
+    "Learn about Global Jobs Opportunity - a job discovery platform connecting job seekers with opportunities worldwide. Our mission is to make finding employment easier.",
+  keywords: [
+    "about global jobs opportunity",
+    "job platform",
+    "career opportunities",
+    "job search platform",
+  ],
+  alternates: {
+    canonical: `${SITE_URL}/about`,
+  },
+  openGraph: {
+    type: "website",
+    title: "About Global Jobs Opportunity",
+    description:
+      "Learn about our mission to connect job seekers with global career opportunities.",
+    url: `${SITE_URL}/about`,
+    images: [
+      {
+        url: `${SITE_URL}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: "About Global Jobs Opportunity",
+      },
+    ],
+  },
+};
 
 export default function AboutUs() {
   return (
@@ -353,46 +384,11 @@ export default function AboutUs() {
           </Link>
         </div>
       </section>
-
-      {/* Footer Links */}
-      <section className="border-t border-[var(--color-border)] bg-[var(--color-surface)]">
-        <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-x-8 gap-y-3 px-6 py-8 text-sm text-[var(--color-muted)]">
-          <Link
-            href="/privacy-policy"
-            className="transition hover:text-[var(--color-primary-dark)]"
-          >
-            Privacy Policy
-          </Link>
-
-          <Link
-            href="/terms-and-conditions"
-            className="transition hover:text-[var(--color-primary-dark)]"
-          >
-            Terms & Conditions
-          </Link>
-
-          <Link
-            href="/contact"
-            className="transition hover:text-[var(--color-primary-dark)]"
-          >
-            Contact Us
-          </Link>
-
-          <Link
-            href="/jobs"
-            className="transition hover:text-[var(--color-primary-dark)]"
-          >
-            Browse Jobs
-          </Link>
-        </div>
-      </section>
     </main>
   );
 }
 
-/* =========================================================
-   Info Card
-========================================================= */
+
 
 function InfoCard({
   title,
