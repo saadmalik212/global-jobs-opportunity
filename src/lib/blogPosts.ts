@@ -111,6 +111,84 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
   },
+  {
+    slug: "how-to-write-a-resume-that-gets-noticed",
+    title: "How to Write a Resume That Gets Noticed in 2026",
+    description:
+      "A simple resume framework for showing your impact clearly and getting through the first screening round.",
+    publishedAt: "2026-08-10",
+    readingTime: "5 min read",
+    content: [
+      {
+        paragraphs: [
+          "A strong resume does not need to be flashy. It needs to make your experience easy to understand and connect your skills to the role in front of you. Recruiters often spend less than a minute on the first review, so clarity matters more than length.",
+        ],
+      },
+      {
+        heading: "Start with a clear headline",
+        paragraphs: [
+          "Use a short headline that says what you do and where you create value, such as Frontend Developer specialising in accessible React applications. This gives the reader useful context before they reach your work history.",
+        ],
+      },
+      {
+        heading: "Show outcomes, not task lists",
+        paragraphs: [
+          "Replace responsibilities with evidence. Instead of saying you managed a website, explain that you improved checkout completion by 18 percent or reduced page load time by two seconds. Numbers make your contribution memorable, even when they are approximate and honestly explained.",
+        ],
+      },
+      {
+        heading: "Tailor the first half",
+        paragraphs: [
+          "Match the job description's most important requirements in your summary, skills, and recent experience. You do not need to rewrite every line for every application, but the top third of your resume should clearly fit the role.",
+        ],
+      },
+      {
+        heading: "Keep the document easy to scan",
+        paragraphs: [
+          "Use consistent headings, comfortable spacing, and simple formatting. Save the final version as a PDF with your name and role in the filename, then check it on a phone before sending it.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "best-skills-to-learn-for-remote-work",
+    title: "Best Skills to Learn for Remote Work in Pakistan",
+    description:
+      "Explore practical, high-value skills that can help you compete for remote roles and build a stronger portfolio.",
+    publishedAt: "2026-08-15",
+    readingTime: "7 min read",
+    content: [
+      {
+        paragraphs: [
+          "Remote work rewards people who can deliver reliably, communicate clearly, and keep learning. You do not need to master every trending tool; choose one valuable skill, practise it through real projects, and make the result visible to employers.",
+        ],
+      },
+      {
+        heading: "Technical and digital skills",
+        paragraphs: [
+          "Web development, quality assurance, data analysis, SEO, performance marketing, and product design remain useful across many industries. Pick a direction that matches your interests and study the tools that appear repeatedly in real job descriptions.",
+        ],
+      },
+      {
+        heading: "Written communication",
+        paragraphs: [
+          "Clear written English is a career advantage on distributed teams. Practise writing concise project updates, thoughtful emails, and documentation that someone in another time zone can understand without a meeting.",
+        ],
+      },
+      {
+        heading: "Build proof while you learn",
+        paragraphs: [
+          "Create two or three small projects that solve realistic problems. A landing page, dashboard, campaign plan, or customer-support knowledge base can show more ability than a long list of completed courses. Publish your work and explain the decisions behind it.",
+        ],
+      },
+      {
+        heading: "Turn skills into opportunities",
+        paragraphs: [
+          "Add your projects to a focused portfolio, update your LinkedIn headline, and apply to roles where your current ability meets most of the requirements. Keep improving between applications and use feedback to make the next version stronger.",
+        ],
+      },
+    ],
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {

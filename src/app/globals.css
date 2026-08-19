@@ -31,8 +31,41 @@ html {
 
 body {
   background-color: var(--color-canvas);
+  background-image: radial-gradient(rgba(23, 35, 29, 0.06) 0.7px, transparent 0.7px);
+  background-size: 18px 18px;
   color: var(--color-ink);
   font-family: var(--font-body);
+}
+
+.blog-page {
+  position: relative;
+}
+
+.blog-intro {
+  border-left: 4px solid var(--color-primary);
+  padding-left: 1rem;
+}
+
+.blog-kicker {
+  color: var(--color-primary-dark);
+}
+
+.blog-card-accent {
+  position: absolute;
+  top: 0;
+  left: 1.5rem;
+  width: 4rem;
+  height: 4px;
+  background: var(--color-primary);
+}
+
+.blog-card-accent-2 { background: var(--color-accent); }
+.blog-card-accent-3 { background: #168aad; }
+.blog-card-accent-4 { background: #7a9e2a; }
+
+.blog-number {
+  color: var(--color-primary-dark);
+  letter-spacing: 0.1em;
 }
 
 ::selection {

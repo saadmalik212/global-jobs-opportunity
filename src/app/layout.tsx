@@ -9,6 +9,11 @@ import { siteKeywords } from "@/lib/seoKeywords";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
 
+  icons: {
+    icon: [{ url: "/logo.png", type: "image/png" }],
+    apple: [{ url: "/logo.png", type: "image/png" }],
+  },
+
   title: {
     default: "Global Jobs Opportunity | Latest Jobs Worldwide",
     template: "%s | Global Jobs Opportunity",
@@ -103,8 +108,8 @@ export default function RootLayout({
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#1e293b" />
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" href="/logo.png" />
+        <link rel="apple-touch-icon" href="/logo.png" />
       </head>
       <body className="bg-canvas font-body text-ink antialiased">
        

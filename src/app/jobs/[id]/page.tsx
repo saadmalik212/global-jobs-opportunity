@@ -6,6 +6,7 @@ import { timeAgo } from "@/lib/timeAgo";
 import { buildApplyHref } from "@/lib/applyLink";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import { getBreadcrumbSchema } from "@/lib/schema";
+import WhatsAppBanner from "@/components/WhatsAppBanner"; // Ensure path matches your setup
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +25,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${job.title} — ${job.location} | ${SITE_NAME}`,
     description,
-    // Expanded dynamic keywords for better Search Coverage
     keywords: [
       job.title,
       `${job.title} jobs`,
@@ -79,7 +79,6 @@ export default async function JobDetailPage({ params }: Props) {
     .toLowerCase()
     .includes("remote");
 
-  // Properly formatted description for Google Schema Parsing
   const fullDescriptionHtml = `
     <p><strong>Job Title:</strong> ${job.title}</p>
     <p><strong>Location:</strong> ${job.location}</p>
@@ -91,7 +90,6 @@ export default async function JobDetailPage({ params }: Props) {
     <p>${job.noticeLine}</p>
   `.replace(/\s+/g, ' ').trim();
 
-  // Expiry date calculation (Default: 30 days after creation if not specified)
   const createdDate = new Date(job.createdAt);
   const validThroughDate = new Date(createdDate.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
 
@@ -148,19 +146,27 @@ export default async function JobDetailPage({ params }: Props) {
       </Link>
 
       <article className="rounded-2xl border border-border bg-surface p-6">
-        <div className="mb-3 flex items-start justify-between gap-3">
+        {/* Title & Time */}
+        <div className="mb-2 flex items-start justify-between gap-3">
           <h1 className="font-display text-2xl font-bold text-ink">{job.title}</h1>
           <span className="shrink-0 rounded-full bg-primary-light px-2.5 py-1 font-mono text-[11px] font-medium text-primary-dark">
             {timeAgo(job.createdAt)}
           </span>
         </div>
 
+        {/* Notice Line - Moved right under Title */}
+        <p className="mb-4 rounded-lg bg-accent/10 px-3 py-2 text-xs font-medium text-ink/70">
+          ⚠️ {job.noticeLine}
+        </p>
+
+        {/* Meta Info */}
         <div className="mb-4 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted">
           <span>📍 {job.location}</span>
           <span>🧭 {job.experience}</span>
           <span>💼 {job.jobType}</span>
         </div>
 
+        {/* Requirements */}
         {job.requirements.length > 0 && (
           <ul className="mb-4 space-y-2">
             {job.requirements.map((req, i) => (
@@ -172,12 +178,9 @@ export default async function JobDetailPage({ params }: Props) {
           </ul>
         )}
 
-        <p className="mb-4 rounded-lg bg-accent/10 px-3 py-2 text-xs font-medium text-ink/70">
-          ⚠️ {job.noticeLine}
-        </p>
-
+        {/* Apply Link */}
         {job.applyLink && (
-          <p className="text-sm text-ink/85">
+          <p className="mb-6 text-sm text-ink/85">
             <span className="font-semibold text-ink">Apply Now: </span>
             <a
               href={buildApplyHref(job.applyLink)}
@@ -189,6 +192,9 @@ export default async function JobDetailPage({ params }: Props) {
             </a>
           </p>
         )}
+
+        {/* WhatsApp Banner Section */}
+        <WhatsAppBanner />
       </article>
     </section>
   );
