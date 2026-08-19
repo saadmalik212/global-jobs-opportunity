@@ -5,6 +5,7 @@ import { getOrganizationSchema, getWebsiteSchema } from "@/lib/schema";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { siteKeywords } from "@/lib/seoKeywords";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -22,8 +23,7 @@ export const metadata: Metadata = {
   description:
     "Find the latest jobs, remote jobs, international career opportunities, and hiring listings from companies worldwide. Explore jobs by country, city, industry, and job type.",
 
-  
- keywords: siteKeywords,
+  keywords: siteKeywords,
 
   authors: [
     {
@@ -112,7 +112,6 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/logo.png" />
       </head>
       <body className="bg-canvas font-body text-ink antialiased">
-       
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -132,6 +131,7 @@ export default function RootLayout({
         {children}
         <Footer />
       </body>
+      <GoogleAnalytics gaId="G-8RLLPRTZNT" />
     </html>
   );
 }
