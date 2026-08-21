@@ -5,6 +5,7 @@ import Link from "next/link";
 import Logo from "./Logo";
 
 const navLinks = [
+  { label: "ATS Resume", href: "/ats-resume" },
   { href: "/about", label: "About Us" },
   { href: "/contact", label: "Contact" },
   { href: "/terms-and-conditions", label: "Terms & Conditions" },

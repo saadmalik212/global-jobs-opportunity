@@ -9,6 +9,7 @@ const SOCIAL_LINKS = [
 ];
 
 const QUICK_LINKS = [
+   { label: "ATS Resume", href: "/ats-resume" },
   { label: "Browse Jobs", href: "/#jobs" },
   { label: "About Us", href: "/about" },
   { label: "Contact", href: "/contact" },

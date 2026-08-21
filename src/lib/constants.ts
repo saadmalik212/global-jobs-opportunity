@@ -22,3 +22,4 @@ export const DEFAULT_NOTICE_LINE =
 export const SITE_NAME = "Global Jobs Opportunity";
 export const SITE_TAGLINE = "Job ke liye, globaljobsopportunity.com";
 export const SITE_URL = "https://globaljobsopportunity.com";
+export const ATS_RESUME_EMAIL = "global.atsresumes@gmail.com";
