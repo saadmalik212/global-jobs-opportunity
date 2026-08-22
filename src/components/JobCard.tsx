@@ -56,19 +56,19 @@ export default function JobCard({ job, highlighted = false }: Props) {
         )}
 
         {/* Apply Link */}
-        {job.applyLink && (
-          <p className="mb-2 truncate text-sm text-ink/85">
-            <span className="font-semibold text-ink">Apply Now: </span>
-            <a
-              href={buildApplyHref(job.applyLink)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary underline decoration-primary/40 underline-offset-2 hover:text-primary-dark"
-            >
-              {job.applyLink}
-            </a>
-          </p>
-        )}
+             {job.applyLink && (
+        <p className="mb-2 text-sm text-ink/85">
+          <span className="font-semibold text-ink">Apply Now: </span>
+          <a
+            href={buildApplyHref(job.applyLink)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary underline decoration-primary/40 underline-offset-2 hover:text-primary-dark"
+          >
+            {job.applyLinkDisplay === "short" ? "Apply Here" : job.applyLink}
+          </a>
+        </p>
+      )}
       </div>
 
       <Link

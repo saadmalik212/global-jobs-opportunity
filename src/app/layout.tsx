@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { SITE_URL } from "@/lib/constants";
 import { getOrganizationSchema, getWebsiteSchema } from "@/lib/schema";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { siteKeywords } from "@/lib/seoKeywords";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import SiteChrome from "@/components/SiteChrome";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -119,7 +118,6 @@ export default function RootLayout({
           }}
         />
 
-        {/* Website Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -127,9 +125,7 @@ export default function RootLayout({
           }}
         />
 
-        <Navbar />
-        {children}
-        <Footer />
+        <SiteChrome>{children}</SiteChrome>
       </body>
       <GoogleAnalytics gaId="G-8RLLPRTZNT" />
     </html>

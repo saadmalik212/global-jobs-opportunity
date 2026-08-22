@@ -183,8 +183,8 @@ export default async function JobDetailPage({ params }: Props) {
         )}
 
         {/* Apply Link */}
-        {job.applyLink && (
-          <p className="mb-6 text-sm text-ink/85">
+              {job.applyLink && (
+          <p className="text-sm text-ink/85">
             <span className="font-semibold text-ink">Apply Now: </span>
             <a
               href={buildApplyHref(job.applyLink)}
@@ -192,7 +192,7 @@ export default async function JobDetailPage({ params }: Props) {
               rel="noopener noreferrer"
               className="text-primary underline decoration-primary/40 underline-offset-2 hover:text-primary-dark"
             >
-              {job.applyLink}
+              {job.applyLinkDisplay === "short" ? "Apply Here" : job.applyLink}
             </a>
           </p>
         )}

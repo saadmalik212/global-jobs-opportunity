@@ -20,6 +20,9 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
   const [experience, setExperience] = useState(initialValues?.experience ?? "");
   const [jobType, setJobType] = useState(initialValues?.jobType ?? "");
   const [applyLink, setApplyLink] = useState(initialValues?.applyLink ?? "");
+  const [applyLinkDisplay, setApplyLinkDisplay] = useState<"real" | "short">(
+    initialValues?.applyLinkDisplay ?? "real"
+  );
   const [requirements, setRequirements] = useState<JobRequirement[]>(
     initialValues?.requirements?.length ? initialValues.requirements : [{ ...EMPTY_REQUIREMENT }]
   );
@@ -57,6 +60,7 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
         experience: experience.trim(),
         jobType: jobType.trim(),
         applyLink: applyLink.trim(),
+        applyLinkDisplay,
         requirements: requirements
           .filter((r) => r.title.trim() || r.details.trim())
           .map((r) => ({ title: r.title.trim(), details: r.details.trim() })),
@@ -113,16 +117,28 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
         </Field>
       </div>
 
-      <Field
-        label="Apply Now"
-        hint="Email, LinkedIn job post, Google Form, company site — koi bhi daal dein, ye khud-ba-khud sahi clickable link ban jayega"
-      >
-        <input
-          value={applyLink}
-          onChange={(e) => setApplyLink(e.target.value)}
-          placeholder="e.g. hr@company.com or https://linkedin.com/jobs/view/123"
-          className={inputClass}
-        />
+      <Field label="Apply Now">
+        <div className="flex gap-2">
+          <input
+            value={applyLink}
+            onChange={(e) => setApplyLink(e.target.value)}
+            placeholder="e.g. hr@company.com or https://linkedin.com/jobs/view/123"
+            className={`${inputClass} flex-1`}
+          />
+          <select
+            value={applyLinkDisplay}
+            onChange={(e) => setApplyLinkDisplay(e.target.value as "real" | "short")}
+            className="shrink-0 rounded-lg border border-border bg-canvas px-2 py-2 text-sm text-ink focus:border-primary"
+          >
+            <option value="real">Real URL</option>
+            <option value="short">Short URL</option>
+          </select>
+        </div>
+        <p className="mt-1 text-xs text-muted">
+          {applyLinkDisplay === "short"
+            ? "Frontend par sirf \"Apply Here\" dikhega — link wahi upar wala hi kaam karega."
+            : "Frontend par yehi poora link jaisa daala hai waise hi dikhega."}
+        </p>
       </Field>
 
       <div>

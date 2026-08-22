@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import AtsResumeBanner from "./AtsResumeBanner";
 import AtsResumePopup from "./AtsResumePopup";
 
 export default function SiteChrome({ children }: { children: React.ReactNode }) {
@@ -15,6 +16,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
     <>
       <Navbar />
       {children}
+      <AtsResumeBanner />
       <Footer />
       <AtsResumePopup />
     </>

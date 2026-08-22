@@ -11,6 +11,7 @@ export interface Job {
   experience: string;
   jobType: string;
   applyLink: string; 
+  applyLinkDisplay: "real" | "short";
   requirements: JobRequirement[];
   noticeLine: string; 
   createdAt: number; 

@@ -29,7 +29,7 @@ export default function AtsResumePopup() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-sm animate-riseIn rounded-2xl border border-border bg-surface p-6 text-center shadow-xl"
+        className="relative w-full max-w-[520px] sm:max-w-[560px] md:max-w-[620px] animate-riseIn rounded-2xl border border-border bg-surface p-5 sm:p-6 text-center shadow-xl"
       >
         <button
           onClick={() => setVisible(false)}
@@ -43,20 +43,20 @@ export default function AtsResumePopup() {
           📄
         </div>
 
-        <h2 className="mb-2 font-display text-lg font-bold text-ink">
+        <h2 className="mb-2 font-display text-lg sm:text-2xl font-bold text-ink">
           Want an ATS Resume for Getting a Job?
         </h2>
-        <p className="mb-5 text-sm text-ink/70">
+        <p className="mb-5 text-sm sm:text-base text-ink/70">
           Get a professionally optimized resume that passes automated filters and reaches real
-          recruiters — for any country, starting at just $1.
+          recruiters — for any country.
         </p>
 
         <Link
           href="/ats-resume"
           onClick={() => setVisible(false)}
-          className="mb-2 block w-full rounded-full bg-primary py-2.5 text-sm font-semibold text-white transition hover:bg-primary-dark"
+          className="mb-2 block w-64 rounded-full bg-primary py-2.5 text-sm font-semibold text-white transition hover:bg-primary-dark mx-auto"
         >
-          Yes, Show Me
+          Yes, I Want
         </Link>
         <button
           onClick={() => setVisible(false)}
