@@ -5,12 +5,14 @@ import Link from "next/link";
 import { subscribeJobs, deleteJob } from "@/lib/jobs";
 import { Job } from "@/lib/types";
 import { timeAgo } from "@/lib/timeAgo";
+import { buildShareText } from "@/lib/shareText";
 
 export default function AdminDashboard() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [copiedTextId, setCopiedTextId] = useState<string | null>(null);
 
   useEffect(() => {
     const unsub = subscribeJobs((j) => {
@@ -30,8 +32,7 @@ export default function AdminDashboard() {
     }
   }
 
-
-async function handleCopyLink(id: string) {
+  async function handleCopyLink(id: string) {
     const url = `${window.location.origin}/jobs/${id}`;
     try {
       await navigator.clipboard.writeText(url);
@@ -39,6 +40,19 @@ async function handleCopyLink(id: string) {
       setTimeout(() => setCopiedId((cur) => (cur === id ? null : cur)), 2000);
     } catch {
       window.prompt("Link copy nahi ho saka — manually copy kar lein:", url);
+    }
+  }
+
+  // Copies the full job post as ready-to-paste text — for sharing directly
+  // on WhatsApp, Facebook, LinkedIn, etc. without retyping anything.
+  async function handleCopyText(job: Job) {
+    const text = buildShareText(job);
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedTextId(job.id);
+      setTimeout(() => setCopiedTextId((cur) => (cur === job.id ? null : cur)), 2000);
+    } catch {
+      window.prompt("Text copy nahi ho saka — manually copy kar lein:", text);
     }
   }
 
@@ -80,7 +94,13 @@ async function handleCopyLink(id: string) {
                     {timeAgo(job.createdAt)}
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <div className="flex justify-end gap-3">
+                    <div className="flex flex-wrap justify-end gap-3">
+                      <button
+                        onClick={() => handleCopyText(job)}
+                        className="text-primary hover:underline"
+                      >
+                        {copiedTextId === job.id ? "Copied!" : "Copy text"}
+                      </button>
                       <button
                         onClick={() => handleCopyLink(job.id)}
                         className="text-primary hover:underline"
