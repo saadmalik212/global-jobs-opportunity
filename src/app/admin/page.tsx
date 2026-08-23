@@ -1,5 +1,6 @@
 "use client";
 
+import { SITE_URL } from "@/lib/constants";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { subscribeJobs, deleteJob } from "@/lib/jobs";
@@ -33,7 +34,7 @@ export default function AdminDashboard() {
   }
 
   async function handleCopyLink(id: string) {
-    const url = `${window.location.origin}/jobs/${id}`;
+    const url = `${SITE_URL}/jobs/${id}`;
     try {
       await navigator.clipboard.writeText(url);
       setCopiedId(id);
