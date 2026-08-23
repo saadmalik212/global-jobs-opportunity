@@ -19,6 +19,8 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
   const [location, setLocation] = useState(initialValues?.location ?? "");
   const [experience, setExperience] = useState(initialValues?.experience ?? "");
   const [jobType, setJobType] = useState(initialValues?.jobType ?? "");
+  const [company, setCompany] = useState(initialValues?.company ?? "");
+  const [salary, setSalary] = useState(initialValues?.salary ?? "");
   const [applyLink, setApplyLink] = useState(initialValues?.applyLink ?? "");
   const [applyLinkDisplay, setApplyLinkDisplay] = useState<"real" | "short">(
     initialValues?.applyLinkDisplay ?? "real"
@@ -59,6 +61,8 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
         location: location.trim(),
         experience: experience.trim(),
         jobType: jobType.trim(),
+        company: company.trim(),
+        salary: salary.trim(),
         applyLink: applyLink.trim(),
         applyLinkDisplay,
         requirements: requirements
@@ -99,7 +103,7 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
       </Field>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Experience">
+        <Field label="Experience" hint="Leave blank to hide this field on the job card">
           <input
             value={experience}
             onChange={(e) => setExperience(e.target.value)}
@@ -112,6 +116,22 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
             value={jobType}
             onChange={(e) => setJobType(e.target.value)}
             placeholder="e.g. Full-time"
+            className={inputClass}
+          />
+        </Field>
+        <Field label="Company" hint="Optional — leave blank to hide this field">
+          <input
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+            placeholder="e.g. Systems Ltd"
+            className={inputClass}
+          />
+        </Field>
+        <Field label="Salary" hint="Optional — leave blank to hide this field">
+          <input
+            value={salary}
+            onChange={(e) => setSalary(e.target.value)}
+            placeholder="e.g. $1500/month"
             className={inputClass}
           />
         </Field>

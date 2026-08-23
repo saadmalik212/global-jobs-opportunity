@@ -30,16 +30,16 @@ function mapDoc(id: string, data: Record<string, unknown>): Job {
     location: (data.location as string) ?? "",
     experience: (data.experience as string) ?? "",
     jobType: (data.jobType as string) ?? "",
+    company: (data.company as string) ?? "",
+    salary: (data.salary as string) ?? "",
     applyLink: (data.applyLink as string) ?? "",
     applyLinkDisplay: (data.applyLinkDisplay as Job["applyLinkDisplay"]) ?? "real",
-    
     requirements: (data.requirements as Job["requirements"]) ?? [],
     noticeLine: (data.noticeLine as string) ?? "",
     createdAt: toMillis(data.createdAt),
     updatedAt: toMillis(data.updatedAt),
   };
 }
-
 
 export async function fetchJobs(): Promise<Job[]> {
   const q = query(collection(db, JOBS_COLLECTION), orderBy("createdAt", "desc"));

@@ -4,9 +4,10 @@ import { notFound } from "next/navigation";
 import { fetchJob } from "@/lib/jobs";
 import { timeAgo } from "@/lib/timeAgo";
 import { buildApplyHref } from "@/lib/applyLink";
+import { getJobMetaRows } from "@/lib/jobMeta";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import { getBreadcrumbSchema } from "@/lib/schema";
-import WhatsAppBanner from "@/components/WhatsAppBanner"; // Ensure path matches your setup
+import WhatsAppBanner from "@/components/WhatsAppBanner";
 
 export const dynamic = "force-dynamic";
 
@@ -35,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "apply now",
       "careers 2026",
     ],
-    alternates: { 
+    alternates: {
       canonical: `${SITE_URL}/jobs/${job.id}`,
     },
     openGraph: {
@@ -75,6 +76,8 @@ export default async function JobDetailPage({ params }: Props) {
   const job = await fetchJob(params.id);
   if (!job) notFound();
 
+  const metaRows = getJobMetaRows(job);
+
   const isRemote = `${job.title} ${job.location} ${job.jobType}`
     .toLowerCase()
     .includes("remote");
@@ -82,7 +85,9 @@ export default async function JobDetailPage({ params }: Props) {
   const fullDescriptionHtml = `
     <p><strong>Job Title:</strong> ${job.title}</p>
     <p><strong>Location:</strong> ${job.location}</p>
-    <p><strong>Experience:</strong> ${job.experience}</p>
+    ${job.experience ? `<p><strong>Experience:</strong> ${job.experience}</p>` : ""}
+    ${job.company ? `<p><strong>Company:</strong> ${job.company}</p>` : ""}
+    ${job.salary ? `<p><strong>Salary:</strong> ${job.salary}</p>` : ""}
     <h3>Requirements:</h3>
     <ul>
       ${job.requirements.map((r) => `<li><strong>${r.title}:</strong> ${r.details}</li>`).join("")}
@@ -103,7 +108,7 @@ export default async function JobDetailPage({ params }: Props) {
     employmentType: guessEmploymentType(job.jobType),
     hiringOrganization: {
       "@type": "Organization",
-      name: SITE_NAME,
+      name: job.company || SITE_NAME,
       sameAs: SITE_URL,
     },
     jobLocationType: isRemote ? "TELECOMMUTE" : undefined,
@@ -154,17 +159,23 @@ export default async function JobDetailPage({ params }: Props) {
           </span>
         </div>
 
-        {/* Notice Line - Moved right under Title */}
+        {/* Notice Line */}
         <p className="mb-4 rounded-lg bg-accent/10 px-3 py-2 text-xs font-medium text-ink/70">
           ⚠️ {job.noticeLine}
         </p>
 
-        {/* Meta Info */}
-        <div className="mb-4 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted">
-          <span>📍 {job.location}</span>
-          <span>🧭 {job.experience}</span>
-          <span>💼 {job.jobType}</span>
-        </div>
+        {/* Location / Experience / Job Type / Company / Salary — each row
+            starts flush left, value sits right after its own label. */}
+        {metaRows.length > 0 && (
+          <dl className="mb-4 space-y-1.5 text-sm">
+            {metaRows.map((row) => (
+              <div key={row.label} className="flex flex-wrap gap-x-1.5">
+                <dt className="font-medium text-muted">{row.label}:</dt>
+                <dd className="text-ink/85">{row.value}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
 
         {/* Requirements */}
         {job.requirements.length > 0 && (
@@ -172,7 +183,7 @@ export default async function JobDetailPage({ params }: Props) {
             {job.requirements.map((req, i) => (
               <li key={i} className="text-sm text-ink/85">
                 <span className="font-semibold text-ink">{req.title}: </span>
-                <ul className="ml-5 space-y-1">
+                <ul className="space-y-1">
                   {req.details.split(/\r?\n/).filter((line) => line.trim()).map((line, lineIndex) => (
                     <li key={lineIndex}>{line.trim()}</li>
                   ))}
@@ -183,8 +194,8 @@ export default async function JobDetailPage({ params }: Props) {
         )}
 
         {/* Apply Link */}
-              {job.applyLink && (
-          <p className="text-sm text-ink/85">
+        {job.applyLink && (
+          <p className="mb-6 text-sm text-ink/85">
             <span className="font-semibold text-ink">Apply Now: </span>
             <a
               href={buildApplyHref(job.applyLink)}

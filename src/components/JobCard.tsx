@@ -1,7 +1,9 @@
+import { Fragment } from "react";
 import Link from "next/link";
 import { Job } from "@/lib/types";
 import { timeAgo } from "@/lib/timeAgo";
 import { buildApplyHref } from "@/lib/applyLink";
+import { getJobMetaRows } from "@/lib/jobMeta";
 
 interface Props {
   job: Job;
@@ -9,6 +11,8 @@ interface Props {
 }
 
 export default function JobCard({ job, highlighted = false }: Props) {
+  const metaRows = getJobMetaRows(job);
+
   return (
     <article
       id={`job-${job.id}`}
@@ -27,17 +31,25 @@ export default function JobCard({ job, highlighted = false }: Props) {
       </div>
 
       <div className="min-h-0 flex-1 overflow-hidden">
-        {/* Notice Line - Moved right below the title section */}
+        {/* Notice Line */}
         <p className="mb-3 rounded-lg bg-accent/10 px-3 py-2 text-xs font-medium text-ink/70">
           ⚠️ {job.noticeLine}
         </p>
 
-        {/* Location, Experience & Type */}
-        <div className="mb-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted">
-          <span>📍 {job.location}</span>
-          <span>🧭 {job.experience}</span>
-          <span>💼 {job.jobType}</span>
-        </div>
+        {/* Location / Experience / Job Type / Company / Salary — each row
+            starts flush left, and the value sits right after its own label
+            (no fixed-width column forcing extra gaps). Only filled-in
+            fields render. */}
+        {metaRows.length > 0 && (
+          <dl className="mb-3 space-y-1 text-sm">
+            {metaRows.map((row) => (
+              <div key={row.label} className="flex flex-wrap gap-x-1.5">
+                <dt className="font-medium text-muted">{row.label}:</dt>
+                <dd className="text-ink/85">{row.value}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
 
         {/* Job Requirements */}
         {job.requirements.length > 0 && (
@@ -45,7 +57,7 @@ export default function JobCard({ job, highlighted = false }: Props) {
             {job.requirements.map((req, i) => (
               <li key={i} className="text-sm text-ink/85">
                 <span className="font-semibold text-ink">{req.title}: </span>
-                <ul className="ml-5 space-y-1">
+                <ul className="space-y-1">
                   {req.details.split(/\r?\n/).filter((line) => line.trim()).map((line, lineIndex) => (
                     <li key={lineIndex}>{line.trim()}</li>
                   ))}
@@ -56,19 +68,19 @@ export default function JobCard({ job, highlighted = false }: Props) {
         )}
 
         {/* Apply Link */}
-             {job.applyLink && (
-        <p className="mb-2 text-sm text-ink/85">
-          <span className="font-semibold text-ink">Apply Now: </span>
-          <a
-            href={buildApplyHref(job.applyLink)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary underline decoration-primary/40 underline-offset-2 hover:text-primary-dark"
-          >
-            {job.applyLinkDisplay === "short" ? "Apply Here" : job.applyLink}
-          </a>
-        </p>
-      )}
+        {job.applyLink && (
+          <p className="mb-2 text-sm text-ink/85">
+            <span className="font-semibold text-ink">Apply Now: </span>
+            <a
+              href={buildApplyHref(job.applyLink)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary underline decoration-primary/40 underline-offset-2 hover:text-primary-dark"
+            >
+              {job.applyLinkDisplay === "short" ? "Apply Here" : job.applyLink}
+            </a>
+          </p>
+        )}
       </div>
 
       <Link
