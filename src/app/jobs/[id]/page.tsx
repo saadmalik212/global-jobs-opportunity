@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { fetchJob } from "@/lib/jobs";
+import { fetchJob, fetchJobs } from "@/lib/jobs";
 import { timeAgo } from "@/lib/timeAgo";
 import { buildApplyHref } from "@/lib/applyLink";
 import { getJobMetaRows } from "@/lib/jobMeta";
+import { getRelatedJobs } from "@/lib/relatedJobs";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import { getBreadcrumbSchema } from "@/lib/schema";
 import WhatsAppBanner from "@/components/WhatsAppBanner";
+import JobCard from "@/components/JobCard";
 
 export const dynamic = "force-dynamic";
 
@@ -77,6 +79,11 @@ export default async function JobDetailPage({ params }: Props) {
   if (!job) notFound();
 
   const metaRows = getJobMetaRows(job);
+
+  // Fetched once, used both for related-jobs matching and to keep the
+  // detail page feeling alive (more jobs to click into after this one).
+  const allJobs = await fetchJobs();
+  const relatedJobs = getRelatedJobs(job, allJobs, 4);
 
   const isRemote = `${job.title} ${job.location} ${job.jobType}`
     .toLowerCase()
@@ -164,8 +171,7 @@ export default async function JobDetailPage({ params }: Props) {
           ⚠️ {job.noticeLine}
         </p>
 
-        {/* Location / Experience / Job Type / Company / Salary — each row
-            starts flush left, value sits right after its own label. */}
+        {/* Location / Experience / Job Type / Company / Salary */}
         {metaRows.length > 0 && (
           <dl className="mb-4 space-y-1.5 text-sm">
             {metaRows.map((row) => (
@@ -208,9 +214,32 @@ export default async function JobDetailPage({ params }: Props) {
           </p>
         )}
 
+        {/* Career guides CTA — keeps people exploring instead of leaving
+            right after applying */}
+        <div className="mb-6 rounded-2xl border border-border bg-canvas p-4 text-center">
+          <Link href="/blog" className="text-sm font-medium text-primary hover:underline">
+            📚 Read our career guides & job tips →
+          </Link>
+        </div>
+
         {/* WhatsApp Banner Section */}
         <WhatsAppBanner />
       </article>
+
+      {/* Related Jobs — gives people a reason to keep browsing on this same
+          tab instead of closing it right after they apply. */}
+      {relatedJobs.length > 0 && (
+        <section className="mt-10">
+          <h2 className="mb-4 font-display text-lg font-bold text-ink">
+            Related Jobs
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {relatedJobs.map((rj) => (
+              <JobCard key={rj.id} job={rj} />
+            ))}
+          </div>
+        </section>
+      )}
     </section>
   );
 }
