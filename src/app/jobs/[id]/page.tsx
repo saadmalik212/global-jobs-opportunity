@@ -201,7 +201,7 @@ export default async function JobDetailPage({ params }: Props) {
 
         {/* Apply Link */}
         {job.applyLink && (
-          <p className="mb-6 text-sm text-ink/85">
+          <p className="text-sm text-ink/85">
             <span className="font-semibold text-ink">Apply Now: </span>
             <a
               href={buildApplyHref(job.applyLink)}
@@ -213,23 +213,12 @@ export default async function JobDetailPage({ params }: Props) {
             </a>
           </p>
         )}
-
-        {/* Career guides CTA — keeps people exploring instead of leaving
-            right after applying */}
-        <div className="mb-6 rounded-2xl border border-border bg-canvas p-4 text-center">
-          <Link href="/blog" className="text-sm font-medium text-primary hover:underline">
-            📚 Read our career guides & job tips →
-          </Link>
-        </div>
-
-        {/* WhatsApp Banner Section */}
-        <WhatsAppBanner />
       </article>
 
-      {/* Related Jobs — gives people a reason to keep browsing on this same
-          tab instead of closing it right after they apply. */}
+      {/* Related Jobs — placed right after Apply Now, before the person
+          leaves, so more options are visible without much scrolling. */}
       {relatedJobs.length > 0 && (
-        <section className="mt-10">
+        <section className="mt-8">
           <h2 className="mb-4 font-display text-lg font-bold text-ink">
             Related Jobs
           </h2>
@@ -240,6 +229,17 @@ export default async function JobDetailPage({ params }: Props) {
           </div>
         </section>
       )}
+
+      {/* Career guides CTA + WhatsApp — kept below Related Jobs so the most
+          relevant next step (more jobs) comes first. */}
+      <div className="mt-8 space-y-4">
+        <div className="rounded-2xl border border-border bg-surface p-4 text-center">
+          <Link href="/blog" className="text-sm font-medium text-primary hover:underline">
+            📚 Read our career guides & job tips →
+          </Link>
+        </div>
+        <WhatsAppBanner />
+      </div>
     </section>
   );
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SITE_NAME, SITE_URL, ATS_RESUME_EMAIL } from "@/lib/constants";
+import AtsScoreChecker from "@/components/AtsScoreChecker";
 
 export const metadata: Metadata = {
   title: `ATS Resume Writing Service — $1 | ${SITE_NAME}`,
@@ -53,8 +54,8 @@ export default function AtsResumePage() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-[var(--color-ink)]">
-        <div className="absolute inset-0 bg-[var(--color-primary)] opacity-[0.07]" />
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-[var(--color-ink)]" />
         <div
           className="absolute inset-0 opacity-[0.12]"
           style={{
@@ -95,6 +96,8 @@ export default function AtsResumePage() {
           avoid that trap.
         </p>
       </section>
+
+      <AtsScoreChecker />
 
       {/* Benefits */}
       <section className="bg-surface py-14">
@@ -142,7 +145,7 @@ export default function AtsResumePage() {
             Ready to stop getting filtered out?
           </h2>
           <p className="mb-5 text-sm text-ink/75">
-            One-time price of $1 USD — any country, any industry.
+            One-time price of $1 — any country, any industry.
           </p>
           <p className="text-sm text-ink/85">
             <span className="font-semibold text-ink">Email us: </span>
