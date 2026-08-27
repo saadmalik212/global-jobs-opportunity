@@ -15,6 +15,7 @@ const QUICK_LINKS = [
   { label: "Contact", href: "/contact" },
   { label: "Blog", href: "/blog" },
   { label: "Terms & Conditions", href: "/terms-and-conditions" },
+   { label: "Privacy Policy", href: "/privacy" },
 ];
 
 export default function Footer() {

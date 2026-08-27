@@ -4,7 +4,7 @@ import { BLOG_POSTS } from "@/lib/blogPosts";
 import { SITE_URL } from "@/lib/constants";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticRoutes: MetadataRoute.Sitemap = ["", "/about", "/contact", "/terms", "/blog", "/ats-resume"].map(
+  const staticRoutes: MetadataRoute.Sitemap = ["", "/about", "/contact", "/terms", "/privacy", "/blog", "/ats-resume"].map(
     (path) => ({
       url: `${SITE_URL}${path}`,
       lastModified: new Date(),
@@ -30,7 +30,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     }));
   } catch {
-   
+    // If Firestore is unreachable at build time, still return the static routes.
   }
 
   return [...staticRoutes, ...blogRoutes, ...jobRoutes];
