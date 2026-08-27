@@ -16,7 +16,8 @@ export const metadata: Metadata = {
     canonical: `${SITE_URL}/terms-and-conditions`,
   },
   robots: {
-    index: false, // Optional: exclude from search if it's legal/admin content
+    index: true,
+    follow: true,
   },
   openGraph: {
     type: "website",
@@ -309,7 +310,7 @@ export default function TermsAndConditions() {
             </p>
 
             <Link
-              href="/privacy-policy"
+              href="/privacy"
               className="mt-5 inline-flex font-semibold text-[var(--color-primary-dark)] transition hover:text-[var(--color-accent)]"
             >
               Read our Privacy Policy →
