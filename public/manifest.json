@@ -4,7 +4,7 @@
   "description": "Find the latest jobs, remote jobs, international career opportunities, and hiring listings from companies worldwide",
   "start_url": "/",
   "scope": "/",
-  "display": "standalone",
+  "display": "browser",
   "orientation": "portrait-primary",
   "theme_color": "#1e293b",
   "background_color": "#ffffff",
