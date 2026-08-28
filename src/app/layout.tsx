@@ -4,6 +4,7 @@ import { SITE_URL } from "@/lib/constants";
 import { getOrganizationSchema, getWebsiteSchema } from "@/lib/schema";
 import { siteKeywords } from "@/lib/seoKeywords";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import Script from "next/script";
 import SiteChrome from "@/components/SiteChrome";
 
 export const metadata: Metadata = {
@@ -109,6 +110,11 @@ export default function RootLayout({
         <meta name="theme-color" content="#1e293b" />
         <link rel="icon" type="image/png" href="/logo.png" />
         <link rel="apple-touch-icon" href="/logo.png" />
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8823780017191777"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className="bg-canvas font-body text-ink antialiased">
         <script
