@@ -60,10 +60,6 @@ async function rawFetchJob(id: string): Promise<Job | null> {
   return mapDoc(snap.id, snap.data());
 }
 
-/**
- * Next.js Cached Data Fetching (5 Minutes Cache)
- * Avoids hitting Firestore on every page view or sitemap generation.
- */
 export const fetchJobs = (maxCount?: number) =>
   unstable_cache(
     async () => rawFetchJobs(maxCount),

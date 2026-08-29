@@ -23,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let jobRoutes: MetadataRoute.Sitemap = [];
   try {
-    const jobs = await fetchJobs();
+   const jobs = await fetchJobs(100);
     jobRoutes = jobs.map((job) => ({
       url: `${SITE_URL}/jobs/${job.id}`,
       lastModified: new Date(job.updatedAt),

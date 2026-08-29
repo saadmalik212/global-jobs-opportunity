@@ -18,7 +18,8 @@ export default function AdminDashboard() {
   async function loadJobs() {
     setLoading(true);
     try {
-      const data = await fetchJobsUncached();
+  
+const data = await fetchJobsUncached(200);
       setJobs(data);
     } catch (err) {
       console.error("Failed to load jobs", err);
