@@ -14,7 +14,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "./firebase";
-import { Job, JobFormValues } from "./types";
+import { Job, JobFormValues, JobMetaField } from "./types";
 import { unstable_cache } from "next/cache";
 
 const JOBS_COLLECTION = "jobs";
@@ -23,6 +23,18 @@ function toMillis(value: unknown): number {
   if (value instanceof Timestamp) return value.toMillis();
   if (typeof value === "number") return value;
   return Date.now();
+}
+
+function normalizeMetaFields(value: unknown): JobMetaField[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .filter((item): item is Record<string, unknown> => !!item && typeof item === "object")
+    .map((item) => ({
+      id: String((item.id as string) ?? `${Date.now()}-${Math.random()}`),
+      label: String((item.label as string) ?? ""),
+      value: String((item.value as string) ?? ""),
+    }))
+    .filter((item) => item.label.trim() || item.value.trim());
 }
 
 function mapDoc(id: string, data: Record<string, unknown>): Job {
@@ -36,6 +48,7 @@ function mapDoc(id: string, data: Record<string, unknown>): Job {
     salary: (data.salary as string) ?? "",
     applyLink: (data.applyLink as string) ?? "",
     applyLinkDisplay: (data.applyLinkDisplay as Job["applyLinkDisplay"]) ?? "real",
+    metaFields: normalizeMetaFields(data.metaFields),
     requirements: (data.requirements as Job["requirements"]) ?? [],
     noticeLine: (data.noticeLine as string) ?? "",
     createdAt: toMillis(data.createdAt),

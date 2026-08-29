@@ -3,6 +3,12 @@ export interface JobRequirement {
   details: string;
 }
 
+export interface JobMetaField {
+  id: string;
+  label: string;
+  value: string;
+}
+
 export interface Job {
   id: string;
   title: string;
@@ -13,6 +19,7 @@ export interface Job {
   salary: string;
   applyLink: string;
   applyLinkDisplay: "real" | "short";
+  metaFields: JobMetaField[];
   requirements: JobRequirement[];
   noticeLine: string;
   createdAt: number;

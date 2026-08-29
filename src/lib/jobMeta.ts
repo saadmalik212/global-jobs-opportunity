@@ -13,5 +13,13 @@ export function getJobMetaRows(job: Job): JobMetaRow[] {
   if (job.jobType) rows.push({ label: "Job Type", value: job.jobType });
   if (job.company) rows.push({ label: "Company", value: job.company });
   if (job.salary) rows.push({ label: "Salary", value: job.salary });
-  return rows;
+
+  const customRows = (job.metaFields ?? [])
+    .filter((field) => field.label.trim() && field.value.trim())
+    .map((field) => ({
+      label: field.label.trim(),
+      value: field.value.trim(),
+    }));
+
+  return [...rows, ...customRows];
 }

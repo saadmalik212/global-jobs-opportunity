@@ -92,12 +92,18 @@ export default async function JobDetailPage({ params }: Props) {
     .toLowerCase()
     .includes("remote");
 
+  const metaFieldsHtml = (job.metaFields ?? [])
+    .filter((field) => field.label.trim() && field.value.trim())
+    .map((field) => `<p><strong>${field.label.trim()}:</strong> ${field.value.trim()}</p>`)
+    .join("");
+
   const fullDescriptionHtml = `
     <p><strong>Job Title:</strong> ${job.title}</p>
     <p><strong>Location:</strong> ${job.location}</p>
     ${job.experience ? `<p><strong>Experience:</strong> ${job.experience}</p>` : ""}
     ${job.company ? `<p><strong>Company:</strong> ${job.company}</p>` : ""}
     ${job.salary ? `<p><strong>Salary:</strong> ${job.salary}</p>` : ""}
+    ${metaFieldsHtml}
     <h3>Requirements:</h3>
     <ul>
       ${job.requirements.map((r) => `<li><strong>${r.title}:</strong> ${r.details}</li>`).join("")}

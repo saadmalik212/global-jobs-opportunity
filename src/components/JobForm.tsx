@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { JobFormValues, JobRequirement } from "@/lib/types";
+import { JobFormValues, JobMetaField, JobRequirement } from "@/lib/types";
 import { DEFAULT_NOTICE_LINE } from "@/lib/constants";
 
 interface Props {
@@ -12,6 +12,17 @@ interface Props {
 }
 
 const EMPTY_REQUIREMENT: JobRequirement = { title: "", details: "" };
+
+function makeMetaField(): JobMetaField {
+  return {
+    id:
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    label: "",
+    value: "",
+  };
+}
 
 export default function JobForm({ initialValues, onSubmit, submitLabel }: Props) {
   const router = useRouter();
@@ -24,6 +35,9 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
   const [applyLink, setApplyLink] = useState(initialValues?.applyLink ?? "");
   const [applyLinkDisplay, setApplyLinkDisplay] = useState<"real" | "short">(
     initialValues?.applyLinkDisplay ?? "real"
+  );
+  const [metaFields, setMetaFields] = useState<JobMetaField[]>(
+    initialValues?.metaFields?.length ? initialValues.metaFields : []
   );
   const [requirements, setRequirements] = useState<JobRequirement[]>(
     initialValues?.requirements?.length ? initialValues.requirements : [{ ...EMPTY_REQUIREMENT }]
@@ -43,6 +57,20 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
 
   function removeRequirement(index: number) {
     setRequirements((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function updateMetaField(id: string, field: keyof JobMetaField, value: string) {
+    setMetaFields((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, [field]: value } : item))
+    );
+  }
+
+  function addMetaField() {
+    setMetaFields((prev) => [...prev, makeMetaField()]);
+  }
+
+  function removeMetaField(id: string) {
+    setMetaFields((prev) => prev.filter((item) => item.id !== id));
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -65,6 +93,13 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
         salary: salary.trim(),
         applyLink: applyLink.trim(),
         applyLinkDisplay,
+        metaFields: metaFields
+          .filter((field) => field.label.trim() || field.value.trim())
+          .map((field) => ({
+            id: field.id,
+            label: field.label.trim(),
+            value: field.value.trim(),
+          })),
         requirements: requirements
           .filter((r) => r.title.trim() || r.details.trim())
           .map((r) => ({ title: r.title.trim(), details: r.details.trim() })),
@@ -160,6 +195,49 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
             : "Frontend par yehi poora link jaisa daala hai waise hi dikhega."}
         </p>
       </Field>
+
+      <div>
+        <div className="mb-2 flex items-center justify-between">
+          <label className="text-sm font-semibold text-ink">Extra fields</label>
+          <button
+            type="button"
+            onClick={addMetaField}
+            className="text-xs font-medium text-primary hover:underline"
+          >
+            + Add field
+          </button>
+        </div>
+        <div className="space-y-3">
+          {metaFields.map((field) => (
+            <div key={field.id} className="grid gap-2 rounded-lg border border-border p-3 sm:grid-cols-[1fr_1.3fr_auto]">
+              <input
+                value={field.label}
+                onChange={(e) => updateMetaField(field.id, "label", e.target.value)}
+                placeholder="Heading, e.g. Compensation"
+                className={`${inputClass} font-medium`}
+              />
+              <input
+                value={field.value}
+                onChange={(e) => updateMetaField(field.id, "value", e.target.value)}
+                placeholder="Value, e.g. $1500/month"
+                className={inputClass}
+              />
+              <button
+                type="button"
+                onClick={() => removeMetaField(field.id)}
+                className="shrink-0 self-center text-xs text-red-600 hover:underline"
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+          {metaFields.length === 0 && (
+            <p className="text-xs text-muted">
+              Add custom headings like “Compensation”, “Remote Policy”, or “Deadline”.
+            </p>
+          )}
+        </div>
+      </div>
 
       <div>
         <div className="mb-2 flex items-center justify-between">
