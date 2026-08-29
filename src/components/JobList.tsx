@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 import Sidebar from "./Sidebar";
 import JobCard from "./JobCard";
 import WhatsAppBanner from "./WhatsAppBanner";
-import { fetchJobs } from "@/lib/jobs";
 import { Job, JobFilters } from "@/lib/types";
 
 const EMPTY_FILTERS: JobFilters = {
@@ -32,18 +31,17 @@ function jobMatches(job: Job, filters: JobFilters): boolean {
   }
 
   if (filters.remoteOnly && !haystack.includes("remote")) return false;
-  if (
-    filters.onsiteOnly &&
-    !haystack.replace(/[-\s]/g, "").includes("onsite")
-  ) return false;
   if (filters.internshipOnly && !haystack.includes("intern")) return false;
 
   return true;
 }
 
-export default function JobList() {
-  const [jobs, setJobs] = useState<Job[]>([]);
-  const [loading, setLoading] = useState(true);
+interface Props {
+  initialJobs: Job[];
+}
+
+export default function JobList({ initialJobs }: Props) {
+  const [jobs] = useState<Job[]>(initialJobs);
   const [filters, setFilters] = useState<JobFilters>(EMPTY_FILTERS);
 
   const searchParams = useSearchParams();
@@ -51,12 +49,6 @@ export default function JobList() {
   const cityParam = searchParams.get("city");
   const countryParam = searchParams.get("country");
   const remoteParam = searchParams.get("remote");
-
-  useEffect(() => {
-    fetchJobs()
-      .then(setJobs)
-      .finally(() => setLoading(false));
-  }, []);
 
   useEffect(() => {
     if (!cityParam) return;
@@ -72,7 +64,7 @@ export default function JobList() {
 
   useEffect(() => {
     if (remoteParam !== "true") return;
-    setFilters((prev) => ({ ...prev, remoteOnly: true, onsiteOnly: false }));
+    setFilters((prev) => ({ ...prev, remoteOnly: true }));
     document.getElementById("jobs")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [remoteParam]);
 
@@ -82,12 +74,12 @@ export default function JobList() {
   );
 
   useEffect(() => {
-    if (!targetJobId || loading) return;
+    if (!targetJobId) return;
     const el = document.getElementById(`job-${targetJobId}`);
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  }, [targetJobId, loading, visibleJobs]);
+  }, [targetJobId, visibleJobs]);
 
   return (
     <section id="jobs" className="mx-auto grid max-w-7xl gap-6 px-5 py-12 sm:px-8 lg:grid-cols-[280px_1fr]">
@@ -106,22 +98,13 @@ export default function JobList() {
             Latest openings
           </h2>
           <span className="text-sm text-muted">
-            {loading ? "Loading…" : `${visibleJobs.length} job${visibleJobs.length === 1 ? "" : "s"}`}
+            {visibleJobs.length} job{visibleJobs.length === 1 ? "" : "s"}
           </span>
         </div>
 
-        {loading ? (
-          <div className="grid gap-4 sm:grid-cols-2">
-            {[...Array(4)].map((_, i) => (
-              <div
-                key={i}
-                className="h-40 animate-pulse rounded-2xl border border-border bg-surface"
-              />
-            ))}
-          </div>
-        ) : visibleJobs.length === 0 ? (
+        {visibleJobs.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-border bg-surface p-10 text-center text-muted">
-            No jobs match your selected filters. Please clear the filters and try another.
+            Koi job filters se match nahi hui — filters clear kar ke dubara try karein.
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2">

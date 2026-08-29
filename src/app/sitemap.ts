@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { fetchJobs } from "@/lib/jobs";
 import { BLOG_POSTS } from "@/lib/blogPosts";
 import { SITE_URL } from "@/lib/constants";
+export const revalidate = 3600; 
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = ["", "/about", "/contact", "/terms", "/privacy", "/blog", "/ats-resume"].map(

@@ -11,7 +11,9 @@ import { getBreadcrumbSchema } from "@/lib/schema";
 import WhatsAppBanner from "@/components/WhatsAppBanner";
 import JobCard from "@/components/JobCard";
 
-export const dynamic = "force-dynamic";
+// Cache each job page for 5 minutes instead of re-hitting Firestore on
+// every single visitor — this was the main cause of the read-count spike.
+export const revalidate = 300;
 
 interface Props {
   params: { id: string };
@@ -80,10 +82,11 @@ export default async function JobDetailPage({ params }: Props) {
 
   const metaRows = getJobMetaRows(job);
 
-  // Fetched once, used both for related-jobs matching and to keep the
-  // detail page feeling alive (more jobs to click into after this one).
-  const allJobs = await fetchJobs();
-  const relatedJobs = getRelatedJobs(job, allJobs, 4);
+  // Only reads the 50 most recent jobs (not the whole collection) to build
+  // the Related Jobs section — keeps this cheap even as the total job
+  // count grows into the hundreds or thousands.
+  const recentJobs = await fetchJobs(50);
+  const relatedJobs = getRelatedJobs(job, recentJobs, 4);
 
   const isRemote = `${job.title} ${job.location} ${job.jobType}`
     .toLowerCase()
@@ -158,7 +161,6 @@ export default async function JobDetailPage({ params }: Props) {
       </Link>
 
       <article className="rounded-2xl border border-border bg-surface p-6">
-        {/* Title & Time */}
         <div className="mb-2 flex items-start justify-between gap-3">
           <h1 className="font-display text-2xl font-bold text-ink">{job.title}</h1>
           <span className="shrink-0 rounded-full bg-primary-light px-2.5 py-1 font-mono text-[11px] font-medium text-primary-dark">
@@ -166,12 +168,10 @@ export default async function JobDetailPage({ params }: Props) {
           </span>
         </div>
 
-        {/* Notice Line */}
         <p className="mb-4 rounded-lg bg-accent/10 px-3 py-2 text-xs font-medium text-ink/70">
           ⚠️ {job.noticeLine}
         </p>
 
-        {/* Location / Experience / Job Type / Company / Salary */}
         {metaRows.length > 0 && (
           <dl className="mb-4 space-y-1.5 text-sm">
             {metaRows.map((row) => (
@@ -183,7 +183,6 @@ export default async function JobDetailPage({ params }: Props) {
           </dl>
         )}
 
-        {/* Requirements */}
         {job.requirements.length > 0 && (
           <ul className="mb-4 space-y-2">
             {job.requirements.map((req, i) => (
@@ -199,7 +198,6 @@ export default async function JobDetailPage({ params }: Props) {
           </ul>
         )}
 
-        {/* Apply Link */}
         {job.applyLink && (
           <p className="text-sm text-ink/85">
             <span className="font-semibold text-ink">Apply Now: </span>
@@ -215,8 +213,6 @@ export default async function JobDetailPage({ params }: Props) {
         )}
       </article>
 
-      {/* Related Jobs — placed right after Apply Now, before the person
-          leaves, so more options are visible without much scrolling. */}
       {relatedJobs.length > 0 && (
         <section className="mt-8">
           <h2 className="mb-4 font-display text-lg font-bold text-ink">
@@ -230,8 +226,6 @@ export default async function JobDetailPage({ params }: Props) {
         </section>
       )}
 
-      {/* Career guides CTA + WhatsApp — kept below Related Jobs so the most
-          relevant next step (more jobs) comes first. */}
       <div className="mt-8 space-y-4">
         <div className="rounded-2xl border border-border bg-surface p-4 text-center">
           <Link href="/blog" className="text-sm font-medium text-primary hover:underline">

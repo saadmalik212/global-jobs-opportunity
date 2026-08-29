@@ -9,6 +9,7 @@ import {
   onSnapshot,
   orderBy,
   query,
+  limit as fsLimit,
   serverTimestamp,
   Timestamp,
 } from "firebase/firestore";
@@ -41,8 +42,16 @@ function mapDoc(id: string, data: Record<string, unknown>): Job {
   };
 }
 
-export async function fetchJobs(): Promise<Job[]> {
-  const q = query(collection(db, JOBS_COLLECTION), orderBy("createdAt", "desc"));
+/**
+ * One-time fetch, newest first. Pass `maxCount` to cap how many documents
+ * are read — e.g. the Related Jobs section only needs a recent sample, not
+ * the entire collection, so it should always pass a limit to keep Firestore
+ * read costs bounded as the number of job posts grows.
+ */
+export async function fetchJobs(maxCount?: number): Promise<Job[]> {
+  const q = maxCount
+    ? query(collection(db, JOBS_COLLECTION), orderBy("createdAt", "desc"), fsLimit(maxCount))
+    : query(collection(db, JOBS_COLLECTION), orderBy("createdAt", "desc"));
   const snap = await getDocs(q);
   return snap.docs.map((d) => mapDoc(d.id, d.data()));
 }
