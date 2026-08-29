@@ -11,6 +11,7 @@ import {
   limit as fsLimit,
   serverTimestamp,
   Timestamp,
+  where,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { Job, JobFormValues } from "./types";
@@ -44,11 +45,14 @@ function mapDoc(id: string, data: Record<string, unknown>): Job {
 
 /**
  * Direct uncached fetch function for raw internal access.
+ * Default limit 50 set kar di gayi hai taake uncontrolled reads na hon.
  */
-async function rawFetchJobs(maxCount?: number): Promise<Job[]> {
-  const q = maxCount
-    ? query(collection(db, JOBS_COLLECTION), orderBy("createdAt", "desc"), fsLimit(maxCount))
-    : query(collection(db, JOBS_COLLECTION), orderBy("createdAt", "desc"));
+async function rawFetchJobs(maxCount: number = 50): Promise<Job[]> {
+  const q = query(
+    collection(db, JOBS_COLLECTION),
+    orderBy("createdAt", "desc"),
+    fsLimit(maxCount)
+  );
   const snap = await getDocs(q);
   return snap.docs.map((d) => mapDoc(d.id, d.data()));
 }
@@ -60,10 +64,13 @@ async function rawFetchJob(id: string): Promise<Job | null> {
   return mapDoc(snap.id, snap.data());
 }
 
-export const fetchJobs = (maxCount?: number) =>
+/**
+ * Next.js Cached Data Fetching (5 Minutes Cache)
+ */
+export const fetchJobs = (maxCount: number = 50) =>
   unstable_cache(
     async () => rawFetchJobs(maxCount),
-    [`jobs-list-${maxCount || "all"}`],
+    [`jobs-list-${maxCount}`],
     { revalidate: 300, tags: ["jobs"] }
   )();
 
@@ -75,8 +82,32 @@ export const fetchJob = (id: string) =>
   )();
 
 /** Uncached version specifically for Admin Dashboard */
-export async function fetchJobsUncached(maxCount?: number): Promise<Job[]> {
+export async function fetchJobsUncached(maxCount: number = 200): Promise<Job[]> {
   return rawFetchJobs(maxCount);
+}
+
+/** 
+ * Client-Side Filter Function: Direct search on full database when user clicks sidebar filters.
+ */
+export async function fetchJobsFiltered(filters: { country?: string; jobType?: string }): Promise<Job[]> {
+  const constraints = [];
+
+  if (filters.country) {
+    constraints.push(where("location", "==", filters.country));
+  }
+  if (filters.jobType) {
+    constraints.push(where("jobType", "==", filters.jobType));
+  }
+
+  const q = query(
+    collection(db, JOBS_COLLECTION),
+    ...constraints,
+    orderBy("createdAt", "desc"),
+    fsLimit(100)
+  );
+
+  const snap = await getDocs(q);
+  return snap.docs.map((d) => mapDoc(d.id, d.data()));
 }
 
 export async function createJob(values: JobFormValues): Promise<string> {
