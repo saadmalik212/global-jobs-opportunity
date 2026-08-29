@@ -6,7 +6,6 @@ import {
   doc,
   getDoc,
   getDocs,
-  onSnapshot,
   orderBy,
   query,
   limit as fsLimit,
@@ -15,6 +14,7 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { Job, JobFormValues } from "./types";
+import { unstable_cache } from "next/cache";
 
 const JOBS_COLLECTION = "jobs";
 
@@ -43,12 +43,9 @@ function mapDoc(id: string, data: Record<string, unknown>): Job {
 }
 
 /**
- * One-time fetch, newest first. Pass `maxCount` to cap how many documents
- * are read — e.g. the Related Jobs section only needs a recent sample, not
- * the entire collection, so it should always pass a limit to keep Firestore
- * read costs bounded as the number of job posts grows.
+ * Direct uncached fetch function for raw internal access.
  */
-export async function fetchJobs(maxCount?: number): Promise<Job[]> {
+async function rawFetchJobs(maxCount?: number): Promise<Job[]> {
   const q = maxCount
     ? query(collection(db, JOBS_COLLECTION), orderBy("createdAt", "desc"), fsLimit(maxCount))
     : query(collection(db, JOBS_COLLECTION), orderBy("createdAt", "desc"));
@@ -56,19 +53,34 @@ export async function fetchJobs(maxCount?: number): Promise<Job[]> {
   return snap.docs.map((d) => mapDoc(d.id, d.data()));
 }
 
-/** Live subscription — used in the admin dashboard so new posts show instantly. */
-export function subscribeJobs(callback: (jobs: Job[]) => void) {
-  const q = query(collection(db, JOBS_COLLECTION), orderBy("createdAt", "desc"));
-  return onSnapshot(q, (snap) => {
-    callback(snap.docs.map((d) => mapDoc(d.id, d.data())));
-  });
-}
-
-export async function fetchJob(id: string): Promise<Job | null> {
+async function rawFetchJob(id: string): Promise<Job | null> {
   const ref = doc(db, JOBS_COLLECTION, id);
   const snap = await getDoc(ref);
   if (!snap.exists()) return null;
   return mapDoc(snap.id, snap.data());
+}
+
+/**
+ * Next.js Cached Data Fetching (5 Minutes Cache)
+ * Avoids hitting Firestore on every page view or sitemap generation.
+ */
+export const fetchJobs = (maxCount?: number) =>
+  unstable_cache(
+    async () => rawFetchJobs(maxCount),
+    [`jobs-list-${maxCount || "all"}`],
+    { revalidate: 300, tags: ["jobs"] }
+  )();
+
+export const fetchJob = (id: string) =>
+  unstable_cache(
+    async () => rawFetchJob(id),
+    [`job-detail-${id}`],
+    { revalidate: 300, tags: ["jobs"] }
+  )();
+
+/** Uncached version specifically for Admin Dashboard */
+export async function fetchJobsUncached(maxCount?: number): Promise<Job[]> {
+  return rawFetchJobs(maxCount);
 }
 
 export async function createJob(values: JobFormValues): Promise<string> {

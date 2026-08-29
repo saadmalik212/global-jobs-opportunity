@@ -3,7 +3,7 @@
 import { SITE_URL } from "@/lib/constants";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { subscribeJobs, deleteJob } from "@/lib/jobs";
+import { fetchJobsUncached, deleteJob } from "@/lib/jobs";
 import { Job } from "@/lib/types";
 import { timeAgo } from "@/lib/timeAgo";
 import { buildShareText } from "@/lib/shareText";
@@ -15,12 +15,20 @@ export default function AdminDashboard() {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [copiedTextId, setCopiedTextId] = useState<string | null>(null);
 
-  useEffect(() => {
-    const unsub = subscribeJobs((j) => {
-      setJobs(j);
+  async function loadJobs() {
+    setLoading(true);
+    try {
+      const data = await fetchJobsUncached();
+      setJobs(data);
+    } catch (err) {
+      console.error("Failed to load jobs", err);
+    } finally {
       setLoading(false);
-    });
-    return unsub;
+    }
+  }
+
+  useEffect(() => {
+    loadJobs();
   }, []);
 
   async function handleDelete(id: string) {
@@ -28,6 +36,7 @@ export default function AdminDashboard() {
     setDeletingId(id);
     try {
       await deleteJob(id);
+      setJobs((prev) => prev.filter((j) => j.id !== id));
     } finally {
       setDeletingId(null);
     }
@@ -44,8 +53,6 @@ export default function AdminDashboard() {
     }
   }
 
-  // Copies the full job post as ready-to-paste text — for sharing directly
-  // on WhatsApp, Facebook, LinkedIn, etc. without retyping anything.
   async function handleCopyText(job: Job) {
     const text = buildShareText(job);
     try {
@@ -61,12 +68,20 @@ export default function AdminDashboard() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <h1 className="font-display text-2xl font-bold text-ink">Job posts</h1>
-        <Link
-          href="/admin/new"
-          className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-dark"
-        >
-          + New job post
-        </Link>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={loadJobs}
+            className="rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-ink hover:bg-canvas"
+          >
+            🔄 Refresh
+          </button>
+          <Link
+            href="/admin/new"
+            className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-dark"
+          >
+            + New job post
+          </Link>
+        </div>
       </div>
 
       {loading ? (
