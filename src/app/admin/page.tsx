@@ -8,9 +8,13 @@ import { Job } from "@/lib/types";
 import { timeAgo } from "@/lib/timeAgo";
 import { buildShareText } from "@/lib/shareText";
 
+const DEFAULT_LIMIT = 10;
+
 export default function AdminDashboard() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingAll, setLoadingAll] = useState(false);
+  const [showingAll, setShowingAll] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [copiedTextId, setCopiedTextId] = useState<string | null>(null);
@@ -18,13 +22,26 @@ export default function AdminDashboard() {
   async function loadJobs() {
     setLoading(true);
     try {
-  
-const data = await fetchJobsUncached(200);
+      const data = await fetchJobsUncached(DEFAULT_LIMIT);
       setJobs(data);
+      setShowingAll(false);
     } catch (err) {
       console.error("Failed to load jobs", err);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function loadAllJobs() {
+    setLoadingAll(true);
+    try {
+      const data = await fetchJobsUncached(); // no limit — sirf on-demand
+      setJobs(data);
+      setShowingAll(true);
+    } catch (err) {
+      console.error("Failed to load all jobs", err);
+    } finally {
+      setLoadingAll(false);
     }
   }
 
@@ -92,58 +109,72 @@ const data = await fetchJobsUncached(200);
           Abhi koi job post nahi — “New job post” se pehli job add karein.
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-border bg-surface">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-canvas text-xs uppercase tracking-wide text-muted">
-              <tr>
-                <th className="px-4 py-3">Title</th>
-                <th className="px-4 py-3">Location</th>
-                <th className="px-4 py-3">Posted</th>
-                <th className="px-4 py-3 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {jobs.map((job) => (
-                <tr key={job.id} className="border-t border-border">
-                  <td className="px-4 py-3 font-medium text-ink">{job.title}</td>
-                  <td className="px-4 py-3 text-ink/80">{job.location}</td>
-                  <td className="px-4 py-3 font-mono text-xs text-muted">
-                    {timeAgo(job.createdAt)}
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    <div className="flex flex-wrap justify-end gap-3">
-                      <button
-                        onClick={() => handleCopyText(job)}
-                        className="text-primary hover:underline"
-                      >
-                        {copiedTextId === job.id ? "Copied!" : "Copy text"}
-                      </button>
-                      <button
-                        onClick={() => handleCopyLink(job.id)}
-                        className="text-primary hover:underline"
-                      >
-                        {copiedId === job.id ? "Copied!" : "Copy link"}
-                      </button>
-                      <Link
-                        href={`/admin/edit/${job.id}`}
-                        className="text-primary hover:underline"
-                      >
-                        Edit
-                      </Link>
-                      <button
-                        onClick={() => handleDelete(job.id)}
-                        disabled={deletingId === job.id}
-                        className="text-red-600 hover:underline disabled:opacity-50"
-                      >
-                        {deletingId === job.id ? "Deleting…" : "Delete"}
-                      </button>
-                    </div>
-                  </td>
+        <>
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-canvas text-xs uppercase tracking-wide text-muted">
+                <tr>
+                  <th className="px-4 py-3">Title</th>
+                  <th className="px-4 py-3">Location</th>
+                  <th className="px-4 py-3">Posted</th>
+                  <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {jobs.map((job) => (
+                  <tr key={job.id} className="border-t border-border">
+                    <td className="px-4 py-3 font-medium text-ink">{job.title}</td>
+                    <td className="px-4 py-3 text-ink/80">{job.location}</td>
+                    <td className="px-4 py-3 font-mono text-xs text-muted">
+                      {timeAgo(job.createdAt)}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <div className="flex flex-wrap justify-end gap-3">
+                        <button
+                          onClick={() => handleCopyText(job)}
+                          className="text-primary hover:underline"
+                        >
+                          {copiedTextId === job.id ? "Copied!" : "Copy text"}
+                        </button>
+                        <button
+                          onClick={() => handleCopyLink(job.id)}
+                          className="text-primary hover:underline"
+                        >
+                          {copiedId === job.id ? "Copied!" : "Copy link"}
+                        </button>
+                        <Link
+                          href={`/admin/edit/${job.id}`}
+                          className="text-primary hover:underline"
+                        >
+                          Edit
+                        </Link>
+                        <button
+                          onClick={() => handleDelete(job.id)}
+                          disabled={deletingId === job.id}
+                          className="text-red-600 hover:underline disabled:opacity-50"
+                        >
+                          {deletingId === job.id ? "Deleting…" : "Delete"}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {!showingAll && (
+            <div className="mt-4 text-center">
+              <button
+                onClick={loadAllJobs}
+                disabled={loadingAll}
+                className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-ink hover:bg-canvas disabled:opacity-50"
+              >
+                {loadingAll ? "Loading…" : "Load all jobs"}
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
