@@ -116,6 +116,7 @@ export default function AdminDashboard() {
                 <tr>
                   <th className="px-4 py-3">Title</th>
                   <th className="px-4 py-3">Location</th>
+                  <th className="px-4 py-3">Applications</th>
                   <th className="px-4 py-3">Posted</th>
                   <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
@@ -125,6 +126,9 @@ export default function AdminDashboard() {
                   <tr key={job.id} className="border-t border-border">
                     <td className="px-4 py-3 font-medium text-ink">{job.title}</td>
                     <td className="px-4 py-3 text-ink/80">{job.location}</td>
+                    <td className="px-4 py-3 font-semibold text-ink">
+                      {job.applicationCount ?? 0}
+                    </td>
                     <td className="px-4 py-3 font-mono text-xs text-muted">
                       {timeAgo(job.createdAt)}
                     </td>

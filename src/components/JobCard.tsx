@@ -1,9 +1,8 @@
-import { Fragment } from "react";
 import Link from "next/link";
 import { Job } from "@/lib/types";
 import { timeAgo } from "@/lib/timeAgo";
-import { buildApplyHref } from "@/lib/applyLink";
 import { getJobMetaRows } from "@/lib/jobMeta";
+import TrackableApplyLink from "@/components/TrackableApplyLink";
 
 interface Props {
   job: Job;
@@ -71,14 +70,12 @@ export default function JobCard({ job, highlighted = false }: Props) {
         {job.applyLink && (
           <p className="mb-2 text-sm text-ink/85">
             <span className="font-semibold text-ink">Apply Now: </span>
-            <a
-              href={buildApplyHref(job.applyLink)}
-              target="_blank"
-              rel="noopener noreferrer"
+            <TrackableApplyLink
+              jobId={job.id}
+              applyLink={job.applyLink}
+              applyLinkDisplay={job.applyLinkDisplay}
               className="text-primary underline decoration-primary/40 underline-offset-2 hover:text-primary-dark"
-            >
-              {job.applyLinkDisplay === "short" ? "Apply Here" : job.applyLink}
-            </a>
+            />
           </p>
         )}
       </div>

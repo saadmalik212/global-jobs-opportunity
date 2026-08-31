@@ -12,6 +12,7 @@ import {
   serverTimestamp,
   Timestamp,
   where,
+  increment,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { Job, JobFormValues, JobMetaField } from "./types";
@@ -46,6 +47,7 @@ function mapDoc(id: string, data: Record<string, unknown>): Job {
     jobType: (data.jobType as string) ?? "",
     company: (data.company as string) ?? "",
     salary: (data.salary as string) ?? "",
+    applicationCount: Number(data.applicationCount ?? 0),
     applyLink: (data.applyLink as string) ?? "",
     applyLinkDisplay: (data.applyLinkDisplay as Job["applyLinkDisplay"]) ?? "real",
     metaFields: normalizeMetaFields(data.metaFields),
@@ -126,6 +128,7 @@ export async function fetchJobsFiltered(filters: { country?: string; jobType?: s
 export async function createJob(values: JobFormValues): Promise<string> {
   const ref = await addDoc(collection(db, JOBS_COLLECTION), {
     ...values,
+    applicationCount: 0,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
@@ -136,6 +139,16 @@ export async function updateJob(id: string, values: JobFormValues): Promise<void
   const ref = doc(db, JOBS_COLLECTION, id);
   await updateDoc(ref, {
     ...values,
+    updatedAt: serverTimestamp(),
+  });
+}
+
+export async function trackJobApplication(jobId: string): Promise<void> {
+  if (!jobId) return;
+
+  const ref = doc(db, JOBS_COLLECTION, jobId);
+  await updateDoc(ref, {
+    applicationCount: increment(1),
     updatedAt: serverTimestamp(),
   });
 }

@@ -12,6 +12,16 @@ interface Props {
 }
 
 const EMPTY_REQUIREMENT: JobRequirement = { title: "", details: "" };
+const SALARY_OPTIONS = [
+  { value: "", label: "Custom / Not specified" },
+  { value: "Negotiable", label: "Negotiable" },
+  { value: "$800 - $1200 / month", label: "$800 - $1200 / month" },
+  { value: "$1200 - $2000 / month", label: "$1200 - $2000 / month" },
+  { value: "$2000 - $3500 / month", label: "$2000 - $3500 / month" },
+  { value: "$35 - $60 / hour", label: "$35 - $60 / hour" },
+  { value: "PKR 80,000 - 150,000 / month", label: "PKR 80,000 - 150,000 / month" },
+  { value: "PKR 150,000 - 300,000 / month", label: "PKR 150,000 - 300,000 / month" },
+] as const;
 
 function makeMetaField(): JobMetaField {
   return {
@@ -32,6 +42,12 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
   const [jobType, setJobType] = useState(initialValues?.jobType ?? "");
   const [company, setCompany] = useState(initialValues?.company ?? "");
   const [salary, setSalary] = useState(initialValues?.salary ?? "");
+  const [salaryPreset, setSalaryPreset] = useState(() => {
+    const currentSalary = initialValues?.salary ?? "";
+    return SALARY_OPTIONS.some((option) => option.value === currentSalary)
+      ? currentSalary
+      : "";
+  });
   const [applyLink, setApplyLink] = useState(initialValues?.applyLink ?? "");
   const [applyLinkDisplay, setApplyLinkDisplay] = useState<"real" | "short">(
     initialValues?.applyLinkDisplay ?? "real"
@@ -73,6 +89,15 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
     setMetaFields((prev) => prev.filter((item) => item.id !== id));
   }
 
+  function handleSalaryPresetChange(nextPreset: string) {
+    setSalaryPreset(nextPreset);
+    if (nextPreset) {
+      setSalary(nextPreset);
+    } else {
+      setSalary("");
+    }
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
@@ -82,6 +107,8 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
       return;
     }
 
+    const finalSalary = salary.trim() || (salaryPreset ? salaryPreset : "");
+
     setSaving(true);
     try {
       await onSubmit({
@@ -90,7 +117,8 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
         experience: experience.trim(),
         jobType: jobType.trim(),
         company: company.trim(),
-        salary: salary.trim(),
+        salary: finalSalary,
+        applicationCount: initialValues?.applicationCount ?? 0,
         applyLink: applyLink.trim(),
         applyLinkDisplay,
         metaFields: metaFields
@@ -162,13 +190,29 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
             className={inputClass}
           />
         </Field>
-        <Field label="Salary" hint="Optional — leave blank to hide this field">
-          <input
-            value={salary}
-            onChange={(e) => setSalary(e.target.value)}
-            placeholder="e.g. $1500/month"
-            className={inputClass}
-          />
+        <Field label="Salary" hint="Preset select karen ya custom amount type karen">
+          <div className="grid gap-2 sm:grid-cols-[200px_1fr]">
+            <select
+              value={salaryPreset}
+              onChange={(e) => handleSalaryPresetChange(e.target.value)}
+              className={inputClass}
+            >
+              {SALARY_OPTIONS.map((option) => (
+                <option key={option.value || "custom"} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <input
+              value={salary}
+              onChange={(e) => {
+                setSalary(e.target.value);
+                setSalaryPreset("");
+              }}
+              placeholder="e.g. $1500/month or Negotiable"
+              className={inputClass}
+            />
+          </div>
         </Field>
       </div>
 

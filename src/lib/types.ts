@@ -17,6 +17,7 @@ export interface Job {
   jobType: string;
   company: string;
   salary: string;
+  applicationCount: number;
   applyLink: string;
   applyLinkDisplay: "real" | "short";
   metaFields: JobMetaField[];

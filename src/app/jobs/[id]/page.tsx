@@ -3,13 +3,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { fetchJob, fetchJobs } from "@/lib/jobs";
 import { timeAgo } from "@/lib/timeAgo";
-import { buildApplyHref } from "@/lib/applyLink";
 import { getJobMetaRows } from "@/lib/jobMeta";
 import { getRelatedJobs } from "@/lib/relatedJobs";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import { getBreadcrumbSchema } from "@/lib/schema";
 import WhatsAppBanner from "@/components/WhatsAppBanner";
 import JobCard from "@/components/JobCard";
+import TrackableApplyLink from "@/components/TrackableApplyLink";
 
 // Cache each job page for 5 minutes instead of re-hitting Firestore on
 // every single visitor — this was the main cause of the read-count spike.
@@ -207,14 +207,12 @@ export default async function JobDetailPage({ params }: Props) {
         {job.applyLink && (
           <p className="text-sm text-ink/85">
             <span className="font-semibold text-ink">Apply Now: </span>
-            <a
-              href={buildApplyHref(job.applyLink)}
-              target="_blank"
-              rel="noopener noreferrer"
+            <TrackableApplyLink
+              jobId={job.id}
+              applyLink={job.applyLink}
+              applyLinkDisplay={job.applyLinkDisplay}
               className="text-primary underline decoration-primary/40 underline-offset-2 hover:text-primary-dark"
-            >
-              {job.applyLinkDisplay === "short" ? "Apply Here" : job.applyLink}
-            </a>
+            />
           </p>
         )}
       </article>
