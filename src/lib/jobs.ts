@@ -101,6 +101,10 @@ export async function fetchJobsUncached(maxCount: number = 200): Promise<Job[]> 
   return rawFetchJobs(maxCount);
 }
 
+export async function fetchJobUncached(id: string): Promise<Job | null> {
+  return rawFetchJob(id);
+}
+
 /** 
  * Client-Side Filter Function: Direct search on full database when user clicks sidebar filters.
  */

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import JobForm from "@/components/JobForm";
-import { fetchJob, updateJob } from "@/lib/jobs";
+import { fetchJobUncached, updateJob } from "@/lib/jobs";
 import { JobFormValues } from "@/lib/types";
 
 export default function EditJobPage() {
@@ -12,15 +12,26 @@ export default function EditJobPage() {
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    fetchJob(params.id).then((job) => {
-      if (!job) {
+    const jobId = params?.id;
+    if (!jobId) {
+      setNotFound(true);
+      return;
+    }
+
+    fetchJobUncached(jobId)
+      .then((job) => {
+        if (!job) {
+          setNotFound(true);
+          return;
+        }
+        const { id, createdAt, updatedAt, ...values } = job;
+        setInitialValues(values);
+      })
+      .catch((error) => {
+        console.error("Failed to load job for editing", error);
         setNotFound(true);
-        return;
-      }
-      const { id, createdAt, updatedAt, ...values } = job;
-      setInitialValues(values);
-    });
-  }, [params.id]);
+      });
+  }, [params?.id]);
 
   if (notFound) {
     return <p className="text-muted">Yeh job post nahi mili — ho sakta hai delete ho chuki ho.</p>;

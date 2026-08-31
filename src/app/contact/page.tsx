@@ -105,12 +105,12 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[var(--color-canvas)] text-[var(--color-ink)]">
+    <main className="min-h-screen overflow-x-hidden bg-[var(--color-canvas)] text-[var(--color-ink)]">
       {/* Hero */}
       <section className="relative overflow-hidden bg-[var(--color-ink)]">
         <div className="absolute inset-0 bg-[var(--color-primary)] opacity-[0.07]" />
 
-        <div className="relative mx-auto max-w-7xl px-6 py-20 sm:px-8 lg:px-12">
+        <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-8 sm:py-20 lg:px-12">
           <div className="max-w-3xl">
             <button
               type="button"
@@ -125,11 +125,11 @@ export default function ContactPage() {
               Get In Touch
             </button>
 
-            <h1 className="mt-6 font-[var(--font-display)] text-4xl font-bold tracking-tight text-[var(--color-surface)] sm:text-5xl lg:text-6xl">
+            <h1 className="mt-6 font-[var(--font-display)] text-3xl font-bold tracking-tight text-[var(--color-surface)] sm:text-5xl lg:text-6xl">
               Contact Us
             </h1>
 
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-[var(--color-surface)]">
+            <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--color-surface)] sm:text-lg sm:leading-8">
               Have a question, suggestion, or need assistance? Send us a
               message and our team will be happy to help.
             </p>
@@ -138,10 +138,10 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Content */}
-      <section className="mx-auto max-w-7xl px-6 py-16 sm:px-8 lg:px-12">
-        <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-8 sm:py-16 lg:px-12">
+        <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-10">
           {/* Contact Information */}
-          <div className="rounded-3xl bg-[var(--color-ink)] p-8 text-[var(--color-surface)] sm:p-10">
+          <div className="rounded-3xl bg-[var(--color-ink)] p-5 text-[var(--color-surface)] sm:p-8 lg:p-10">
             <p className="text-sm font-semibold uppercase tracking-wider text-[var(--color-primary)]">
               Let&apos;s Connect
             </p>
@@ -178,7 +178,7 @@ export default function ContactPage() {
           </div>
 
           {/* Contact Form */}
-          <div id="contact-form" className="rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-sm sm:p-10">
+          <div id="contact-form" className="rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-sm sm:p-6 lg:p-10">
             <div>
               <p className="text-sm font-semibold uppercase tracking-wider text-[var(--color-primary-dark)]">
                 Send a Message
@@ -199,7 +199,7 @@ export default function ContactPage() {
               className="mt-8 space-y-6"
             >
               {/* Name + Email */}
-              <div className="grid gap-6 sm:grid-cols-2">
+              <div className="grid gap-5 sm:grid-cols-2">
                 <FormField
                   label="Full Name"
                   name="name"
