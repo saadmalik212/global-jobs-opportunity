@@ -3,13 +3,21 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    match /jobs/{jobId} {
-      // Anyone can view job posts on the public site.
-      allow read: if true;
+    function isAdmin() {
+      return request.auth != null &&
+        request.auth.token.email in [
+          "muhammadsaad16321@gmail.com"
+        ];
+    }
 
-      // Only a signed-in admin (created manually in Firebase Auth) can
-      // create, edit, or delete job posts.
-      allow write: if request.auth != null;
+    match /jobs/{jobId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /contactMessages/{messageId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
     }
   }
 }

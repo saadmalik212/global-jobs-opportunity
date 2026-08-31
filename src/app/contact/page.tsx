@@ -1,7 +1,7 @@
-
 "use client";
 
 import { FormEvent, useState } from "react";
+import { submitContactMessage } from "@/lib/contactMessages";
 
 type FormData = {
   name: string;
@@ -22,6 +22,8 @@ export default function ContactPage() {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [showSuccess, setShowSuccess] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -78,20 +80,28 @@ export default function ContactPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setSubmitError("");
 
     if (!validateForm()) return;
 
-    // Frontend only — no backend/API request
-    setShowSuccess(true);
+    setSubmitting(true);
+    try {
+      await submitContactMessage({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        subject: formData.subject.trim(),
+        message: formData.message.trim(),
+      });
 
-    setFormData({
-      name: "",
-      email: "",
-      subject: "",
-      message: "",
-    });
+      setShowSuccess(true);
+      setFormData({ name: "", email: "", subject: "", message: "" });
+    } catch {
+      setSubmitError("Message bhej nahi saka — dobara try karein ya seedha email karein.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -102,21 +112,19 @@ export default function ContactPage() {
 
         <div className="relative mx-auto max-w-7xl px-6 py-20 sm:px-8 lg:px-12">
           <div className="max-w-3xl">
-            
-            
-          <button
-  type="button"
-  onClick={() =>
-    document.getElementById("contact-form")?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    })
-  }
-  className="inline-flex rounded-full border border-[var(--color-primary)]/30 bg-[var(--color-primary)]/10 px-4 py-2 text-sm font-medium text-[var(--color-primary)] transition hover:bg-[var(--color-primary)]/20"
->
-  Get In Touch
-</button>
-            
+            <button
+              type="button"
+              onClick={() =>
+                document.getElementById("contact-form")?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                })
+              }
+              className="inline-flex rounded-full border border-[var(--color-primary)]/30 bg-[var(--color-primary)]/10 px-4 py-2 text-sm font-medium text-[var(--color-primary)] transition hover:bg-[var(--color-primary)]/20"
+            >
+              Get In Touch
+            </button>
+
             <h1 className="mt-6 font-[var(--font-display)] text-4xl font-bold tracking-tight text-[var(--color-surface)] sm:text-5xl lg:text-6xl">
               Contact Us
             </h1>
@@ -170,7 +178,7 @@ export default function ContactPage() {
           </div>
 
           {/* Contact Form */}
-          <div    id="contact-form" className="rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-sm sm:p-10">
+          <div id="contact-form" className="rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-sm sm:p-10">
             <div>
               <p className="text-sm font-semibold uppercase tracking-wider text-[var(--color-primary-dark)]">
                 Send a Message
@@ -261,12 +269,17 @@ export default function ContactPage() {
                 </div>
               </div>
 
+              {submitError && (
+                <p className="text-sm text-[var(--color-accent)]">{submitError}</p>
+              )}
+
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full rounded-xl bg-[var(--color-accent)] px-6 py-3.5 text-sm font-semibold text-[var(--color-surface)] shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[var(--color-accent)]/20"
+                disabled={submitting}
+                className="w-full rounded-xl bg-[var(--color-accent)] px-6 py-3.5 text-sm font-semibold text-[var(--color-surface)] shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[var(--color-accent)]/20 disabled:opacity-60"
               >
-                Submit Message
+                {submitting ? "Sending…" : "Submit Message"}
               </button>
 
               <p className="text-center text-xs leading-5 text-[var(--color-muted)]">
@@ -324,10 +337,6 @@ export default function ContactPage() {
   );
 }
 
-/* =========================================================
-   Form Field
-========================================================= */
-
 function FormField({
   label,
   name,
@@ -379,10 +388,6 @@ function FormField({
   );
 }
 
-/* =========================================================
-   Contact Information
-========================================================= */
-
 function ContactInfo({
   icon,
   title,
@@ -410,10 +415,6 @@ function ContactInfo({
     </div>
   );
 }
-
-/* =========================================================
-   Icons
-========================================================= */
 
 function MailIcon() {
   return (
