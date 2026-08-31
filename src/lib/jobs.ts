@@ -58,25 +58,31 @@ function mapDoc(id: string, data: Record<string, unknown>): Job {
   };
 }
 
-/**
- * Direct uncached fetch function for raw internal access.
- * Default limit 50 set kar di gayi hai taake uncontrolled reads na hon.
- */
 async function rawFetchJobs(maxCount: number = 50): Promise<Job[]> {
-  const q = query(
-    collection(db, JOBS_COLLECTION),
-    orderBy("createdAt", "desc"),
-    fsLimit(maxCount)
-  );
-  const snap = await getDocs(q);
-  return snap.docs.map((d) => mapDoc(d.id, d.data()));
+  try {
+    const q = query(
+      collection(db, JOBS_COLLECTION),
+      orderBy("createdAt", "desc"),
+      fsLimit(maxCount)
+    );
+    const snap = await getDocs(q);
+    return snap.docs.map((d) => mapDoc(d.id, d.data()));
+  } catch (err) {
+    console.error("rawFetchJobs error:", err);
+    return [];
+  }
 }
 
 async function rawFetchJob(id: string): Promise<Job | null> {
-  const ref = doc(db, JOBS_COLLECTION, id);
-  const snap = await getDoc(ref);
-  if (!snap.exists()) return null;
-  return mapDoc(snap.id, snap.data());
+  try {
+    const ref = doc(db, JOBS_COLLECTION, id);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) return null;
+    return mapDoc(snap.id, snap.data());
+  } catch (err) {
+    console.error("rawFetchJob error:", err);
+    return null;
+  }
 }
 
 /**
@@ -105,28 +111,55 @@ export async function fetchJobUncached(id: string): Promise<Job | null> {
   return rawFetchJob(id);
 }
 
-/** 
- * Client-Side Filter Function: Direct search on full database when user clicks sidebar filters.
- */
-export async function fetchJobsFiltered(filters: { country?: string; jobType?: string }): Promise<Job[]> {
-  const constraints = [];
-
-  if (filters.country) {
-    constraints.push(where("location", "==", filters.country));
+export async function fetchJobsFiltered(
+  filters: {
+    cities?: string[];
+    countries?: string[];
+    remoteOnly?: boolean;
+    onsiteOnly?: boolean;
+    internshipOnly?: boolean;
   }
-  if (filters.jobType) {
-    constraints.push(where("jobType", "==", filters.jobType));
+): Promise<Job[]> {
+  try {
+    const q = query(
+      collection(db, JOBS_COLLECTION),
+      orderBy("createdAt", "desc"),
+      fsLimit(500) 
+    );
+
+    const snap = await getDocs(q);
+    const allJobs = snap.docs.map((d) => mapDoc(d.id, d.data()));
+
+    const filtered = allJobs.filter((job) => {
+      const haystack =
+        `${job.title} ${job.location} ${job.jobType} ${job.experience}`.toLowerCase();
+
+      if (filters.cities && filters.cities.length > 0) {
+        const hit = filters.cities.some((city) =>
+          haystack.includes(city.toLowerCase())
+        );
+        if (!hit) return false;
+      }
+
+      if (filters.countries && filters.countries.length > 0) {
+        const hit = filters.countries.some((country) =>
+          haystack.includes(country.toLowerCase().replace(/\s*\(uae\)/, ""))
+        );
+        if (!hit) return false;
+      }
+
+      if (filters.remoteOnly && !haystack.includes("remote")) return false;
+      if (filters.onsiteOnly && haystack.includes("remote")) return false;
+      if (filters.internshipOnly && !haystack.includes("intern")) return false;
+
+      return true;
+    });
+
+    return filtered;
+  } catch (err) {
+    console.error("fetchJobsFiltered error:", err);
+    return []; // crash hone ki bajaye empty array return karega
   }
-
-  const q = query(
-    collection(db, JOBS_COLLECTION),
-    ...constraints,
-    orderBy("createdAt", "desc"),
-    fsLimit(100)
-  );
-
-  const snap = await getDocs(q);
-  return snap.docs.map((d) => mapDoc(d.id, d.data()));
 }
 
 export async function createJob(values: JobFormValues): Promise<string> {
@@ -136,6 +169,7 @@ export async function createJob(values: JobFormValues): Promise<string> {
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
+   
   return ref.id;
 }
 
@@ -145,6 +179,7 @@ export async function updateJob(id: string, values: JobFormValues): Promise<void
     ...values,
     updatedAt: serverTimestamp(),
   });
+   
 }
 
 export async function trackJobApplication(jobId: string): Promise<void> {
@@ -159,4 +194,5 @@ export async function trackJobApplication(jobId: string): Promise<void> {
 
 export async function deleteJob(id: string): Promise<void> {
   await deleteDoc(doc(db, JOBS_COLLECTION, id));
+    
 }

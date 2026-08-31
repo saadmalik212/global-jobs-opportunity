@@ -50,15 +50,16 @@ export default function AdminDashboard() {
   }, []);
 
   async function handleDelete(id: string) {
-    if (!confirm("Yeh job post delete karni hai?")) return;
-    setDeletingId(id);
-    try {
-      await deleteJob(id);
-      setJobs((prev) => prev.filter((j) => j.id !== id));
-    } finally {
-      setDeletingId(null);
-    }
+  if (!confirm("Yeh job post delete karni hai?")) return;
+  setDeletingId(id);
+  try {
+    await deleteJob(id);
+    await fetch("/api/revalidate-jobs", { method: "POST" }); 
+    setJobs((prev) => prev.filter((j) => j.id !== id));
+  } finally {
+    setDeletingId(null);
   }
+}
 
   async function handleCopyLink(id: string) {
     const url = `${SITE_URL}/jobs/${id}`;

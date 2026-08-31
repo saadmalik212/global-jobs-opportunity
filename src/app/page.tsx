@@ -5,8 +5,6 @@ import { fetchJobs } from "@/lib/jobs";
 
 export const revalidate = 300;
 
-
-
 export default async function HomePage() {
  const jobs = await fetchJobs(50);
 

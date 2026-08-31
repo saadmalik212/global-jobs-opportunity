@@ -40,26 +40,50 @@ export default function JobList({ initialJobs }: Props) {
     );
   }, [filters]);
 
-  // Ab ye Firestore ko direct hit nahi karta — cached API route call karta hai.
-  const fetchFilteredJobs = useCallback(async (currentFilters: JobFilters) => {
-    setLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (currentFilters.cities.length > 0) params.set("cities", currentFilters.cities.join(","));
-      if (currentFilters.countries.length > 0) params.set("countries", currentFilters.countries.join(","));
-      if (currentFilters.remoteOnly) params.set("remote", "true");
-      if (currentFilters.onsiteOnly) params.set("onsite", "true");
-      if (currentFilters.internshipOnly) params.set("intern", "true");
+const fetchFilteredJobs = useCallback(async (currentFilters: JobFilters) => {
+  setLoading(true);
 
-      const res = await fetch(`/api/jobs/filter?${params.toString()}`);
-      const data = await res.json();
-      setJobs(data.jobs ?? []);
-    } catch (err) {
-      console.error("Error fetching filtered jobs:", err);
-    } finally {
-      setLoading(false);
+  try {
+    const params = new URLSearchParams();
+
+    if (currentFilters.cities.length > 0) {
+      params.set("cities", currentFilters.cities.join(","));
     }
-  }, []);
+
+    if (currentFilters.countries.length > 0) {
+      params.set("countries", currentFilters.countries.join(","));
+    }
+
+    if (currentFilters.remoteOnly) {
+      params.set("remote", "true");
+    }
+
+    if (currentFilters.onsiteOnly) {
+      params.set("onsite", "true");
+    }
+
+    if (currentFilters.internshipOnly) {
+      params.set("intern", "true");
+    }
+
+    const res = await fetch(`/api/jobs/filter?${params.toString()}`, {
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      throw new Error(`Filter request failed: ${res.status}`);
+    }
+
+    const data = await res.json();
+
+    setJobs(data.jobs ?? []);
+  } catch (err) {
+    console.error("Error fetching filtered jobs:", err);
+    setJobs([]);
+  } finally {
+    setLoading(false);
+  }
+}, []);
 
   const handleFilterChange = (newFilters: JobFilters) => {
     setFilters(newFilters);
@@ -144,3 +168,4 @@ export default function JobList({ initialJobs }: Props) {
     </section>
   );
 }
+

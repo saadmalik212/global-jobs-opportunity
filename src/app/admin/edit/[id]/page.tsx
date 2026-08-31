@@ -47,7 +47,11 @@ export default function EditJobPage() {
       <JobForm
         initialValues={initialValues}
         submitLabel="Save changes"
-        onSubmit={(values) => updateJob(params.id, values)}
+        onSubmit={(values) =>
+          updateJob(params.id, values).then(async () => {
+            await fetch("/api/revalidate-jobs", { method: "POST" });
+          })
+        }
       />
     </div>
   );
