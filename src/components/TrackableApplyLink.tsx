@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { buildApplyHref } from "@/lib/applyLink";
 import { trackJobApplication } from "@/lib/jobs";
+import * as Sentry from "@sentry/nextjs";
 
 interface Props {
   jobId: string;
@@ -26,6 +27,8 @@ export default function TrackableApplyLink({
       await trackJobApplication(jobId);
     } catch (error) {
       console.error("Failed to track application click:", error);
+      Sentry.captureException(error); 
+
     } finally {
       setTracking(false);
     }

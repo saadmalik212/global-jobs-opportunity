@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import * as Sentry from "@sentry/nextjs";
 import JobForm from "@/components/JobForm";
 import { fetchJobUncached, updateJob } from "@/lib/jobs";
 import { JobFormValues } from "@/lib/types";
@@ -29,6 +30,7 @@ export default function EditJobPage() {
       })
       .catch((error) => {
         console.error("Failed to load job for editing", error);
+        Sentry.captureException(error);
         setNotFound(true);
       });
   }, [params?.id]);

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import Sidebar from "./Sidebar";
+import * as Sentry from "@sentry/nextjs";
 import JobCard from "./JobCard";
 import WhatsAppBanner from "./WhatsAppBanner";
 import { Job, JobFilters } from "@/lib/types";
@@ -79,6 +80,7 @@ const fetchFilteredJobs = useCallback(async (currentFilters: JobFilters) => {
     setJobs(data.jobs ?? []);
   } catch (err) {
     console.error("Error fetching filtered jobs:", err);
+    Sentry.captureException(err);
     setJobs([]);
   } finally {
     setLoading(false);

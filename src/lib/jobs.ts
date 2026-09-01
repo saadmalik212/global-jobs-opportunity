@@ -17,6 +17,8 @@ import {
 import { db } from "./firebase";
 import { Job, JobFormValues, JobMetaField } from "./types";
 import { unstable_cache } from "next/cache";
+import * as Sentry from "@sentry/nextjs";
+
 
 const JOBS_COLLECTION = "jobs";
 
@@ -69,6 +71,7 @@ async function rawFetchJobs(maxCount: number = 50): Promise<Job[]> {
     return snap.docs.map((d) => mapDoc(d.id, d.data()));
   } catch (err) {
     console.error("rawFetchJobs error:", err);
+    Sentry.captureException(err); 
     return [];
   }
 }
@@ -81,6 +84,7 @@ async function rawFetchJob(id: string): Promise<Job | null> {
     return mapDoc(snap.id, snap.data());
   } catch (err) {
     console.error("rawFetchJob error:", err);
+    Sentry.captureException(err);
     return null;
   }
 }
@@ -158,7 +162,8 @@ export async function fetchJobsFiltered(
     return filtered;
   } catch (err) {
     console.error("fetchJobsFiltered error:", err);
-    return []; // crash hone ki bajaye empty array return karega
+    Sentry.captureException(err);
+    return [];
   }
 }
 

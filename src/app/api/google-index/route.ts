@@ -1,5 +1,6 @@
 import { google } from 'googleapis';
 import { NextResponse } from 'next/server';
+import * as Sentry from "@sentry/nextjs";
 
 export async function POST(req: Request) {
   try {
@@ -31,6 +32,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true, data: response.data });
   } catch (error: any) {
     console.error('Indexing API Error:', error.response?.data || error.message);
+    Sentry.captureException(error);
     return NextResponse.json(
       { error: error.message || 'Failed to trigger indexing' },
       { status: 500 }

@@ -7,6 +7,7 @@ import { fetchJobsUncached, deleteJob } from "@/lib/jobs";
 import { Job } from "@/lib/types";
 import { timeAgo } from "@/lib/timeAgo";
 import { buildShareText } from "@/lib/shareText";
+import * as Sentry from "@sentry/nextjs";
 
 const DEFAULT_LIMIT = 10;
 
@@ -27,6 +28,7 @@ export default function AdminDashboard() {
       setShowingAll(false);
     } catch (err) {
       console.error("Failed to load jobs", err);
+       Sentry.captureException(err);
     } finally {
       setLoading(false);
     }
@@ -40,6 +42,7 @@ export default function AdminDashboard() {
       setShowingAll(true);
     } catch (err) {
       console.error("Failed to load all jobs", err);
+      Sentry.captureException(err);
     } finally {
       setLoadingAll(false);
     }
