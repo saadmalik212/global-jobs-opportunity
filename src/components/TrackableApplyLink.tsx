@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { buildApplyHref } from "@/lib/applyLink";
-import { trackJobApplication } from "@/lib/jobs";
+import { trackJobApplication } from "@/lib/jobsClient";
 import * as Sentry from "@sentry/nextjs";
 
 interface Props {

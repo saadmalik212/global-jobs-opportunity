@@ -20,6 +20,7 @@ import { unstable_cache } from "next/cache";
 import * as Sentry from "@sentry/nextjs";
 import { adminDb } from "./firebaseAdmin";
 
+
 const JOBS_COLLECTION = "jobs";
 
 function toMillis(value: unknown): number {
@@ -167,16 +168,6 @@ export async function updateJob(id: string, values: JobFormValues): Promise<void
     updatedAt: serverTimestamp(),
   });
    
-}
-
-export async function trackJobApplication(jobId: string): Promise<void> {
-  if (!jobId) return;
-
-  const ref = doc(db, JOBS_COLLECTION, jobId);
-  await updateDoc(ref, {
-    applicationCount: increment(1),
-    updatedAt: serverTimestamp(),
-  });
 }
 
 export async function deleteJob(id: string): Promise<void> {
