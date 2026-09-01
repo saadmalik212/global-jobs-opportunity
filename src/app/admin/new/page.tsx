@@ -1,7 +1,7 @@
 "use client";
 
 import JobForm from "@/components/JobForm";
-import { createJob } from "@/lib/jobs";
+import { createJob } from "@/lib/jobsClient";
 
 export default function NewJobPage() {
   return (

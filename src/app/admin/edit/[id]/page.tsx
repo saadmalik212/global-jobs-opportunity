@@ -1,10 +1,8 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import * as Sentry from "@sentry/nextjs";
 import JobForm from "@/components/JobForm";
-import { fetchJobUncached, updateJob } from "@/lib/jobs";
+import { updateJob } from "@/lib/jobsClient";
 import { JobFormValues } from "@/lib/types";
 
 export default function EditJobPage() {
@@ -12,28 +10,19 @@ export default function EditJobPage() {
   const [initialValues, setInitialValues] = useState<JobFormValues | null>(null);
   const [notFound, setNotFound] = useState(false);
 
-  useEffect(() => {
-    const jobId = params?.id;
-    if (!jobId) {
-      setNotFound(true);
-      return;
-    }
+useEffect(() => {
+  const jobId = params?.id;
+  if (!jobId) { setNotFound(true); return; }
 
-    fetchJobUncached(jobId)
-      .then((job) => {
-        if (!job) {
-          setNotFound(true);
-          return;
-        }
-        const { id, createdAt, updatedAt, ...values } = job;
-        setInitialValues(values);
-      })
-      .catch((error) => {
-        console.error("Failed to load job for editing", error);
-        Sentry.captureException(error);
-        setNotFound(true);
-      });
-  }, [params?.id]);
+  fetch(`/api/admin/jobs/${jobId}`)
+    .then((r) => r.json())
+    .then(({ job }) => {
+      if (!job) { setNotFound(true); return; }
+      const { id, createdAt, updatedAt, ...values } = job;
+      setInitialValues(values);
+    })
+    .catch(() => setNotFound(true));
+}, [params?.id]);
 
   if (notFound) {
     return <p className="text-muted">Yeh job post nahi mili — ho sakta hai delete ho chuki ho.</p>;
