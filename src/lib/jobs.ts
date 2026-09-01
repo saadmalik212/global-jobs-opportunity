@@ -89,9 +89,7 @@ async function rawFetchJob(id: string): Promise<Job | null> {
   }
 }
 
-/**
- * Next.js Cached Data Fetching (5 Minutes Cache)
- */
+
 export const fetchJobs = (maxCount: number = 50) =>
   unstable_cache(
     async () => rawFetchJobs(maxCount),
@@ -106,7 +104,6 @@ export const fetchJob = (id: string) =>
     { revalidate: 300, tags: ["jobs"] }
   )();
 
-/** Uncached version specifically for Admin Dashboard */
 export async function fetchJobsUncached(maxCount: number = 200): Promise<Job[]> {
   return rawFetchJobs(maxCount);
 }
@@ -125,33 +122,22 @@ export async function fetchJobsFiltered(
   }
 ): Promise<Job[]> {
   try {
-    const q = query(
-      collection(db, JOBS_COLLECTION),
-      orderBy("createdAt", "desc"),
-      fsLimit(500) 
-    );
-
-    const snap = await getDocs(q);
-    const allJobs = snap.docs.map((d) => mapDoc(d.id, d.data()));
+    const allJobs = await fetchJobs(1000); 
 
     const filtered = allJobs.filter((job) => {
       const haystack =
         `${job.title} ${job.location} ${job.jobType} ${job.experience}`.toLowerCase();
 
       if (filters.cities && filters.cities.length > 0) {
-        const hit = filters.cities.some((city) =>
-          haystack.includes(city.toLowerCase())
-        );
+        const hit = filters.cities.some((city) => haystack.includes(city.toLowerCase()));
         if (!hit) return false;
       }
-
       if (filters.countries && filters.countries.length > 0) {
         const hit = filters.countries.some((country) =>
           haystack.includes(country.toLowerCase().replace(/\s*\(uae\)/, ""))
         );
         if (!hit) return false;
       }
-
       if (filters.remoteOnly && !haystack.includes("remote")) return false;
       if (filters.onsiteOnly && haystack.includes("remote")) return false;
       if (filters.internshipOnly && !haystack.includes("intern")) return false;
@@ -162,7 +148,7 @@ export async function fetchJobsFiltered(
     return filtered;
   } catch (err) {
     console.error("fetchJobsFiltered error:", err);
-    Sentry.captureException(err);
+     Sentry.captureException(err);
     return [];
   }
 }
