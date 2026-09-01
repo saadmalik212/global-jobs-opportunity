@@ -26,6 +26,9 @@ const JOBS_COLLECTION = "jobs";
 
 function toMillis(value: unknown): number {
   if (value instanceof Timestamp) return value.toMillis();
+  if (value && typeof value === "object" && "toMillis" in value && typeof (value as any).toMillis === "function") {
+    return (value as any).toMillis();
+  }
   if (typeof value === "number") return value;
   return Date.now();
 }
