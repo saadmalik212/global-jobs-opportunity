@@ -1,5 +1,7 @@
+import 'server-only';
 import { initializeApp, getApps, cert, App } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
+
 
 let adminApp: App;
 
