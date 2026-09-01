@@ -18,7 +18,7 @@ import { db } from "./firebase";
 import { Job, JobFormValues, JobMetaField } from "./types";
 import { unstable_cache } from "next/cache";
 import * as Sentry from "@sentry/nextjs";
-
+import { adminDb } from "./firebaseAdmin";
 
 const JOBS_COLLECTION = "jobs";
 
@@ -62,29 +62,25 @@ function mapDoc(id: string, data: Record<string, unknown>): Job {
 
 async function rawFetchJobs(maxCount: number = 50): Promise<Job[]> {
   try {
-    const q = query(
-      collection(db, JOBS_COLLECTION),
-      orderBy("createdAt", "desc"),
-      fsLimit(maxCount)
-    );
-    const snap = await getDocs(q);
+    const snap = await adminDb
+      .collection(JOBS_COLLECTION)
+      .orderBy("createdAt", "desc")
+      .limit(maxCount)
+      .get();
     return snap.docs.map((d) => mapDoc(d.id, d.data()));
   } catch (err) {
     console.error("rawFetchJobs error:", err);
-    Sentry.captureException(err); 
     return [];
   }
 }
 
 async function rawFetchJob(id: string): Promise<Job | null> {
   try {
-    const ref = doc(db, JOBS_COLLECTION, id);
-    const snap = await getDoc(ref);
-    if (!snap.exists()) return null;
-    return mapDoc(snap.id, snap.data());
+    const snap = await adminDb.collection(JOBS_COLLECTION).doc(id).get();
+    if (!snap.exists) return null;
+    return mapDoc(snap.id, snap.data() as Record<string, unknown>);
   } catch (err) {
     console.error("rawFetchJob error:", err);
-    Sentry.captureException(err);
     return null;
   }
 }
