@@ -3,7 +3,7 @@
 import { SITE_URL } from "@/lib/constants";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { fetchJobsUncached, deleteJob } from "@/lib/jobs";
+import { deleteJob } from "@/lib/jobsClient";
 import { Job } from "@/lib/types";
 import { timeAgo } from "@/lib/timeAgo";
 import { buildShareText } from "@/lib/shareText";
@@ -20,33 +20,35 @@ export default function AdminDashboard() {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [copiedTextId, setCopiedTextId] = useState<string | null>(null);
 
-  async function loadJobs() {
-    setLoading(true);
-    try {
-      const data = await fetchJobsUncached(DEFAULT_LIMIT);
-      setJobs(data);
-      setShowingAll(false);
-    } catch (err) {
-      console.error("Failed to load jobs", err);
-       Sentry.captureException(err);
-    } finally {
-      setLoading(false);
-    }
+async function loadJobs() {
+  setLoading(true);
+  try {
+    const res = await fetch(`/api/admin/jobs?limit=${DEFAULT_LIMIT}`);
+    const { jobs: data } = await res.json();
+    setJobs(data);
+    setShowingAll(false);
+  } catch (err) {
+    console.error("Failed to load jobs", err);
+    Sentry.captureException(err);
+  } finally {
+    setLoading(false);
   }
+}
 
-  async function loadAllJobs() {
-    setLoadingAll(true);
-    try {
-      const data = await fetchJobsUncached(); // no limit — sirf on-demand
-      setJobs(data);
-      setShowingAll(true);
-    } catch (err) {
-      console.error("Failed to load all jobs", err);
-      Sentry.captureException(err);
-    } finally {
-      setLoadingAll(false);
-    }
+async function loadAllJobs() {
+  setLoadingAll(true);
+  try {
+    const res = await fetch(`/api/admin/jobs`);
+    const { jobs: data } = await res.json();
+    setJobs(data);
+    setShowingAll(true);
+  } catch (err) {
+    console.error("Failed to load all jobs", err);
+    Sentry.captureException(err);
+  } finally {
+    setLoadingAll(false);
   }
+}
 
   useEffect(() => {
     loadJobs();
