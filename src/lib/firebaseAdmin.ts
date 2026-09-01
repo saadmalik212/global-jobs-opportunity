@@ -11,6 +11,11 @@ function getAdminApp() {
   const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
   let privateKey = process.env.FIREBASE_PRIVATE_KEY;
 
+    console.log("DEBUG projectId:", projectId); // ye add karein
+  console.log("DEBUG clientEmail:", clientEmail); // ye add karein
+  console.log("DEBUG privateKey exists:", !!privateKey); // ye add karein
+
+
   if (privateKey) {
    
     privateKey = privateKey.trim().replace(/^["']|["']$/g, '');
