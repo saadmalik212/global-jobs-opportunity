@@ -1,4 +1,5 @@
 import "server-only";
+import { redis } from "./redis";
 import {
   collection,
   addDoc,
@@ -17,7 +18,6 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { Job, JobFormValues, JobMetaField } from "./types";
-import { unstable_cache } from "next/cache";
 import * as Sentry from "@sentry/nextjs";
 import { adminDb } from "./firebaseAdmin";
 
@@ -91,19 +91,49 @@ async function rawFetchJob(id: string): Promise<Job | null> {
 }
 
 
-export const fetchJobs = (maxCount: number = 50) =>
-  unstable_cache(
-    async () => rawFetchJobs(maxCount),
-    [`jobs-list-${maxCount}`],
-    { revalidate: 300, tags: ["jobs"] }
-  )();
+const CACHE_TTL = 300; // 5 minutes, seconds mein
 
-export const fetchJob = (id: string) =>
-  unstable_cache(
-    async () => rawFetchJob(id),
-    [`job-detail-${id}`],
-    { revalidate: 300, tags: ["jobs"] }
-  )();
+export async function fetchJobs(maxCount: number = 50): Promise<Job[]> {
+  const cacheKey = `jobs-list-${maxCount}`;
+  try {
+    const cached = await redis.get<Job[]>(cacheKey);
+    if (cached) return cached;
+  } catch (err) {
+    console.error("Redis get error:", err);
+  }
+
+  const jobs = await rawFetchJobs(maxCount);
+
+  try {
+    await redis.set(cacheKey, jobs, { ex: CACHE_TTL });
+  } catch (err) {
+    console.error("Redis set error:", err);
+  }
+
+  return jobs;
+}
+
+export async function fetchJob(id: string): Promise<Job | null> {
+  const cacheKey = `job-detail-${id}`;
+  try {
+    const cached = await redis.get<Job>(cacheKey);
+    if (cached) return cached;
+  } catch (err) {
+    console.error("Redis get error:", err);
+  }
+
+  const job = await rawFetchJob(id);
+
+  if (job) {
+    try {
+      await redis.set(cacheKey, job, { ex: CACHE_TTL });
+    } catch (err) {
+      console.error("Redis set error:", err);
+    }
+  }
+
+  return job;
+}
 
 export async function fetchJobsUncached(maxCount: number = 200): Promise<Job[]> {
   return rawFetchJobs(maxCount);
@@ -123,7 +153,7 @@ export async function fetchJobsFiltered(
   }
 ): Promise<Job[]> {
   try {
-    const allJobs = await fetchJobs(1000); 
+    const allJobs = await fetchJobs(1000); // ab ye Redis se aayega, Firestore se nahi
 
     const filtered = allJobs.filter((job) => {
       const haystack =
@@ -149,7 +179,6 @@ export async function fetchJobsFiltered(
     return filtered;
   } catch (err) {
     console.error("fetchJobsFiltered error:", err);
-     Sentry.captureException(err);
     return [];
   }
 }

@@ -162,9 +162,9 @@ export default async function JobDetailPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      <Link href="/#jobs" className="mb-6 inline-block text-sm text-muted hover:text-primary">
-        ← Back to all jobs
-      </Link>
+  <Link href="/#jobs" prefetch={false} className="mb-6 inline-block text-sm text-muted hover:text-primary">
+  ← Back to all jobs
+</Link>
 
       <article className="rounded-2xl border border-border bg-surface p-6">
         <div className="mb-2 flex items-start justify-between gap-3">
@@ -232,9 +232,9 @@ export default async function JobDetailPage({ params }: Props) {
 
       <div className="mt-8 space-y-4">
         <div className="rounded-2xl border border-border bg-surface p-4 text-center">
-          <Link href="/blog" className="text-sm font-medium text-primary hover:underline">
-            📚 Read our career guides & job tips →
-          </Link>
+        <Link href="/blog" prefetch={false} className="text-sm font-medium text-primary hover:underline">
+  📚 Read our career guides & job tips →
+</Link>
         </div>
         <WhatsAppBanner />
       </div>

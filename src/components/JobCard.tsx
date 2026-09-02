@@ -35,10 +35,7 @@ export default function JobCard({ job, highlighted = false }: Props) {
           ⚠️ {job.noticeLine}
         </p>
 
-        {/* Location / Experience / Job Type / Company / Salary — each row
-            starts flush left, and the value sits right after its own label
-            (no fixed-width column forcing extra gaps). Only filled-in
-            fields render. */}
+        {/* Location / Experience / Job Type / Company / Salary */}
         {metaRows.length > 0 && (
           <dl className="mb-3 space-y-1 text-sm">
             {metaRows.map((row) => (
@@ -82,6 +79,7 @@ export default function JobCard({ job, highlighted = false }: Props) {
 
       <Link
         href={`/jobs/${job.id}`}
+        prefetch={false}
         className="mt-2 shrink-0 text-xs font-medium text-muted underline decoration-dotted hover:text-primary"
       >
         View full details →

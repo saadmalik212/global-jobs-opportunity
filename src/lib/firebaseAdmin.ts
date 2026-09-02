@@ -15,7 +15,6 @@ function getAdminApp() {
   if (privateKey) {
    
     privateKey = privateKey.trim().replace(/^["']|["']$/g, '');
-    // 2. Escaped \n ko actual newline characters me convert karein
     privateKey = privateKey.replace(/\\n/g, '\n');
   }
 
