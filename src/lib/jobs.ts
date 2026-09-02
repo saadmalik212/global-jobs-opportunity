@@ -22,8 +22,8 @@ import { db } from "./firebase";
 import { Job, JobFormValues, JobMetaField } from "./types";
 import { adminDb } from "./firebaseAdmin";
 
-
 const JOBS_COLLECTION = "jobs";
+const CACHE_TTL = 300; // 5 minutes, seconds mein
 
 function toMillis(value: unknown): number {
   if (value instanceof Timestamp) return value.toMillis();
@@ -91,36 +91,14 @@ async function rawFetchJob(id: string): Promise<Job | null> {
   }
 }
 
-export async function fetchJobsPage(
-  pageSize: number = 20,
-  cursor?: number // last job ka createdAt (millis)
-): Promise<{ jobs: Job[]; nextCursor: number | null }> {
-  try {
-    let q = adminDb
-      .collection(JOBS_COLLECTION)
-      .orderBy("createdAt", "desc")
-      .limit(pageSize);
-
-    if (cursor) {
-      q = q.startAfter(AdminTimestamp.fromMillis(cursor));
-    }
-
-    const snap = await q.get();
-    const jobs = snap.docs.map((d) => mapDoc(d.id, d.data()));
-
-    const nextCursor =
-      jobs.length === pageSize ? jobs[jobs.length - 1].createdAt : null;
-
-    return { jobs, nextCursor };
-  } catch (err) {
-    console.error("fetchJobsPage error:", err);
-    return { jobs: [], nextCursor: null };
-  }
-}
-const CACHE_TTL = 300; // 5 minutes, seconds mein
+// In-flight request coalescing — same Lambda container ke andar
+// simultaneous requests ko ek hi Firestore fetch share karwata hai,
+// taake cache-expire ke waqt "thundering herd" na ho.
+const inflightRequests = new Map<string, Promise<any>>();
 
 export async function fetchJobs(maxCount: number = 50): Promise<Job[]> {
   const cacheKey = `jobs-list-${maxCount}`;
+
   try {
     const cached = await redis.get<Job[]>(cacheKey);
     if (cached) return cached;
@@ -128,19 +106,32 @@ export async function fetchJobs(maxCount: number = 50): Promise<Job[]> {
     console.error("Redis get error:", err);
   }
 
-  const jobs = await rawFetchJobs(maxCount);
-
-  try {
-    await redis.set(cacheKey, jobs, { ex: CACHE_TTL });
-  } catch (err) {
-    console.error("Redis set error:", err);
+  if (inflightRequests.has(cacheKey)) {
+    return inflightRequests.get(cacheKey)!;
   }
 
-  return jobs;
+  const fetchPromise = (async () => {
+    const jobs = await rawFetchJobs(maxCount);
+    try {
+      await redis.set(cacheKey, jobs, { ex: CACHE_TTL });
+    } catch (err) {
+      console.error("Redis set error:", err);
+    }
+    return jobs;
+  })();
+
+  inflightRequests.set(cacheKey, fetchPromise);
+
+  try {
+    return await fetchPromise;
+  } finally {
+    inflightRequests.delete(cacheKey);
+  }
 }
 
 export async function fetchJob(id: string): Promise<Job | null> {
   const cacheKey = `job-detail-${id}`;
+
   try {
     const cached = await redis.get<Job>(cacheKey);
     if (cached) return cached;
@@ -148,17 +139,87 @@ export async function fetchJob(id: string): Promise<Job | null> {
     console.error("Redis get error:", err);
   }
 
-  const job = await rawFetchJob(id);
-
-  if (job) {
-    try {
-      await redis.set(cacheKey, job, { ex: CACHE_TTL });
-    } catch (err) {
-      console.error("Redis set error:", err);
-    }
+  if (inflightRequests.has(cacheKey)) {
+    return inflightRequests.get(cacheKey)!;
   }
 
-  return job;
+  const fetchPromise = (async () => {
+    const job = await rawFetchJob(id);
+    if (job) {
+      try {
+        await redis.set(cacheKey, job, { ex: CACHE_TTL });
+      } catch (err) {
+        console.error("Redis set error:", err);
+      }
+    }
+    return job;
+  })();
+
+  inflightRequests.set(cacheKey, fetchPromise);
+
+  try {
+    return await fetchPromise;
+  } finally {
+    inflightRequests.delete(cacheKey);
+  }
+}
+
+export async function fetchJobsPage(
+  pageSize: number = 20,
+  cursor?: number // last job ka createdAt (millis)
+): Promise<{ jobs: Job[]; nextCursor: number | null }> {
+  const cacheKey = `jobs-page-${pageSize}-${cursor ?? "first"}`;
+
+  try {
+    const cached = await redis.get<{ jobs: Job[]; nextCursor: number | null }>(cacheKey);
+    if (cached) return cached;
+  } catch (err) {
+    console.error("Redis get error:", err);
+  }
+
+  if (inflightRequests.has(cacheKey)) {
+    return inflightRequests.get(cacheKey)!;
+  }
+
+  const fetchPromise = (async () => {
+    try {
+      let q = adminDb
+        .collection(JOBS_COLLECTION)
+        .orderBy("createdAt", "desc")
+        .limit(pageSize);
+
+      if (cursor) {
+        q = q.startAfter(AdminTimestamp.fromMillis(cursor));
+      }
+
+      const snap = await q.get();
+      const jobs = snap.docs.map((d) => mapDoc(d.id, d.data()));
+
+      const nextCursor =
+        jobs.length === pageSize ? jobs[jobs.length - 1].createdAt : null;
+
+      const result = { jobs, nextCursor };
+
+      try {
+        await redis.set(cacheKey, result, { ex: CACHE_TTL });
+      } catch (err) {
+        console.error("Redis set error:", err);
+      }
+
+      return result;
+    } catch (err) {
+      console.error("fetchJobsPage error:", err);
+      return { jobs: [], nextCursor: null };
+    }
+  })();
+
+  inflightRequests.set(cacheKey, fetchPromise);
+
+  try {
+    return await fetchPromise;
+  } finally {
+    inflightRequests.delete(cacheKey);
+  }
 }
 
 export async function fetchJobsUncached(maxCount: number = 200): Promise<Job[]> {
@@ -181,7 +242,7 @@ export async function fetchJobsFiltered(
   pageSize: number = 10
 ): Promise<{ jobs: Job[]; totalCount: number; totalPages: number }> {
   try {
-    const allJobs = await fetchJobs(1000); 
+    const allJobs = await fetchJobs(1000);
 
     const filtered = allJobs.filter((job) => {
       const haystack =
@@ -223,7 +284,7 @@ export async function createJob(values: JobFormValues): Promise<string> {
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
-   
+
   return ref.id;
 }
 
@@ -233,10 +294,8 @@ export async function updateJob(id: string, values: JobFormValues): Promise<void
     ...values,
     updatedAt: serverTimestamp(),
   });
-   
 }
 
 export async function deleteJob(id: string): Promise<void> {
   await deleteDoc(doc(db, JOBS_COLLECTION, id));
-    
 }
