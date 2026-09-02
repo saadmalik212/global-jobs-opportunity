@@ -189,26 +189,42 @@ export default function JobList({ initialJobs }: Props) {
           </span>
         </div>
 
-        {loading ? (
-          <div className="rounded-2xl border border-border bg-surface p-10 text-center text-muted">
-            Matching jobs search ho rahi hain...
-          </div>
-        ) : (isFilterActive ? jobs : displayedJobs).length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-border bg-surface p-10 text-center text-muted">
-            Koi job filters se match nahi hui — filters clear kar ke dubara
-            try karein.
-          </div>
-        ) : (
-          <>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {(isFilterActive ? jobs : displayedJobs).map((job) => (
-                <JobCard
-                  key={job.id}
-                  job={job}
-                  highlighted={job.id === targetJobId}
-                />
-              ))}
-            </div>
+      {loading ? (
+  <div className="grid gap-4 sm:grid-cols-2">
+    {Array.from({ length: 10 }).map((_, i) => (
+      <div
+        key={i}
+        className="h-[360px] animate-pulse rounded-2xl border border-border bg-surface p-5"
+      >
+        <div className="mb-3 flex items-start justify-between gap-3">
+          <div className="h-5 w-2/3 rounded bg-ink/10" />
+          <div className="h-5 w-14 shrink-0 rounded-full bg-ink/10" />
+        </div>
+        <div className="mb-4 h-8 w-full rounded bg-ink/5" />
+        <div className="space-y-2">
+          <div className="h-3 w-1/2 rounded bg-ink/10" />
+          <div className="h-3 w-1/3 rounded bg-ink/10" />
+          <div className="h-3 w-2/3 rounded bg-ink/10" />
+          <div className="h-3 w-1/2 rounded bg-ink/10" />
+        </div>
+      </div>
+    ))}
+  </div>
+) : (isFilterActive ? jobs : displayedJobs).length === 0 ? (
+  <div className="rounded-2xl border border-dashed border-border bg-surface p-10 text-center text-muted">
+    No jobs matched your selected filters. Please clear the filters and try another.
+  </div>
+) : (
+  <>
+    <div className="grid gap-4 sm:grid-cols-2">
+      {(isFilterActive ? jobs : displayedJobs).map((job) => (
+        <JobCard
+          key={job.id}
+          job={job}
+          highlighted={job.id === targetJobId}
+        />
+      ))}
+    </div>
 
             {!isFilterActive && nextCursor && (
               <div className="mt-8 flex justify-center">
