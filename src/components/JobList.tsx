@@ -24,6 +24,8 @@ export default function JobList({ initialJobs }: Props) {
   const [jobs, setJobs] = useState<Job[]>(initialJobs);
   const [filters, setFilters] = useState<JobFilters>(EMPTY_FILTERS);
   const [loading, setLoading] = useState<boolean>(false);
+  const [filterPage, setFilterPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const searchParams = useSearchParams();
   const targetJobId = searchParams.get("job");
@@ -68,51 +70,43 @@ export default function JobList({ initialJobs }: Props) {
     }
   }, [nextCursor, loadingMore]);
 
-  const fetchFilteredJobs = useCallback(async (currentFilters: JobFilters) => {
-    setLoading(true);
+  const fetchFilteredJobs = useCallback(
+    async (currentFilters: JobFilters, page: number = 1) => {
+      setLoading(true);
+      try {
+        const params = new URLSearchParams();
+        if (currentFilters.cities.length > 0)
+          params.set("cities", currentFilters.cities.join(","));
+        if (currentFilters.countries.length > 0)
+          params.set("countries", currentFilters.countries.join(","));
+        if (currentFilters.remoteOnly) params.set("remote", "true");
+        if (currentFilters.onsiteOnly) params.set("onsite", "true");
+        if (currentFilters.internshipOnly) params.set("intern", "true");
+        params.set("page", String(page));
 
-    try {
-      const params = new URLSearchParams();
+        const res = await fetch(`/api/jobs/filter?${params.toString()}`, {
+          cache: "no-store",
+        });
 
-      if (currentFilters.cities.length > 0) {
-        params.set("cities", currentFilters.cities.join(","));
+        if (!res.ok) {
+          throw new Error(`Filter request failed: ${res.status}`);
+        }
+
+        const data = await res.json();
+
+        setJobs(data.jobs ?? []);
+        setTotalPages(data.totalPages ?? 1);
+        setFilterPage(page);
+      } catch (err) {
+        console.error("Error fetching filtered jobs:", err);
+        Sentry.captureException(err);
+        setJobs([]);
+      } finally {
+        setLoading(false);
       }
-
-      if (currentFilters.countries.length > 0) {
-        params.set("countries", currentFilters.countries.join(","));
-      }
-
-      if (currentFilters.remoteOnly) {
-        params.set("remote", "true");
-      }
-
-      if (currentFilters.onsiteOnly) {
-        params.set("onsite", "true");
-      }
-
-      if (currentFilters.internshipOnly) {
-        params.set("intern", "true");
-      }
-
-      const res = await fetch(`/api/jobs/filter?${params.toString()}`, {
-        cache: "no-store",
-      });
-
-      if (!res.ok) {
-        throw new Error(`Filter request failed: ${res.status}`);
-      }
-
-      const data = await res.json();
-
-      setJobs(data.jobs ?? []);
-    } catch (err) {
-      console.error("Error fetching filtered jobs:", err);
-      Sentry.captureException(err);
-      setJobs([]);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    []
+  );
 
   const handleFilterChange = (newFilters: JobFilters) => {
     setFilters(newFilters);
@@ -126,8 +120,10 @@ export default function JobList({ initialJobs }: Props) {
 
     if (!hasFilters) {
       setJobs(initialJobs);
+      setFilterPage(1);
+      setTotalPages(1);
     } else {
-      fetchFilteredJobs(newFilters);
+      fetchFilteredJobs(newFilters, 1);
     }
   };
 
@@ -186,7 +182,9 @@ export default function JobList({ initialJobs }: Props) {
             {loading
               ? "Searching..."
               : `${(isFilterActive ? jobs : displayedJobs).length} job${
-                  (isFilterActive ? jobs : displayedJobs).length === 1 ? "" : "s"
+                  (isFilterActive ? jobs : displayedJobs).length === 1
+                    ? ""
+                    : "s"
                 }`}
           </span>
         </div>
@@ -197,7 +195,8 @@ export default function JobList({ initialJobs }: Props) {
           </div>
         ) : (isFilterActive ? jobs : displayedJobs).length === 0 ? (
           <div className="rounded-2xl border border-dashed border-border bg-surface p-10 text-center text-muted">
-            Koi job filters se match nahi hui — filters clear kar ke dubara try karein.
+            Koi job filters se match nahi hui — filters clear kar ke dubara
+            try karein.
           </div>
         ) : (
           <>
@@ -231,6 +230,28 @@ export default function JobList({ initialJobs }: Props) {
                       </span>
                     </>
                   )}
+                </button>
+              </div>
+            )}
+
+            {isFilterActive && totalPages > 1 && (
+              <div className="mt-8 flex items-center justify-center gap-2">
+                <button
+                  onClick={() => fetchFilteredJobs(filters, filterPage - 1)}
+                  disabled={filterPage === 1 || loading}
+                  className="rounded-full border border-border bg-surface px-4 py-2 text-sm font-medium text-ink disabled:opacity-40 hover:bg-canvas"
+                >
+                  ← Previous
+                </button>
+                <span className="text-sm text-muted">
+                  Page {filterPage} of {totalPages}
+                </span>
+                <button
+                  onClick={() => fetchFilteredJobs(filters, filterPage + 1)}
+                  disabled={filterPage === totalPages || loading}
+                  className="rounded-full border border-border bg-surface px-4 py-2 text-sm font-medium text-ink disabled:opacity-40 hover:bg-canvas"
+                >
+                  Next →
                 </button>
               </div>
             )}

@@ -9,7 +9,7 @@ import { timeAgo } from "@/lib/timeAgo";
 import { buildShareText } from "@/lib/shareText";
 import * as Sentry from "@sentry/nextjs";
 
-const DEFAULT_LIMIT = 10;
+const DEFAULT_LIMIT = 5;
 
 export default function AdminDashboard() {
   const [jobs, setJobs] = useState<Job[]>([]);

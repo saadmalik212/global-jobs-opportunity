@@ -13,7 +13,9 @@ export async function GET(req: NextRequest) {
     internshipOnly: searchParams.get("intern") === "true",
   };
 
-  const jobs = await fetchJobsFiltered(filters);
+  const page = Number(searchParams.get("page") ?? 1);
 
-  return NextResponse.json({ jobs });
+  const result = await fetchJobsFiltered(filters, page, 10);
+
+  return NextResponse.json(result);
 }

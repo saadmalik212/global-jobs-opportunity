@@ -176,10 +176,12 @@ export async function fetchJobsFiltered(
     remoteOnly?: boolean;
     onsiteOnly?: boolean;
     internshipOnly?: boolean;
-  }
-): Promise<Job[]> {
+  },
+  page: number = 1,
+  pageSize: number = 10
+): Promise<{ jobs: Job[]; totalCount: number; totalPages: number }> {
   try {
-    const allJobs = await fetchJobs(1000); // ab ye Redis se aayega, Firestore se nahi
+    const allJobs = await fetchJobs(1000); 
 
     const filtered = allJobs.filter((job) => {
       const haystack =
@@ -202,10 +204,15 @@ export async function fetchJobsFiltered(
       return true;
     });
 
-    return filtered;
+    const totalCount = filtered.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const start = (page - 1) * pageSize;
+    const paginatedJobs = filtered.slice(start, start + pageSize);
+
+    return { jobs: paginatedJobs, totalCount, totalPages };
   } catch (err) {
     console.error("fetchJobsFiltered error:", err);
-    return [];
+    return { jobs: [], totalCount: 0, totalPages: 0 };
   }
 }
 
