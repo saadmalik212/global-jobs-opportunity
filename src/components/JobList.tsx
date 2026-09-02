@@ -41,51 +41,78 @@ export default function JobList({ initialJobs }: Props) {
     );
   }, [filters]);
 
-const fetchFilteredJobs = useCallback(async (currentFilters: JobFilters) => {
-  setLoading(true);
+  const PAGE_SIZE = 20;
 
-  try {
-    const params = new URLSearchParams();
+  const [displayedJobs, setDisplayedJobs] = useState<Job[]>(initialJobs);
+  const [nextCursor, setNextCursor] = useState<number | null>(
+    initialJobs.length === PAGE_SIZE
+      ? initialJobs[initialJobs.length - 1].createdAt
+      : null
+  );
+  const [loadingMore, setLoadingMore] = useState(false);
 
-    if (currentFilters.cities.length > 0) {
-      params.set("cities", currentFilters.cities.join(","));
+  const loadMoreJobs = useCallback(async () => {
+    if (!nextCursor || loadingMore) return;
+    setLoadingMore(true);
+    try {
+      const res = await fetch(
+        `/api/jobs/page?cursor=${nextCursor}&limit=${PAGE_SIZE}`
+      );
+      const data = await res.json();
+      setDisplayedJobs((prev) => [...prev, ...data.jobs]);
+      setNextCursor(data.nextCursor);
+    } catch (err) {
+      console.error("Failed to load more jobs", err);
+    } finally {
+      setLoadingMore(false);
     }
+  }, [nextCursor, loadingMore]);
 
-    if (currentFilters.countries.length > 0) {
-      params.set("countries", currentFilters.countries.join(","));
+  const fetchFilteredJobs = useCallback(async (currentFilters: JobFilters) => {
+    setLoading(true);
+
+    try {
+      const params = new URLSearchParams();
+
+      if (currentFilters.cities.length > 0) {
+        params.set("cities", currentFilters.cities.join(","));
+      }
+
+      if (currentFilters.countries.length > 0) {
+        params.set("countries", currentFilters.countries.join(","));
+      }
+
+      if (currentFilters.remoteOnly) {
+        params.set("remote", "true");
+      }
+
+      if (currentFilters.onsiteOnly) {
+        params.set("onsite", "true");
+      }
+
+      if (currentFilters.internshipOnly) {
+        params.set("intern", "true");
+      }
+
+      const res = await fetch(`/api/jobs/filter?${params.toString()}`, {
+        cache: "no-store",
+      });
+
+      if (!res.ok) {
+        throw new Error(`Filter request failed: ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      setJobs(data.jobs ?? []);
+    } catch (err) {
+      console.error("Error fetching filtered jobs:", err);
+      Sentry.captureException(err);
+      setJobs([]);
+    } finally {
+      setLoading(false);
     }
-
-    if (currentFilters.remoteOnly) {
-      params.set("remote", "true");
-    }
-
-    if (currentFilters.onsiteOnly) {
-      params.set("onsite", "true");
-    }
-
-    if (currentFilters.internshipOnly) {
-      params.set("intern", "true");
-    }
-
-    const res = await fetch(`/api/jobs/filter?${params.toString()}`, {
-      cache: "no-store",
-    });
-
-    if (!res.ok) {
-      throw new Error(`Filter request failed: ${res.status}`);
-    }
-
-    const data = await res.json();
-
-    setJobs(data.jobs ?? []);
-  } catch (err) {
-    console.error("Error fetching filtered jobs:", err);
-    Sentry.captureException(err);
-    setJobs([]);
-  } finally {
-    setLoading(false);
-  }
-}, []);
+  }, []);
 
   const handleFilterChange = (newFilters: JobFilters) => {
     setFilters(newFilters);
@@ -107,19 +134,25 @@ const fetchFilteredJobs = useCallback(async (currentFilters: JobFilters) => {
   useEffect(() => {
     if (!cityParam) return;
     handleFilterChange({ ...EMPTY_FILTERS, cities: [cityParam] });
-    document.getElementById("jobs")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document
+      .getElementById("jobs")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [cityParam]);
 
   useEffect(() => {
     if (!countryParam) return;
     handleFilterChange({ ...EMPTY_FILTERS, countries: [countryParam] });
-    document.getElementById("jobs")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document
+      .getElementById("jobs")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [countryParam]);
 
   useEffect(() => {
     if (remoteParam !== "true") return;
     handleFilterChange({ ...EMPTY_FILTERS, remoteOnly: true });
-    document.getElementById("jobs")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document
+      .getElementById("jobs")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [remoteParam]);
 
   useEffect(() => {
@@ -131,7 +164,10 @@ const fetchFilteredJobs = useCallback(async (currentFilters: JobFilters) => {
   }, [targetJobId, jobs]);
 
   return (
-    <section id="jobs" className="mx-auto grid max-w-7xl gap-6 px-5 py-12 sm:px-8 lg:grid-cols-[280px_1fr]">
+    <section
+      id="jobs"
+      className="mx-auto grid max-w-7xl gap-6 px-5 py-12 sm:px-8 lg:grid-cols-[280px_1fr]"
+    >
       <div>
         <h2 className="mb-3 font-display text-lg font-bold text-ink">
           Find the Right Job Faster with Smart Filters
@@ -147,7 +183,11 @@ const fetchFilteredJobs = useCallback(async (currentFilters: JobFilters) => {
             {isFilterActive ? "Filtered Openings" : "Latest openings"}
           </h2>
           <span className="text-sm text-muted">
-            {loading ? "Searching..." : `${jobs.length} job${jobs.length === 1 ? "" : "s"}`}
+            {loading
+              ? "Searching..."
+              : `${(isFilterActive ? jobs : displayedJobs).length} job${
+                  (isFilterActive ? jobs : displayedJobs).length === 1 ? "" : "s"
+                }`}
           </span>
         </div>
 
@@ -155,19 +195,48 @@ const fetchFilteredJobs = useCallback(async (currentFilters: JobFilters) => {
           <div className="rounded-2xl border border-border bg-surface p-10 text-center text-muted">
             Matching jobs search ho rahi hain...
           </div>
-        ) : jobs.length === 0 ? (
+        ) : (isFilterActive ? jobs : displayedJobs).length === 0 ? (
           <div className="rounded-2xl border border-dashed border-border bg-surface p-10 text-center text-muted">
             Koi job filters se match nahi hui — filters clear kar ke dubara try karein.
           </div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2">
-            {jobs.map((job) => (
-              <JobCard key={job.id} job={job} highlighted={job.id === targetJobId} />
-            ))}
-          </div>
+          <>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {(isFilterActive ? jobs : displayedJobs).map((job) => (
+                <JobCard
+                  key={job.id}
+                  job={job}
+                  highlighted={job.id === targetJobId}
+                />
+              ))}
+            </div>
+
+            {!isFilterActive && nextCursor && (
+              <div className="mt-8 flex justify-center">
+                <button
+                  onClick={loadMoreJobs}
+                  disabled={loadingMore}
+                  className="group relative flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-dark disabled:opacity-70"
+                >
+                  {loadingMore ? (
+                    <>
+                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                      Loading more jobs...
+                    </>
+                  ) : (
+                    <>
+                      Load more jobs
+                      <span className="transition group-hover:translate-y-0.5">
+                        ↓
+                      </span>
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>
   );
 }
-

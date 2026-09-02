@@ -1,5 +1,7 @@
 import "server-only";
 import { redis } from "./redis";
+import { Timestamp as AdminTimestamp } from "firebase-admin/firestore";
+
 import {
   collection,
   addDoc,
@@ -18,7 +20,6 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { Job, JobFormValues, JobMetaField } from "./types";
-import * as Sentry from "@sentry/nextjs";
 import { adminDb } from "./firebaseAdmin";
 
 
@@ -90,7 +91,32 @@ async function rawFetchJob(id: string): Promise<Job | null> {
   }
 }
 
+export async function fetchJobsPage(
+  pageSize: number = 20,
+  cursor?: number // last job ka createdAt (millis)
+): Promise<{ jobs: Job[]; nextCursor: number | null }> {
+  try {
+    let q = adminDb
+      .collection(JOBS_COLLECTION)
+      .orderBy("createdAt", "desc")
+      .limit(pageSize);
 
+    if (cursor) {
+      q = q.startAfter(AdminTimestamp.fromMillis(cursor));
+    }
+
+    const snap = await q.get();
+    const jobs = snap.docs.map((d) => mapDoc(d.id, d.data()));
+
+    const nextCursor =
+      jobs.length === pageSize ? jobs[jobs.length - 1].createdAt : null;
+
+    return { jobs, nextCursor };
+  } catch (err) {
+    console.error("fetchJobsPage error:", err);
+    return { jobs: [], nextCursor: null };
+  }
+}
 const CACHE_TTL = 300; // 5 minutes, seconds mein
 
 export async function fetchJobs(maxCount: number = 50): Promise<Job[]> {

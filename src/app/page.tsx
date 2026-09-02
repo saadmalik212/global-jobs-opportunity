@@ -2,18 +2,21 @@ import { Suspense } from "react";
 import Hero from "@/components/Hero";
 import JobList from "@/components/JobList";
 import { fetchJobs } from "@/lib/jobs";
+import JobListSkeleton from "@/components/JobListSkeleton";
+
+
 
 export const revalidate = 300;
 
 export default async function HomePage() {
- const jobs = await fetchJobs(50);
+ const jobs = await fetchJobs(20);
 
   return (
     <main>
       <Hero />
-      <Suspense fallback={null}>
-        <JobList initialJobs={jobs} />
-      </Suspense>
+   <Suspense fallback={<JobListSkeleton />}>
+  <JobList initialJobs={jobs} />
+</Suspense>
     </main>
   );
 }
