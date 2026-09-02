@@ -174,20 +174,11 @@ export default function JobList({ initialJobs }: Props) {
       <div>
         <WhatsAppBanner />
 
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="font-display text-xl font-bold text-ink">
-            {isFilterActive ? "Filtered Openings" : "Latest openings"}
-          </h2>
-          <span className="text-sm text-muted">
-            {loading
-              ? "Searching..."
-              : `${(isFilterActive ? jobs : displayedJobs).length} job${
-                  (isFilterActive ? jobs : displayedJobs).length === 1
-                    ? ""
-                    : "s"
-                }`}
-          </span>
-        </div>
+      <div className="mb-4 flex items-center justify-between">
+  <h2 className="font-display text-xl font-bold text-ink">
+    {isFilterActive ? "Filtered Openings" : "Latest openings"}
+  </h2>
+</div>
 
       {loading ? (
   <div className="grid gap-4 sm:grid-cols-2">
@@ -236,11 +227,11 @@ export default function JobList({ initialJobs }: Props) {
                   {loadingMore ? (
                     <>
                       <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
-                      Loading more jobs...
+                      See more jobs...
                     </>
                   ) : (
                     <>
-                      Load more jobs
+                      See more jobs
                       <span className="transition group-hover:translate-y-0.5">
                         ↓
                       </span>
