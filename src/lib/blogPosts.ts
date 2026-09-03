@@ -445,6 +445,264 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
   },
+  {
+    slug: "how-to-create-a-remote-job-portfolio-with-no-experience",
+    title: "How to Create a Remote Job Portfolio With No Experience",
+    description:
+      "Learn how to build a convincing remote work portfolio from personal projects, volunteer work, and practical samples, even before your first job.",
+    publishedAt: "2026-09-01",
+    readingTime: "8 min read",
+    content: [
+      {
+        paragraphs: [
+          "A portfolio is proof that you can solve the kind of problems an employer will give you. You do not need years of employment history to create one. A focused collection of realistic projects can show your judgement, communication, and ability to finish work, which are exactly the qualities remote employers need when they cannot observe you in an office.",
+        ],
+      },
+      {
+        heading: "Choose one target role first",
+        paragraphs: [
+          "Start by choosing a role such as junior frontend developer, customer support specialist, virtual assistant, SEO writer, or social media coordinator. Read several current job descriptions and note the repeated tools, tasks, and outcomes. Your portfolio should answer one clear question: can this person handle the work described in the listing?",
+          "A broad collection of unrelated certificates is less persuasive than three relevant samples. If you want a remote customer support role, show a support knowledge base, a sample response to a difficult customer, and a simple process for escalating an issue.",
+        ],
+      },
+      {
+        heading: "Build projects that resemble real work",
+        paragraphs: [
+          "Create projects with a clear audience and a specific goal. A developer can build a responsive job search page, a designer can redesign an onboarding flow, and a content writer can publish a search-optimised guide with a content brief. Include the finished result, your role, the tools you used, and the decisions you made.",
+          "Add realistic constraints instead of making a decorative demo. Explain how you handled mobile layouts, accessibility, deadlines, missing information, or a limited budget. These details help a recruiter understand how you think when a task is not perfectly defined.",
+        ],
+      },
+      {
+        heading: "Write a case study for every strong sample",
+        paragraphs: [
+          "A useful case study can be short. Describe the problem, your approach, the final result, and what you would improve next. Where possible, include measurable evidence such as faster load time, fewer support steps, higher click-through rate, or a reduction in repetitive work. Do not invent results; label estimates and explain how you measured them.",
+          "Add links that work without a login. Keep screenshots and files organised, use descriptive filenames, and check every link on a phone. A recruiter should be able to understand the project in under two minutes and find the most relevant sample quickly.",
+        ],
+      },
+      {
+        heading: "Turn your portfolio into an application asset",
+        paragraphs: [
+          "Put your best and most relevant sample first. Link to it from your resume, LinkedIn profile, and application message. Instead of writing that you are detail-oriented, say that you created a documented workflow or tested a page across common screen sizes. Specific evidence is more memorable than general claims.",
+          "Browse current remote openings on Global Jobs Opportunity and use the requirements to choose your next sample. Building a project around a real requirement gives you something useful to discuss in an interview and keeps your learning connected to an actual opportunity.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "how-to-write-a-cover-letter-for-remote-jobs",
+    title: "How to Write a Cover Letter for a Remote Job",
+    description:
+      "A practical cover letter formula for remote job applications, with guidance on tailoring your message and showing value without repeating your resume.",
+    publishedAt: "2026-09-02",
+    readingTime: "7 min read",
+    content: [
+      {
+        paragraphs: [
+          "A good cover letter does not repeat every line of your resume. It connects your most relevant experience to the employer's problem and makes it easy to see why you are applying. For remote roles, it should also give evidence that you can communicate clearly, manage your work, and collaborate across time zones.",
+        ],
+      },
+      {
+        heading: "Research before you write",
+        paragraphs: [
+          "Read the complete job description and visit the employer's official website. Identify the role's three most important responsibilities, the product or customer it serves, and the result the new hire is expected to create. Use that information to select evidence from your own experience.",
+          "Address the company by name and mention the exact role. Avoid copying a paragraph from the listing or making claims about the company that you cannot verify. Personalisation should show relevance, not flattery.",
+        ],
+      },
+      {
+        heading: "Use a clear four-part structure",
+        paragraphs: [
+          "In the opening, name the role and give one specific reason you are a fit. In the second paragraph, describe one relevant achievement and the actions behind it. In the third, explain how you work remotely, including written communication, ownership, or collaboration. Close by pointing the reader to your resume or portfolio and inviting the next conversation.",
+          "Keep the letter to about 250 to 400 words unless the employer gives different instructions. Short paragraphs, direct language, and one strong example usually perform better than a long career history.",
+        ],
+      },
+      {
+        heading: "Show remote readiness with evidence",
+        paragraphs: [
+          "Do not simply write that you are comfortable working remotely. Explain how you share progress, document decisions, protect deadlines, and handle blockers. For example, you might describe a weekly written update, a handover document, or a project delivered with teammates in different cities.",
+          "If the role has specific hours or overlap requirements, confirm your availability honestly. Mention your local time zone and the hours you can reliably overlap, but do not promise permanent availability as a substitute for good planning.",
+        ],
+      },
+      {
+        heading: "Edit before you send it",
+        paragraphs: [
+          "Check the company name, job title, links, spelling, and contact details. Remove generic sentences that could apply to any employer. Save the final file with your name and the role title, then paste the text into an email or application form to confirm the formatting survived.",
+          "Use the cover letter to add context to your resume, not to hide missing requirements. Apply through the verified instructions in the listing and keep a record of the date, role, and version you submitted.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "how-to-prepare-for-a-remote-job-interview",
+    title: "How to Prepare for a Remote Job Interview: A Practical Checklist",
+    description:
+      "Prepare for a remote job interview with a simple checklist covering research, video setup, behavioural answers, technical questions, and follow-up.",
+    publishedAt: "2026-09-03",
+    readingTime: "8 min read",
+    content: [
+      {
+        paragraphs: [
+          "A remote interview tests more than your technical ability. It also shows how you prepare, explain ideas, listen, and communicate when the conversation happens through a screen. A small amount of preparation can prevent avoidable problems and leave more attention for the actual discussion.",
+        ],
+      },
+      {
+        heading: "Research the role and employer",
+        paragraphs: [
+          "Read the job description again and prepare examples for each major responsibility. Learn what the company sells, who its customers are, and what the team appears to value. Prepare two or three thoughtful questions about success in the role, team communication, and the first ninety days.",
+          "Review your resume and portfolio before the call. Be ready to explain the context, your contribution, trade-offs, and results for every project you mention. Never rely on a sample that you cannot open or describe clearly.",
+        ],
+      },
+      {
+        heading: "Test your remote interview setup",
+        paragraphs: [
+          "Test the meeting link, microphone, camera, headphones, lighting, and screen sharing at least a day before the interview. Keep a charged device and a backup internet connection available. Close distracting notifications and make sure the background is quiet and professional.",
+          "Join a few minutes early and display your name correctly. If your connection fails, send a short message explaining the problem and switch to your backup plan. Calm, concise communication during a technical issue is itself useful evidence of professionalism.",
+        ],
+      },
+      {
+        heading: "Answer with specific examples",
+        paragraphs: [
+          "For behavioural questions, use a simple situation, action, and result structure. Explain what happened, what you personally did, and what changed afterward. For technical questions, state your assumptions, talk through your approach, and mention how you would test or improve the solution.",
+          "Remote teams value examples of independent work, written updates, handling ambiguity, and resolving disagreement. Prepare stories that show these behaviours rather than memorising perfect-sounding answers.",
+        ],
+      },
+      {
+        heading: "Follow up with useful context",
+        paragraphs: [
+          "Send a brief follow-up message within a day. Thank the interviewer, mention one specific part of the conversation, and restate your interest. If you promised a portfolio link or document, include it and check that access works without special permissions.",
+          "Use current remote job listings to practise matching your experience to real requirements. Preparation becomes much easier when each answer is connected to the work you actually want to do.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "how-to-find-legitimate-work-from-home-jobs-in-pakistan",
+    title: "How to Find Legitimate Work-From-Home Jobs in Pakistan",
+    description:
+      "Find credible work-from-home jobs in Pakistan with a practical search strategy for remote employment, freelance contracts, and online support roles.",
+    publishedAt: "2026-08-31",
+    readingTime: "8 min read",
+    content: [
+      {
+        paragraphs: [
+          "Work-from-home opportunities in Pakistan range from full-time remote employment to freelance contracts and part-time support work. The variety is useful, but it also means you need a repeatable way to compare roles, verify employers, and protect your time and personal information.",
+        ],
+      },
+      {
+        heading: "Decide what kind of work you want",
+        paragraphs: [
+          "Full-time remote roles may offer a stable schedule, team support, and a longer-term career path. Contract work can offer flexibility and international experience, but income and workload may vary. Decide which arrangement fits your current responsibilities, preferred hours, and financial needs before you start applying.",
+          "Search by skill as well as by the phrase work from home. Customer service, software development, sales, bookkeeping, design, writing, and virtual assistance all use different keywords, so a narrow search can hide relevant opportunities.",
+        ],
+      },
+      {
+        heading: "Build a search routine",
+        paragraphs: [
+          "Create a short daily routine: review new listings, save roles that match your skills, tailor one or two applications, and update your tracker. Record the company, role, closing date, requirements, application link, and follow-up date. This prevents duplicate applications and makes it easier to learn from results.",
+          "Use Global Jobs Opportunity to filter remote openings and then verify the employer's own website before sharing sensitive information. Applying early can help because some employers review suitable candidates as applications arrive.",
+        ],
+      },
+      {
+        heading: "Check whether an opportunity is credible",
+        paragraphs: [
+          "Look for a verifiable company domain, a detailed description, realistic responsibilities, and a clear hiring process. Search for the employer independently rather than trusting only a message or social media profile. Be cautious if the offer promises unusually high income with no skills, creates pressure to act immediately, or avoids explaining the actual work.",
+          "Never pay a fee to apply, unlock training, receive a salary, or purchase required equipment from a particular person. Do not share passwords, one-time codes, or unnecessary identity documents. A legitimate hiring process should explain what information is needed and why.",
+        ],
+      },
+      {
+        heading: "Make your application easy to trust",
+        paragraphs: [
+          "Use a readable resume, a professional email address, and a portfolio link that opens correctly. Highlight the skills that match the listing and include evidence of results. Answer screening questions directly and follow the requested format; attention to instructions matters especially in remote work.",
+          "Keep copies of applications and messages, and ask about payment method, schedule, contract type, and reporting line before accepting an offer. Clear terms protect both sides and help you compare opportunities fairly.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "how-to-improve-linkedin-profile-for-remote-jobs",
+    title: "How to Improve Your LinkedIn Profile for Remote Jobs",
+    description:
+      "Optimise your LinkedIn profile for remote job searches with practical advice for your headline, About section, experience, portfolio, and visibility.",
+    publishedAt: "2026-08-30",
+    readingTime: "7 min read",
+    content: [
+      {
+        paragraphs: [
+          "Your LinkedIn profile often becomes a recruiter's second view after your resume. It should make your target role, strongest skills, and evidence of work clear within a few seconds. A complete profile cannot guarantee an interview, but an unclear one can make a good application harder to trust.",
+        ],
+      },
+      {
+        heading: "Write a searchable headline",
+        paragraphs: [
+          "Use the headline to state your role, key specialisation, and the value you provide. A phrase such as Frontend Developer | React and accessible web experiences is more useful than only writing Open to Work. Include terms that accurately appear in the roles you want, without filling the headline with unrelated keywords.",
+          "Choose a clear professional photo and a simple banner that does not distract from the profile. Confirm your location and contact preferences so employers can understand where you work and how to reach you.",
+        ],
+      },
+      {
+        heading: "Make the About section specific",
+        paragraphs: [
+          "Use the first lines to explain what you do, who you help, and what kind of role you are seeking. Then add two or three examples of outcomes, tools, or projects. Write in the first person and use short paragraphs so the section is easy to scan on a phone.",
+          "Mention remote strengths when you can support them with evidence: written documentation, cross-time-zone collaboration, independent delivery, or a reliable handover process. Avoid vague claims such as hardworking unless a project example makes the claim credible.",
+        ],
+      },
+      {
+        heading: "Improve your experience and featured work",
+        paragraphs: [
+          "Describe achievements rather than listing duties. Explain the problem, your action, and the result. Add relevant links, case studies, presentations, code samples, or published work in the Featured section. Remove old links that are broken, private, or unrelated to your current direction.",
+          "Ask former colleagues, clients, or managers for recommendations that describe your actual contribution. A specific recommendation about communication or delivery is more useful than a generic statement about being pleasant to work with.",
+        ],
+      },
+      {
+        heading: "Stay visible without spamming",
+        paragraphs: [
+          "Follow companies and communities related to your target role, comment thoughtfully on relevant work, and share useful lessons from your projects. A consistent, professional presence is more sustainable than sending the same message to dozens of recruiters.",
+          "After updating your profile, compare it with current remote job listings and adjust only the parts that need stronger evidence. Your profile, resume, and portfolio should tell the same career story.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "how-to-negotiate-salary-for-a-remote-job-from-pakistan",
+    title: "How to Negotiate Salary for a Remote Job From Pakistan",
+    description:
+      "Learn how to discuss compensation for international remote roles, compare offers fairly, and negotiate with clear evidence and professional language.",
+    publishedAt: "2026-08-29",
+    readingTime: "8 min read",
+    content: [
+      {
+        paragraphs: [
+          "Salary conversations are easier when you treat them as a comparison of responsibilities, value, and total compensation rather than a guess about what another person earns. Remote employers may use local, regional, or global salary bands, so prepare your questions and evidence before naming a figure.",
+        ],
+      },
+      {
+        heading: "Understand the complete offer",
+        paragraphs: [
+          "Ask whether the role is employment or independent contracting, which currency is used, and whether the amount is gross or net of taxes and transfer fees. Clarify payment frequency, probation, paid leave, working hours, equipment, health coverage, bonuses, and termination terms.",
+          "A higher monthly figure may not be better if it comes with unpredictable payments, no notice period, or significant transfer costs. Write every part of the offer down so you can compare it with other opportunities accurately.",
+        ],
+      },
+      {
+        heading: "Research a realistic range",
+        paragraphs: [
+          "Use several reliable salary sources, current job listings, recruiter conversations, and your own experience to form a range. Compare roles with similar seniority, location expectations, technology, and scope. Salary data is often imperfect, so treat it as a starting point rather than a promise.",
+          "Consider your minimum acceptable amount, your target, and the figure that would compensate you for unusual requirements. Keep these numbers private while you explain the value you bring to the employer.",
+        ],
+      },
+      {
+        heading: "Support your request with evidence",
+        paragraphs: [
+          "Connect your request to outcomes you can deliver: revenue supported, time saved, conversion improved, bugs reduced, customers retained, or projects shipped. Mention relevant domain experience, scarce skills, and your ability to work the required schedule. Evidence is stronger than personal financial needs, even though your needs still matter in your decision.",
+          "Negotiate the whole package if the base salary cannot move. You may be able to discuss a signing payment, review after three months, additional leave, equipment budget, or a clearer scope. Ask for changes one at a time and explain why each matters.",
+        ],
+      },
+      {
+        heading: "Keep the conversation professional",
+        paragraphs: [
+          "Thank the employer, restate your interest, and make a clear request. For example: Based on the scope of the role and my experience improving customer workflows, I would be comfortable accepting at [amount], provided the payment schedule and review period are confirmed. Give the employer reasonable time to respond and keep the discussion in writing.",
+          "Never accept an offer without a written contract or clear written terms. Verify the company and payment arrangement, and do not send money or sensitive banking credentials to receive employment. Once the details are agreed, focus on delivering the results that support your next review.",
+        ],
+      },
+    ],
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
