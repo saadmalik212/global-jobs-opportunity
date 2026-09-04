@@ -20,6 +20,7 @@ export interface Job {
   applicationCount: number;
   applyLink: string;
   applyLinkDisplay: "real" | "short";
+  applyLinkLabel: string;
   metaFields: JobMetaField[];
   requirements: JobRequirement[];
   noticeLine: string;

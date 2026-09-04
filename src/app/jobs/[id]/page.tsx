@@ -11,8 +11,6 @@ import WhatsAppBanner from "@/components/WhatsAppBanner";
 import JobCard from "@/components/JobCard";
 import TrackableApplyLink from "@/components/TrackableApplyLink";
 
-// Cache each job page for 5 minutes instead of re-hitting Firestore on
-// every single visitor — this was the main cause of the read-count spike.
 export const revalidate = 300;
 
 interface Props {
@@ -82,9 +80,6 @@ export default async function JobDetailPage({ params }: Props) {
 
   const metaRows = getJobMetaRows(job);
 
-  // Only reads the 50 most recent jobs (not the whole collection) to build
-  // the Related Jobs section — keeps this cheap even as the total job
-  // count grows into the hundreds or thousands.
   const recentJobs = await fetchJobs(50);
   const relatedJobs = getRelatedJobs(job, recentJobs, 4);
 
@@ -151,7 +146,7 @@ export default async function JobDetailPage({ params }: Props) {
   ]);
 
   return (
-    <section className="mx-auto max-w-2xl px-5 py-12 sm:px-8">
+    <section className="mx-auto max-w-7xl px-5 py-12 sm:px-8">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -162,13 +157,13 @@ export default async function JobDetailPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-  <Link href="/#jobs" prefetch={false} className="mb-6 inline-block text-sm text-muted hover:text-primary">
-  ← Back to all jobs
-</Link>
+      <Link href="/#jobs" prefetch={false} className="mb-6 inline-block text-sm text-muted hover:text-primary">
+        ← Back to all jobs
+      </Link>
 
-      <article className="rounded-2xl border border-border bg-surface p-6">
+      <article className="rounded-2xl border border-border bg-surface p-6 sm:p-8">
         <div className="mb-2 flex items-start justify-between gap-3">
-          <h1 className="font-display text-2xl font-bold text-ink">{job.title}</h1>
+          <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">{job.title}</h1>
           <span className="shrink-0 rounded-full bg-primary-light px-2.5 py-1 font-mono text-[11px] font-medium text-primary-dark">
             {timeAgo(job.createdAt)}
           </span>
@@ -179,7 +174,7 @@ export default async function JobDetailPage({ params }: Props) {
         </p>
 
         {metaRows.length > 0 && (
-          <dl className="mb-4 space-y-1.5 text-sm">
+          <dl className="mb-5 space-y-1.5 text-sm">
             {metaRows.map((row) => (
               <div key={row.label} className="flex flex-wrap gap-x-1.5">
                 <dt className="font-medium text-muted">{row.label}:</dt>
@@ -190,23 +185,27 @@ export default async function JobDetailPage({ params }: Props) {
         )}
 
         {job.requirements.length > 0 && (
-          <ul className="mb-4 space-y-2">
+          <div className="mb-5 space-y-4">
             {job.requirements.map((req, i) => (
-              <li key={i} className="text-sm text-ink/85">
-                <span className="font-semibold text-ink">{req.title}: </span>
-                <ul className="space-y-1">
+              <div key={i}>
+                <h2 className="mb-2 font-display text-base font-bold text-ink">{req.title}</h2>
+                <ul className="space-y-1.5">
                   {req.details.split(/\r?\n/).filter((line) => line.trim()).map((line, lineIndex) => (
-                    <li key={lineIndex}>{line.trim()}</li>
+                    <li key={lineIndex} className="text-sm leading-relaxed text-ink/85">
+                      {line.trim()}
+                    </li>
                   ))}
                 </ul>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         )}
 
         {job.applyLink && (
           <p className="text-sm text-ink/85">
-            <span className="font-semibold text-ink">Apply Now: </span>
+            <span className="font-semibold text-ink">
+              {job.applyLinkLabel || "Apply Now:"}{" "}
+            </span>
             <TrackableApplyLink
               jobId={job.id}
               applyLink={job.applyLink}
@@ -232,9 +231,9 @@ export default async function JobDetailPage({ params }: Props) {
 
       <div className="mt-8 space-y-4">
         <div className="rounded-2xl border border-border bg-surface p-4 text-center">
-        <Link href="/blog" prefetch={false} className="text-sm font-medium text-primary hover:underline">
-  📚 Read our career guides & job tips →
-</Link>
+          <Link href="/blog" prefetch={false} className="text-sm font-medium text-primary hover:underline">
+            📚 Read our career guides & job tips →
+          </Link>
         </div>
         <WhatsAppBanner />
       </div>

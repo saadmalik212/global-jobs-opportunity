@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Job } from "@/lib/types";
 import { timeAgo } from "@/lib/timeAgo";
 import { getJobMetaRows } from "@/lib/jobMeta";
-import TrackableApplyLink from "@/components/TrackableApplyLink";
 
 interface Props {
   job: Job;
@@ -15,7 +14,7 @@ export default function JobCard({ job, highlighted = false }: Props) {
   return (
     <article
       id={`job-${job.id}`}
-      className={`flex h-[360px] w-full min-w-0 flex-col overflow-hidden rounded-2xl border bg-surface p-5 transition hover:shadow-md ${
+      className={`flex w-full min-w-0 flex-col rounded-2xl border bg-surface p-5 transition hover:shadow-md ${
         highlighted
           ? "border-primary ring-2 ring-primary/40"
           : "border-border hover:border-primary/40"
@@ -29,58 +28,27 @@ export default function JobCard({ job, highlighted = false }: Props) {
         </span>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-hidden">
-        {/* Notice Line */}
-        <p className="mb-3 rounded-lg bg-accent/10 px-3 py-2 text-xs font-medium text-ink/70">
-          ⚠️ {job.noticeLine}
-        </p>
+      {/* Notice Line */}
+      <p className="mb-3 rounded-lg bg-accent/10 px-3 py-2 text-xs font-medium text-ink/70">
+        ⚠️ {job.noticeLine}
+      </p>
 
-        {/* Location / Experience / Job Type / Company / Salary */}
-        {metaRows.length > 0 && (
-          <dl className="mb-3 space-y-1 text-sm">
-            {metaRows.map((row) => (
-              <div key={row.label} className="flex flex-wrap gap-x-1.5">
-                <dt className="font-medium text-muted">{row.label}:</dt>
-                <dd className="text-ink/85">{row.value}</dd>
-              </div>
-            ))}
-          </dl>
-        )}
-
-        {/* Job Requirements */}
-        {job.requirements.length > 0 && (
-          <ul className="mb-3 space-y-1.5">
-            {job.requirements.map((req, i) => (
-              <li key={i} className="text-sm text-ink/85">
-                <span className="font-semibold text-ink">{req.title}: </span>
-                <ul className="space-y-1">
-                  {req.details.split(/\r?\n/).filter((line) => line.trim()).map((line, lineIndex) => (
-                    <li key={lineIndex}>{line.trim()}</li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {/* Apply Link */}
-        {job.applyLink && (
-          <p className="mb-2 text-sm text-ink/85">
-            <span className="font-semibold text-ink">Apply Now: </span>
-            <TrackableApplyLink
-              jobId={job.id}
-              applyLink={job.applyLink}
-              applyLinkDisplay={job.applyLinkDisplay}
-              className="text-primary underline decoration-primary/40 underline-offset-2 hover:text-primary-dark"
-            />
-          </p>
-        )}
-      </div>
+     
+      {metaRows.length > 0 && (
+        <dl className="mb-4 space-y-1 text-sm">
+          {metaRows.map((row) => (
+            <div key={row.label} className="flex flex-wrap gap-x-1.5">
+              <dt className="font-medium text-muted">{row.label}:</dt>
+              <dd className="text-ink/85">{row.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
 
       <Link
         href={`/jobs/${job.id}`}
         prefetch={false}
-        className="mt-2 shrink-0 text-xs font-medium text-muted underline decoration-dotted hover:text-primary"
+        className="mt-auto inline-block text-sm font-semibold text-primary underline decoration-primary/40 underline-offset-2 hover:text-primary-dark"
       >
         View full details →
       </Link>

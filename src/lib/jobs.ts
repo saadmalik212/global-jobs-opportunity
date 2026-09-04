@@ -58,6 +58,7 @@ function mapDoc(id: string, data: Record<string, unknown>): Job {
     applicationCount: Number(data.applicationCount ?? 0),
     applyLink: (data.applyLink as string) ?? "",
     applyLinkDisplay: (data.applyLinkDisplay as Job["applyLinkDisplay"]) ?? "real",
+    applyLinkLabel: (data.applyLinkLabel as string) ?? "",
     metaFields: normalizeMetaFields(data.metaFields),
     requirements: (data.requirements as Job["requirements"]) ?? [],
     noticeLine: (data.noticeLine as string) ?? "",
