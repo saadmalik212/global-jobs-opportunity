@@ -59,6 +59,9 @@ function mapDoc(id: string, data: Record<string, unknown>): Job {
     applyLink: (data.applyLink as string) ?? "",
     applyLinkDisplay: (data.applyLinkDisplay as Job["applyLinkDisplay"]) ?? "real",
     applyLinkLabel: (data.applyLinkLabel as string) ?? "",
+    slug: (data.slug as string) ?? "",
+    metaTitle: (data.metaTitle as string) ?? "",
+    metaDescription: (data.metaDescription as string) ?? "",
     metaFields: normalizeMetaFields(data.metaFields),
     requirements: (data.requirements as Job["requirements"]) ?? [],
     noticeLine: (data.noticeLine as string) ?? "",
@@ -92,9 +95,6 @@ async function rawFetchJob(id: string): Promise<Job | null> {
   }
 }
 
-// In-flight request coalescing — same Lambda container ke andar
-// simultaneous requests ko ek hi Firestore fetch share karwata hai,
-// taake cache-expire ke waqt "thundering herd" na ho.
 const inflightRequests = new Map<string, Promise<any>>();
 
 export async function fetchJobs(maxCount: number = 50): Promise<Job[]> {
@@ -130,6 +130,8 @@ export async function fetchJobs(maxCount: number = 50): Promise<Job[]> {
   }
 }
 
+
+
 export async function fetchJob(id: string): Promise<Job | null> {
   const cacheKey = `job-detail-${id}`;
 
@@ -163,6 +165,44 @@ export async function fetchJob(id: string): Promise<Job | null> {
   } finally {
     inflightRequests.delete(cacheKey);
   }
+}
+
+export async function fetchJobByIdOrSlug(idOrSlug: string): Promise<Job | null> {
+  const cacheKey = `job-detail-${idOrSlug}`;
+
+  try {
+    const cached = await redis.get<Job>(cacheKey);
+    if (cached) return cached;
+  } catch (err) {
+    console.error("Redis get error:", err);
+  }
+
+  let job = await rawFetchJob(idOrSlug);
+
+  if (!job) {
+    try {
+      const snap = await adminDb
+        .collection(JOBS_COLLECTION)
+        .where("slug", "==", idOrSlug)
+        .limit(1)
+        .get();
+      if (!snap.empty) {
+        const d = snap.docs[0];
+        job = mapDoc(d.id, d.data());
+      }
+    } catch (err) {
+      console.error("fetchJobByIdOrSlug slug lookup error:", err);
+    }
+  }
+
+  if (job) {
+    try {
+      await redis.set(cacheKey, job, { ex: CACHE_TTL });
+    } catch (err) {
+      console.error("Redis set error:", err);
+    }
+  }
+  return job;
 }
 
 export async function fetchJobsPage(

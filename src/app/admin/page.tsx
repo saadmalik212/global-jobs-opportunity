@@ -20,58 +20,58 @@ export default function AdminDashboard() {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [copiedTextId, setCopiedTextId] = useState<string | null>(null);
 
-async function loadJobs() {
-  setLoading(true);
-  try {
-    const res = await fetch(`/api/admin/jobs?limit=${DEFAULT_LIMIT}`);
-    const { jobs: data } = await res.json();
-    setJobs(data);
-    setShowingAll(false);
-  } catch (err) {
-    console.error("Failed to load jobs", err);
-    Sentry.captureException(err);
-  } finally {
-    setLoading(false);
+  async function loadJobs() {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/admin/jobs?limit=${DEFAULT_LIMIT}`);
+      const { jobs: data } = await res.json();
+      setJobs(data);
+      setShowingAll(false);
+    } catch (err) {
+      console.error("Failed to load jobs", err);
+      Sentry.captureException(err);
+    } finally {
+      setLoading(false);
+    }
   }
-}
 
-async function loadAllJobs() {
-  setLoadingAll(true);
-  try {
-    const res = await fetch(`/api/admin/jobs`);
-    const { jobs: data } = await res.json();
-    setJobs(data);
-    setShowingAll(true);
-  } catch (err) {
-    console.error("Failed to load all jobs", err);
-    Sentry.captureException(err);
-  } finally {
-    setLoadingAll(false);
+  async function loadAllJobs() {
+    setLoadingAll(true);
+    try {
+      const res = await fetch(`/api/admin/jobs`);
+      const { jobs: data } = await res.json();
+      setJobs(data);
+      setShowingAll(true);
+    } catch (err) {
+      console.error("Failed to load all jobs", err);
+      Sentry.captureException(err);
+    } finally {
+      setLoadingAll(false);
+    }
   }
-}
 
   useEffect(() => {
     loadJobs();
   }, []);
 
   async function handleDelete(id: string) {
-  if (!confirm("Yeh job post delete karni hai?")) return;
-  setDeletingId(id);
-  try {
-    await deleteJob(id);
-    await fetch("/api/revalidate-jobs", { method: "POST" }); 
-    setJobs((prev) => prev.filter((j) => j.id !== id));
-  } finally {
-    setDeletingId(null);
+    if (!confirm("Yeh job post delete karni hai?")) return;
+    setDeletingId(id);
+    try {
+      await deleteJob(id);
+      await fetch("/api/revalidate-jobs", { method: "POST" });
+      setJobs((prev) => prev.filter((j) => j.id !== id));
+    } finally {
+      setDeletingId(null);
+    }
   }
-}
 
-  async function handleCopyLink(id: string) {
-    const url = `${SITE_URL}/jobs/${id}`;
+  async function handleCopyLink(job: Job) {
+    const url = `${SITE_URL}/jobs/${job.slug || job.id}`;
     try {
       await navigator.clipboard.writeText(url);
-      setCopiedId(id);
-      setTimeout(() => setCopiedId((cur) => (cur === id ? null : cur)), 2000);
+      setCopiedId(job.id);
+      setTimeout(() => setCopiedId((cur) => (cur === job.id ? null : cur)), 2000);
     } catch {
       window.prompt("Link copy nahi ho saka — manually copy kar lein:", url);
     }
@@ -147,7 +147,7 @@ async function loadAllJobs() {
                           {copiedTextId === job.id ? "Copied!" : "Copy text"}
                         </button>
                         <button
-                          onClick={() => handleCopyLink(job.id)}
+                          onClick={() => handleCopyLink(job)}
                           className="text-primary hover:underline"
                         >
                           {copiedId === job.id ? "Copied!" : "Copy link"}

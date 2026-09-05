@@ -47,7 +47,7 @@ export function buildShareText(job: Job): string {
   }
 
   lines.push("");
-  lines.push(`🔗 Full details: ${SITE_URL}/jobs/${job.id}`);
+  lines.push(`🔗 Full details: ${SITE_URL}/jobs/${job.slug || job.id}`);
 
   return lines.join("\n");
 }

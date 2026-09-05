@@ -241,17 +241,19 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
             : "Frontend par yehi poora link jaisa daala hai waise hi dikhega."}
         </p>
       </Field>
-              <Field
-  label="Apply heading / sentence"
-  hint="Yeh link se pehle wali heading hai — apni marzi ka koi bhi text likhein (colon/punctuation bhi khud shamil karein). Khali chhodne par default 'Apply Now:' dikhega."
->
-  <input
-    value={applyLinkLabel}
-    onChange={(e) => setApplyLinkLabel(e.target.value)}
-    placeholder="e.g. Apply Now: or Send your CV to:"
-    className={inputClass}
-  />
-</Field>
+
+      <Field
+        label="Apply heading / sentence"
+        hint="Yeh link se pehle wali heading hai — apni marzi ka koi bhi text likhein (colon/punctuation bhi khud shamil karein). Khali chhodne par default 'Apply Now:' dikhega."
+      >
+        <input
+          value={applyLinkLabel}
+          onChange={(e) => setApplyLinkLabel(e.target.value)}
+          placeholder="e.g. Apply Now: or Send your CV to:"
+          className={inputClass}
+        />
+      </Field>
+
       <div>
         <div className="mb-2 flex items-center justify-between">
           <label className="text-sm font-semibold text-ink">Extra fields</label>

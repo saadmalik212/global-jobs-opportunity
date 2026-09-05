@@ -21,6 +21,9 @@ export interface Job {
   applyLink: string;
   applyLinkDisplay: "real" | "short";
   applyLinkLabel: string;
+  slug: string;
+  metaTitle: string;
+  metaDescription: string;
   metaFields: JobMetaField[];
   requirements: JobRequirement[];
   noticeLine: string;
@@ -28,7 +31,10 @@ export interface Job {
   updatedAt: number;
 }
 
-export type JobFormValues = Omit<Job, "id" | "createdAt" | "updatedAt">;
+export type JobFormValues = Omit<
+  Job,
+  "id" | "createdAt" | "updatedAt" | "slug" | "metaTitle" | "metaDescription"
+>;
 
 export interface JobFilters {
   cities: string[];

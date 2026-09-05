@@ -21,18 +21,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  let jobRoutes: MetadataRoute.Sitemap = [];
-  try {
-   const jobs = await fetchJobs(100);
-    jobRoutes = jobs.map((job) => ({
-      url: `${SITE_URL}/jobs/${job.id}`,
-      lastModified: new Date(job.updatedAt),
-      changeFrequency: "daily",
-      priority: 0.8,
-    }));
-  } catch {
-    // If Firestore is unreachable at build time, still return the static routes.
-  }
+let jobRoutes: MetadataRoute.Sitemap = [];
+try {
+  const jobs = await fetchJobs(100);
+  jobRoutes = jobs.map((job) => ({
+    url: `${SITE_URL}/jobs/${job.slug || job.id}`,
+    lastModified: new Date(job.updatedAt),
+    changeFrequency: "daily",
+    priority: 0.8,
+  }));
+} catch {
+}
 
   return [...staticRoutes, ...blogRoutes, ...jobRoutes];
 }

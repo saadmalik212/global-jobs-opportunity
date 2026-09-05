@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { fetchJob, fetchJobs } from "@/lib/jobs";
+import { fetchJobByIdOrSlug, fetchJobs } from "@/lib/jobs";
 import { timeAgo } from "@/lib/timeAgo";
 import { getJobMetaRows } from "@/lib/jobMeta";
 import { getRelatedJobs } from "@/lib/relatedJobs";
@@ -18,15 +18,18 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const job = await fetchJob(params.id);
+  const job = await fetchJobByIdOrSlug(params.id);
   if (!job) {
     return { title: `Job not found — ${SITE_NAME}` };
   }
 
-  const description = `Apply for ${job.title} in ${job.location}. ${job.experience || "Experience varies"} • ${job.jobType || "Various"}. Discover remote & global career opportunities on ${SITE_NAME}.`;
+  const autoDescription = `Apply for ${job.title} in ${job.location}. ${job.experience || "Experience varies"} • ${job.jobType || "Various"}. Discover remote & global career opportunities on ${SITE_NAME}.`;
+  const description = job.metaDescription || autoDescription;
+  const title = job.metaTitle || `${job.title} — ${job.location} | ${SITE_NAME}`;
+  const canonicalUrl = `${SITE_URL}/jobs/${job.slug || job.id}`;
 
   return {
-    title: `${job.title} — ${job.location} | ${SITE_NAME}`,
+    title,
     description,
     keywords: [
       job.title,
@@ -39,12 +42,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "careers 2026",
     ],
     alternates: {
-      canonical: `${SITE_URL}/jobs/${job.id}`,
+      canonical: canonicalUrl,
     },
     openGraph: {
-      title: `${job.title} — ${job.location}`,
+      title,
       description,
-      url: `${SITE_URL}/jobs/${job.id}`,
+      url: canonicalUrl,
       siteName: SITE_NAME,
       type: "article",
       images: [
@@ -58,7 +61,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: `${job.title} — ${job.location}`,
+      title,
       description,
       images: [`${SITE_URL}/og-image.png`],
     },
@@ -75,10 +78,11 @@ function guessEmploymentType(jobType: string): string {
 }
 
 export default async function JobDetailPage({ params }: Props) {
-  const job = await fetchJob(params.id);
+  const job = await fetchJobByIdOrSlug(params.id);
   if (!job) notFound();
 
   const metaRows = getJobMetaRows(job);
+  const canonicalUrl = `${SITE_URL}/jobs/${job.slug || job.id}`;
 
   const recentJobs = await fetchJobs(50);
   const relatedJobs = getRelatedJobs(job, recentJobs, 4);
@@ -142,7 +146,7 @@ export default async function JobDetailPage({ params }: Props) {
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: "Home", url: SITE_URL },
     { name: "Jobs", url: `${SITE_URL}/#jobs` },
-    { name: job.title, url: `${SITE_URL}/jobs/${job.id}` },
+    { name: job.title, url: canonicalUrl },
   ]);
 
   return (

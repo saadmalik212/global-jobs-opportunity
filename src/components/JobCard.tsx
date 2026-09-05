@@ -45,13 +45,13 @@ export default function JobCard({ job, highlighted = false }: Props) {
         </dl>
       )}
 
-      <Link
-        href={`/jobs/${job.id}`}
-        prefetch={false}
-        className="mt-auto inline-block text-sm font-semibold text-primary underline decoration-primary/40 underline-offset-2 hover:text-primary-dark"
-      >
-        View full details →
-      </Link>
+    <Link
+  href={`/jobs/${job.slug || job.id}`}
+  prefetch={false}
+  className="mt-auto inline-block text-sm font-semibold text-primary underline decoration-primary/40 underline-offset-2 hover:text-primary-dark"
+>
+  View full details →
+</Link>
     </article>
   );
 }
