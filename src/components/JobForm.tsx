@@ -42,6 +42,7 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
   const [jobType, setJobType] = useState(initialValues?.jobType ?? "");
   const [company, setCompany] = useState(initialValues?.company ?? "");
   const [salary, setSalary] = useState(initialValues?.salary ?? "");
+  const [slug, setSlug] = useState(initialValues?.slug ?? "");
   const [salaryPreset, setSalaryPreset] = useState(() => {
     const currentSalary = initialValues?.salary ?? "";
     return SALARY_OPTIONS.some((option) => option.value === currentSalary)
@@ -115,6 +116,9 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
       await onSubmit({
         title: title.trim(),
         location: location.trim(),
+          slug: slug.trim(),
+           metaTitle: "",          
+  metaDescription: "", 
         experience: experience.trim(),
         jobType: jobType.trim(),
         company: company.trim(),
@@ -157,6 +161,14 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
           className={inputClass}
         />
       </Field>
+      <Field label="Custom Slug (URL)" hint="Optional — job ka custom URL jaise /jobs/your-slug-here. Khali chhodne par default ID-based URL use hoga.">
+  <input
+    value={slug}
+    onChange={(e) => setSlug(e.target.value)}
+    placeholder="e.g. graphic-designer-lahore"
+    className={inputClass}
+  />
+</Field>
 
       <Field label="Location" hint="City / country keywords go here — used for filter matching, e.g. “Lahore” or “Remote, Dubai”">
         <input

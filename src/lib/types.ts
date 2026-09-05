@@ -33,7 +33,7 @@ export interface Job {
 
 export type JobFormValues = Omit<
   Job,
-  "id" | "createdAt" | "updatedAt" | "slug" | "metaTitle" | "metaDescription"
+  "id" | "createdAt" | "updatedAt"
 >;
 
 export interface JobFilters {
