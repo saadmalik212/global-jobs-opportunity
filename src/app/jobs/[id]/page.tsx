@@ -188,22 +188,37 @@ export default async function JobDetailPage({ params }: Props) {
           </dl>
         )}
 
-        {job.requirements.length > 0 && (
-          <div className="mb-5 space-y-4">
-            {job.requirements.map((req, i) => (
-              <div key={i}>
-                <h2 className="mb-2 font-display text-base font-bold text-ink">{req.title}</h2>
-                <ul className="space-y-1.5">
-                  {req.details.split(/\r?\n/).filter((line) => line.trim()).map((line, lineIndex) => (
-                    <li key={lineIndex} className="text-sm leading-relaxed text-ink/85">
-                      {line.trim()}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+     {job.requirements.length > 0 && (
+  <div className="mb-5 space-y-3">
+    {job.requirements.map((req, i) => {
+      const lines = req.details.split(/\r?\n/).filter((line) => line.trim());
+
+      // Sirf ek line ho to Location/Salary jaisa flat "Label: Value" dikhao
+      if (lines.length <= 1) {
+        return (
+          <div key={i} className="flex flex-wrap gap-x-1.5 text-sm">
+            <span className="font-medium text-muted">{req.title}:</span>
+            <span className="text-ink/85">{lines[0] ?? ""}</span>
           </div>
-        )}
+        );
+      }
+
+      // Multiple lines ho to purana heading + bullet-list style
+      return (
+        <div key={i}>
+          <h2 className="mb-2 font-display text-base font-bold text-ink">{req.title}</h2>
+          <ul className="space-y-1.5">
+            {lines.map((line, lineIndex) => (
+              <li key={lineIndex} className="text-sm leading-relaxed text-ink/85">
+                {line.trim()}
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    })}
+  </div>
+)}
 
         {job.applyLink && (
           <p className="text-sm text-ink/85">

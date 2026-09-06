@@ -43,6 +43,8 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
   const [company, setCompany] = useState(initialValues?.company ?? "");
   const [salary, setSalary] = useState(initialValues?.salary ?? "");
   const [slug, setSlug] = useState(initialValues?.slug ?? "");
+  const [metaTitle, setMetaTitle] = useState(initialValues?.metaTitle ?? "");
+const [metaDescription, setMetaDescription] = useState(initialValues?.metaDescription ?? "");
   const [salaryPreset, setSalaryPreset] = useState(() => {
     const currentSalary = initialValues?.salary ?? "";
     return SALARY_OPTIONS.some((option) => option.value === currentSalary)
@@ -117,8 +119,8 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
         title: title.trim(),
         location: location.trim(),
           slug: slug.trim(),
-           metaTitle: "",          
-  metaDescription: "", 
+         metaTitle: metaTitle.trim(),
+metaDescription: metaDescription.trim(),
         experience: experience.trim(),
         jobType: jobType.trim(),
         company: company.trim(),
@@ -166,6 +168,25 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
     value={slug}
     onChange={(e) => setSlug(e.target.value)}
     placeholder="e.g. graphic-designer-lahore"
+    className={inputClass}
+  />
+</Field>
+
+<Field label="Meta Title (optional)" hint="Google search mein jo title dikhega — khali chhodne par auto-generate hoga">
+  <input
+    value={metaTitle}
+    onChange={(e) => setMetaTitle(e.target.value)}
+    placeholder="Backend Programmer — Mississauga | Global Jobs"
+    className={inputClass}
+  />
+</Field>
+
+<Field label="Meta Description (optional)" hint="Google search snippet mein jo text dikhega — khali chhodne par auto-generate hoga">
+  <textarea
+    value={metaDescription}
+    onChange={(e) => setMetaDescription(e.target.value)}
+    rows={2}
+    placeholder="Apply for the Backend Programmer position in Mississauga, Canada..."
     className={inputClass}
   />
 </Field>
