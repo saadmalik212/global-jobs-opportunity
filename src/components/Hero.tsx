@@ -15,7 +15,6 @@ export default function Hero() {
         className="absolute inset-0 h-full w-full object-cover"
       />
 
-      {/* Brand-colour wash over the photo so the white text stays readable */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary-dark/85 via-primary/70 to-primary-dark/85" />
       <div
         className="absolute inset-0 opacity-[0.12]"

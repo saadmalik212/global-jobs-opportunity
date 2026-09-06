@@ -7,9 +7,9 @@ import { getJobMetaRows } from "@/lib/jobMeta";
 import { getRelatedJobs } from "@/lib/relatedJobs";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import { getBreadcrumbSchema } from "@/lib/schema";
-import WhatsAppBanner from "@/components/WhatsAppBanner";
 import JobCard from "@/components/JobCard";
 import TrackableApplyLink from "@/components/TrackableApplyLink";
+import FollowChannelsBanner from "@/components/FollowChannelsBanner";
 
 export const revalidate = 300;
 
@@ -248,13 +248,16 @@ export default async function JobDetailPage({ params }: Props) {
         </section>
       )}
 
+      <div className="mt-8">
+        <FollowChannelsBanner />
+      </div>
+
       <div className="mt-8 space-y-4">
         <div className="rounded-2xl border border-border bg-surface p-4 text-center">
           <Link href="/blog" prefetch={false} className="text-sm font-medium text-primary hover:underline">
             📚 Read our career guides & job tips →
           </Link>
         </div>
-        <WhatsAppBanner />
       </div>
     </section>
   );
