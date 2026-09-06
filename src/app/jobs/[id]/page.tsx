@@ -197,7 +197,7 @@ export default async function JobDetailPage({ params }: Props) {
       if (lines.length <= 1) {
         return (
           <div key={i} className="flex flex-wrap gap-x-1.5 text-sm">
-            <span className="font-medium text-muted">{req.title}:</span>
+           <span className="font-medium text-muted">{req.title}</span>
             <span className="text-ink/85">{lines[0] ?? ""}</span>
           </div>
         );

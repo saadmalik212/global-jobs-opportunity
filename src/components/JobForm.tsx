@@ -348,7 +348,7 @@ metaDescription: metaDescription.trim(),
                 <input
                   value={req.title}
                   onChange={(e) => updateRequirement(i, "title", e.target.value)}
-                  placeholder="Custom title, e.g. Skills"
+              placeholder="e.g. Skills: or Deadline?"
                   className={`${inputClass} font-medium`}
                 />
                 {requirements.length > 1 && (
