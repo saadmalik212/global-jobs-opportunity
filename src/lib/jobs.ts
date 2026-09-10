@@ -263,31 +263,6 @@ export async function fetchJobsPage(
   }
 }
 
-export async function fetchJobsPageUncached(
-  pageSize: number = 20,
-  cursor?: number
-): Promise<{ jobs: Job[]; nextCursor: number | null }> {
-  try {
-    let q = adminDb
-      .collection(JOBS_COLLECTION)
-      .orderBy("createdAt", "desc")
-      .limit(pageSize);
-
-    if (cursor) {
-      q = q.startAfter(AdminTimestamp.fromMillis(cursor));
-    }
-
-    const snap = await q.get();
-    const jobs = snap.docs.map((d) => mapDoc(d.id, d.data()));
-    const nextCursor = jobs.length === pageSize ? jobs[jobs.length - 1].createdAt : null;
-
-    return { jobs, nextCursor };
-  } catch (err) {
-    console.error("fetchJobsPageUncached error:", err);
-    return { jobs: [], nextCursor: null };
-  }
-}
-
 export async function fetchJobsUncached(maxCount: number = 200): Promise<Job[]> {
   return rawFetchJobs(maxCount);
 }
@@ -295,7 +270,19 @@ export async function fetchJobsUncached(maxCount: number = 200): Promise<Job[]> 
 export async function fetchJobUncached(id: string): Promise<Job | null> {
   return rawFetchJob(id);
 }
+export async function fetchJobsUncachedPaginated(
+  page: number = 1,
+  pageSize: number = 5
+): Promise<{ jobs: Job[]; totalCount: number; totalPages: number }> {
+  const allJobs = await rawFetchJobs(2000); // admin ke liye zyada limit, sab jobs cover karne ke liye
 
+  const totalCount = allJobs.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+  const start = (page - 1) * pageSize;
+  const paginatedJobs = allJobs.slice(start, start + pageSize);
+
+  return { jobs: paginatedJobs, totalCount, totalPages };
+}
 export async function fetchJobsFiltered(
   filters: {
     cities?: string[];

@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { fetchJobsUncached } from "@/lib/jobs";
+import { fetchJobsUncachedPaginated } from "@/lib/jobs";
 
 export async function GET(req: NextRequest) {
-  const limit = req.nextUrl.searchParams.get("limit");
-  const jobs = await fetchJobsUncached(limit ? Number(limit) : undefined);
-  return NextResponse.json({ jobs });
+  const page = Number(req.nextUrl.searchParams.get("page") ?? 1);
+  const pageSize = Number(req.nextUrl.searchParams.get("pageSize") ?? 5);
+
+  const result = await fetchJobsUncachedPaginated(page, pageSize);
+
+  return NextResponse.json(result);
 }

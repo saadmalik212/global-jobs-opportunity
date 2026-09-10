@@ -9,11 +9,14 @@ import { timeAgo } from "@/lib/timeAgo";
 import { buildShareText } from "@/lib/shareText";
 import * as Sentry from "@sentry/nextjs";
 
+const PAGE_SIZE = 5;
+
 export default function AdminDashboard() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [hasNextPage, setHasNextPage] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [copiedTextId, setCopiedTextId] = useState<string | null>(null);
@@ -21,10 +24,11 @@ export default function AdminDashboard() {
   async function loadPage(page: number) {
     setLoading(true);
     try {
-      const res = await fetch(`/api/admin/jobs?page=${page}`);
-      const { jobs: data, hasNextPage: dataHasNextPage } = await res.json();
+      const res = await fetch(`/api/admin/jobs?page=${page}&pageSize=${PAGE_SIZE}`);
+      const { jobs: data, totalPages: pages, totalCount: count } = await res.json();
       setJobs(data);
-      setHasNextPage(dataHasNextPage);
+      setTotalPages(pages);
+      setTotalCount(count);
       setCurrentPage(page);
     } catch (err) {
       console.error("Failed to load jobs", err);
@@ -48,8 +52,8 @@ export default function AdminDashboard() {
     try {
       await deleteJob(id);
       await fetch("/api/revalidate-jobs", { method: "POST" });
-      const remainingJobs = jobs.filter((job) => job.id !== id);
-      if (remainingJobs.length === 0 && currentPage > 1) {
+      const remainingOnPage = jobs.length - 1;
+      if (remainingOnPage === 0 && currentPage > 1) {
         await loadPage(currentPage - 1);
       } else {
         await loadPage(currentPage);
@@ -81,10 +85,32 @@ export default function AdminDashboard() {
     }
   }
 
+  // Page numbers ka array banate hain — agar bohot zyada pages hon to sirf
+  // current ke aas-paas ke aur first/last dikhayenge, beech mein "..." ayega
+  function getPageNumbers(): (number | "...")[] {
+    const pages: (number | "...")[] = [];
+    const delta = 2;
+
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - delta && i <= currentPage + delta)
+      ) {
+        pages.push(i);
+      } else if (pages[pages.length - 1] !== "...") {
+        pages.push("...");
+      }
+    }
+    return pages;
+  }
+
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="font-display text-2xl font-bold text-ink">Job posts</h1>
+        <h1 className="font-display text-2xl font-bold text-ink">
+          Job posts {totalCount > 0 && <span className="text-sm font-normal text-muted">({totalCount} total)</span>}
+        </h1>
         <div className="flex items-center gap-3">
           <button
             onClick={loadJobs}
@@ -105,7 +131,7 @@ export default function AdminDashboard() {
         <p className="text-muted">Loading…</p>
       ) : jobs.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-surface p-10 text-center text-muted">
-          Abhi koi job post nahi — “New job post” se pehli job add karein.
+          Abhi koi job post nahi — "New job post" se pehli job add karein.
         </div>
       ) : (
         <>
@@ -166,23 +192,46 @@ export default function AdminDashboard() {
             </table>
           </div>
 
-          <div className="mt-4 flex items-center justify-center gap-4">
-            <button
-              onClick={() => loadPage(currentPage - 1)}
-              disabled={loading || currentPage === 1}
-              className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-ink hover:bg-canvas disabled:opacity-50"
-            >
-              Previous
-            </button>
-            <span className="text-sm text-muted">Page {currentPage}</span>
-            <button
-              onClick={() => loadPage(currentPage + 1)}
-              disabled={loading || !hasNextPage}
-              className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-ink hover:bg-canvas disabled:opacity-50"
-            >
-              Next
-            </button>
+          {totalPages > 1 && (
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+              <button
+                onClick={() => loadPage(currentPage - 1)}
+                disabled={loading || currentPage === 1}
+                className="rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-ink hover:bg-canvas disabled:opacity-50"
+              >
+                ← Prev
+              </button>
+
+              {getPageNumbers().map((p, i) =>
+                p === "..." ? (
+                  <span key={`ellipsis-${i}`} className="px-2 text-sm text-muted">
+                    …
+                  </span>
+                ) : (
+                  <button
+                    key={p}
+                    onClick={() => loadPage(p)}
+                    disabled={loading}
+                    className={`min-w-[36px] rounded-lg border px-3 py-2 text-sm font-medium disabled:opacity-50 ${
+                      p === currentPage
+                        ? "border-primary bg-primary text-white"
+                        : "border-border bg-surface text-ink hover:bg-canvas"
+                    }`}
+                  >
+                    {p}
+                  </button>
+                )
+              )}
+
+              <button
+                onClick={() => loadPage(currentPage + 1)}
+                disabled={loading || currentPage === totalPages}
+                className="rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-ink hover:bg-canvas disabled:opacity-50"
+              >
+                Next →
+              </button>
             </div>
+          )}
         </>
       )}
     </div>
