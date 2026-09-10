@@ -388,8 +388,6 @@ export default function AboutUs() {
   );
 }
 
-
-
 function InfoCard({
   title,
   text,
