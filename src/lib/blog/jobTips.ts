@@ -7,5 +7,9 @@ export const JOB_TIPS_POSTS = BLOG_POSTS.filter((post) =>
     "how-to-find-legitimate-work-from-home-jobs-in-pakistan",
     "how-to-track-job-applications-and-follow-ups",
     "best-entry-level-remote-jobs-to-start-your-career",
+    "how-to-tailor-resume-for-international-remote-jobs",
+  "how-to-ace-remote-job-interviews-from-pakistan",
+  "how-to-write-cover-letters-for-remote-jobs",
+  "preparing-your-home-setup-for-global-remote-jobs"
   ].includes(post.slug),
 );

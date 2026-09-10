@@ -18,6 +18,8 @@ const BLOG_TABS = [
   { id: "industry-insights", label: "Industry Insights", posts: INDUSTRY_INSIGHTS_POSTS },
 ] as const;
 
+type BlogTabId = (typeof BLOG_TABS)[number]["id"];
+
 function formatDate(date: string) {
   return new Date(date).toLocaleDateString("en-US", {
     year: "numeric",
@@ -27,7 +29,7 @@ function formatDate(date: string) {
 }
 
 export default function BlogTabs() {
-  const [activeTab, setActiveTab] = useState(BLOG_TABS[0].id);
+  const [activeTab, setActiveTab] = useState<BlogTabId>(BLOG_TABS[0].id);
   const activeCategory = BLOG_TABS.find((tab) => tab.id === activeTab) ?? BLOG_TABS[0];
 
   return (
