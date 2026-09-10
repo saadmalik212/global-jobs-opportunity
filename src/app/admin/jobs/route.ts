@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { fetchJobsUncached } from "@/lib/jobs";
+import { fetchJobsPageUncached } from "@/lib/jobs";
 
 export async function GET(req: NextRequest) {
-  const limit = req.nextUrl.searchParams.get("limit");
-  const jobs = await fetchJobsUncached(limit ? Number(limit) : undefined);
-  return NextResponse.json({ jobs });
+  const cursorParam = req.nextUrl.searchParams.get("cursor");
+  const cursor = cursorParam ? Number(cursorParam) : undefined;
+  const result = await fetchJobsPageUncached(5, Number.isFinite(cursor) ? cursor : undefined);
+
+  return NextResponse.json(result);
 }

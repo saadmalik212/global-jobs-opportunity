@@ -263,6 +263,31 @@ export async function fetchJobsPage(
   }
 }
 
+export async function fetchJobsPageUncached(
+  pageSize: number = 20,
+  cursor?: number
+): Promise<{ jobs: Job[]; nextCursor: number | null }> {
+  try {
+    let q = adminDb
+      .collection(JOBS_COLLECTION)
+      .orderBy("createdAt", "desc")
+      .limit(pageSize);
+
+    if (cursor) {
+      q = q.startAfter(AdminTimestamp.fromMillis(cursor));
+    }
+
+    const snap = await q.get();
+    const jobs = snap.docs.map((d) => mapDoc(d.id, d.data()));
+    const nextCursor = jobs.length === pageSize ? jobs[jobs.length - 1].createdAt : null;
+
+    return { jobs, nextCursor };
+  } catch (err) {
+    console.error("fetchJobsPageUncached error:", err);
+    return { jobs: [], nextCursor: null };
+  }
+}
+
 export async function fetchJobsUncached(maxCount: number = 200): Promise<Job[]> {
   return rawFetchJobs(maxCount);
 }

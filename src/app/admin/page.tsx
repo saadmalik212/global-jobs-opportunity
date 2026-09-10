@@ -9,24 +9,27 @@ import { timeAgo } from "@/lib/timeAgo";
 import { buildShareText } from "@/lib/shareText";
 import * as Sentry from "@sentry/nextjs";
 
-const DEFAULT_LIMIT = 5;
+const PAGE_SIZE = 5;
 
 export default function AdminDashboard() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadingAll, setLoadingAll] = useState(false);
-  const [showingAll, setShowingAll] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [nextCursor, setNextCursor] = useState<number | null>(null);
+  const [pageCursors, setPageCursors] = useState<Array<number | undefined>>([undefined]);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [copiedTextId, setCopiedTextId] = useState<string | null>(null);
 
-  async function loadJobs() {
+  async function loadPage(cursor: number | undefined, page: number) {
     setLoading(true);
     try {
-      const res = await fetch(`/api/admin/jobs?limit=${DEFAULT_LIMIT}`);
-      const { jobs: data } = await res.json();
+      const cursorQuery = cursor === undefined ? "" : `&cursor=${cursor}`;
+      const res = await fetch(`/api/admin/jobs?pageSize=${PAGE_SIZE}${cursorQuery}`);
+      const { jobs: data, nextCursor: dataNextCursor } = await res.json();
       setJobs(data);
-      setShowingAll(false);
+      setNextCursor(dataNextCursor);
+      setCurrentPage(page);
     } catch (err) {
       console.error("Failed to load jobs", err);
       Sentry.captureException(err);
@@ -35,19 +38,9 @@ export default function AdminDashboard() {
     }
   }
 
-  async function loadAllJobs() {
-    setLoadingAll(true);
-    try {
-      const res = await fetch(`/api/admin/jobs`);
-      const { jobs: data } = await res.json();
-      setJobs(data);
-      setShowingAll(true);
-    } catch (err) {
-      console.error("Failed to load all jobs", err);
-      Sentry.captureException(err);
-    } finally {
-      setLoadingAll(false);
-    }
+  async function loadJobs() {
+    setPageCursors([undefined]);
+    await loadPage(undefined, 1);
   }
 
   useEffect(() => {
@@ -60,7 +53,13 @@ export default function AdminDashboard() {
     try {
       await deleteJob(id);
       await fetch("/api/revalidate-jobs", { method: "POST" });
-      setJobs((prev) => prev.filter((j) => j.id !== id));
+      const remainingJobs = jobs.filter((job) => job.id !== id);
+      if (remainingJobs.length === 0 && currentPage > 1) {
+        setPageCursors((prev) => prev.slice(0, -1));
+        await loadPage(pageCursors[currentPage - 2], currentPage - 1);
+      } else {
+        await loadPage(pageCursors[currentPage - 1], currentPage);
+      }
     } finally {
       setDeletingId(null);
     }
@@ -173,17 +172,27 @@ export default function AdminDashboard() {
             </table>
           </div>
 
-          {!showingAll && (
-            <div className="mt-4 text-center">
-              <button
-                onClick={loadAllJobs}
-                disabled={loadingAll}
-                className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-ink hover:bg-canvas disabled:opacity-50"
-              >
-                {loadingAll ? "Loading…" : "Load all jobs"}
-              </button>
+          <div className="mt-4 flex items-center justify-center gap-4">
+            <button
+              onClick={() => loadPage(pageCursors[currentPage - 2], currentPage - 1)}
+              disabled={loading || currentPage === 1}
+              className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-ink hover:bg-canvas disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <span className="text-sm text-muted">Page {currentPage}</span>
+            <button
+              onClick={async () => {
+                if (nextCursor === null) return;
+                setPageCursors((prev) => [...prev.slice(0, currentPage), nextCursor]);
+                await loadPage(nextCursor, currentPage + 1);
+              }}
+              disabled={loading || nextCursor === null}
+              className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-ink hover:bg-canvas disabled:opacity-50"
+            >
+              Next
+            </button>
             </div>
-          )}
         </>
       )}
     </div>
