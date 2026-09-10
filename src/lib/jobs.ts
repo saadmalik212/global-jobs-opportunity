@@ -274,7 +274,7 @@ export async function fetchJobsUncachedPaginated(
   page: number = 1,
   pageSize: number = 5
 ): Promise<{ jobs: Job[]; totalCount: number; totalPages: number }> {
-  const allJobs = await rawFetchJobs(2000); // admin ke liye zyada limit, sab jobs cover karne ke liye
+  const allJobs = await rawFetchJobs(300);
 
   const totalCount = allJobs.length;
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
