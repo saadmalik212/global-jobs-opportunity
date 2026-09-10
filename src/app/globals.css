@@ -41,6 +41,22 @@ body {
   position: relative;
 }
 
+.blog-sidebar {
+  border-right: 1px solid var(--color-border);
+  padding-right: 1rem;
+}
+
+.blog-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .blog-sidebar {
+    border-right: 0;
+    padding-right: 0;
+  }
+}
+
 .blog-intro {
   border-left: 4px solid var(--color-primary);
   padding-left: 1rem;

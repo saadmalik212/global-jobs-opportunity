@@ -274,7 +274,24 @@ export async function fetchJobsUncachedPaginated(
   page: number = 1,
   pageSize: number = 5
 ): Promise<{ jobs: Job[]; totalCount: number; totalPages: number }> {
-  const allJobs = await rawFetchJobs(300);
+  const cacheKey = `admin-jobs-all`;
+
+  let allJobs: Job[] | null = null;
+
+  try {
+    allJobs = await redis.get<Job[]>(cacheKey);
+  } catch (err) {
+    console.error("Redis get error:", err);
+  }
+
+  if (!allJobs) {
+    allJobs = await rawFetchJobs(500);
+    try {
+      await redis.set(cacheKey, allJobs, { ex: CACHE_TTL });
+    } catch (err) {
+      console.error("Redis set error:", err);
+    }
+  }
 
   const totalCount = allJobs.length;
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));

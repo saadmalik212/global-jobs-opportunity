@@ -28,11 +28,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let jobRoutes: MetadataRoute.Sitemap = [];
   try {
-    // Uncached + a high cap — sitemap generation is already cached for 1
-    // hour by `revalidate` above, so this only hits Firestore once per
-    // hour regardless of traffic, and needs the FULL job list (not
-    // capped at 100) so every job is discoverable by Google.
-    const jobs = await fetchJobsUncached(2000);
+    
+    const jobs = await fetchJobsUncached(500);
     jobRoutes = jobs.map((job) => ({
       url: `${normalizedSiteUrl}/jobs/${job.slug || job.id}`,
       lastModified: new Date(job.updatedAt || Date.now()),

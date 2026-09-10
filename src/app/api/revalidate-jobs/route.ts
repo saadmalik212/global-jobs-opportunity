@@ -3,10 +3,10 @@ import { redis } from "@/lib/redis";
 
 export async function POST() {
   try {
-
     const keys = await redis.keys("jobs-list-*");
     const jobKeys = await redis.keys("job-detail-*");
-    const allKeys = [...keys, ...jobKeys];
+    const pageKeys = await redis.keys("jobs-page-*");
+    const allKeys = [...keys, ...jobKeys, ...pageKeys, "admin-jobs-all"]; 
 
     if (allKeys.length > 0) {
       await redis.del(...allKeys);

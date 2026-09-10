@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { BLOG_POSTS } from "@/lib/blogPosts";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
+import BlogTabs from "@/components/BlogTabs";
 
 export const metadata: Metadata = {
   title: `Career Guides & Job Tips | ${SITE_NAME}`,
@@ -25,35 +24,7 @@ export default function BlogIndexPage() {
         </p>
       </div>
 
-      <div className="blog-grid grid gap-5 md:grid-cols-2">
-        {BLOG_POSTS.map((post, index) => (
-          <Link
-            key={post.slug}
-            href={`/blog/${post.slug}`}
-            className="blog-card group relative flex min-h-[220px] flex-col overflow-hidden rounded-2xl border border-border bg-surface p-6 transition duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_16px_35px_rgba(23,35,29,0.09)]"
-          >
-            <span className={`blog-card-accent blog-card-accent-${(index % 4) + 1}`} />
-            <div className="mb-6 flex items-center justify-between gap-3">
-              <span className="blog-number font-mono text-xs font-medium">0{index + 1}</span>
-              <p className="font-mono text-xs text-muted">
-              {new Date(post.publishedAt).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}{" "}
-              · {post.readingTime}
-              </p>
-            </div>
-            <h2 className="mb-3 font-display text-xl font-bold leading-snug text-ink transition group-hover:text-primary-dark">
-              {post.title}
-            </h2>
-            <p className="text-sm leading-relaxed text-ink/75">{post.description}</p>
-            <span className="mt-auto pt-6 text-sm font-semibold text-primary-dark">
-              Read guide <span aria-hidden="true" className="transition group-hover:ml-1">-&gt;</span>
-            </span>
-          </Link>
-        ))}
-      </div>
+      <BlogTabs />
     </section>
   );
 }

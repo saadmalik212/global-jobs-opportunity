@@ -85,8 +85,6 @@ export default function AdminDashboard() {
     }
   }
 
-  // Page numbers ka array banate hain — agar bohot zyada pages hon to sirf
-  // current ke aas-paas ke aur first/last dikhayenge, beech mein "..." ayega
   function getPageNumbers(): (number | "...")[] {
     const pages: (number | "...")[] = [];
     const delta = 2;
