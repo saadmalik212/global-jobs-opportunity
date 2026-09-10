@@ -9,26 +9,22 @@ import { timeAgo } from "@/lib/timeAgo";
 import { buildShareText } from "@/lib/shareText";
 import * as Sentry from "@sentry/nextjs";
 
-const PAGE_SIZE = 5;
-
 export default function AdminDashboard() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [nextCursor, setNextCursor] = useState<number | null>(null);
-  const [pageCursors, setPageCursors] = useState<Array<number | undefined>>([undefined]);
+  const [hasNextPage, setHasNextPage] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [copiedTextId, setCopiedTextId] = useState<string | null>(null);
 
-  async function loadPage(cursor: number | undefined, page: number) {
+  async function loadPage(page: number) {
     setLoading(true);
     try {
-      const cursorQuery = cursor === undefined ? "" : `&cursor=${cursor}`;
-      const res = await fetch(`/api/admin/jobs?pageSize=${PAGE_SIZE}${cursorQuery}`);
-      const { jobs: data, nextCursor: dataNextCursor } = await res.json();
+      const res = await fetch(`/api/admin/jobs?page=${page}`);
+      const { jobs: data, hasNextPage: dataHasNextPage } = await res.json();
       setJobs(data);
-      setNextCursor(dataNextCursor);
+      setHasNextPage(dataHasNextPage);
       setCurrentPage(page);
     } catch (err) {
       console.error("Failed to load jobs", err);
@@ -39,8 +35,7 @@ export default function AdminDashboard() {
   }
 
   async function loadJobs() {
-    setPageCursors([undefined]);
-    await loadPage(undefined, 1);
+    await loadPage(1);
   }
 
   useEffect(() => {
@@ -55,10 +50,9 @@ export default function AdminDashboard() {
       await fetch("/api/revalidate-jobs", { method: "POST" });
       const remainingJobs = jobs.filter((job) => job.id !== id);
       if (remainingJobs.length === 0 && currentPage > 1) {
-        setPageCursors((prev) => prev.slice(0, -1));
-        await loadPage(pageCursors[currentPage - 2], currentPage - 1);
+        await loadPage(currentPage - 1);
       } else {
-        await loadPage(pageCursors[currentPage - 1], currentPage);
+        await loadPage(currentPage);
       }
     } finally {
       setDeletingId(null);
@@ -174,7 +168,7 @@ export default function AdminDashboard() {
 
           <div className="mt-4 flex items-center justify-center gap-4">
             <button
-              onClick={() => loadPage(pageCursors[currentPage - 2], currentPage - 1)}
+              onClick={() => loadPage(currentPage - 1)}
               disabled={loading || currentPage === 1}
               className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-ink hover:bg-canvas disabled:opacity-50"
             >
@@ -182,12 +176,8 @@ export default function AdminDashboard() {
             </button>
             <span className="text-sm text-muted">Page {currentPage}</span>
             <button
-              onClick={async () => {
-                if (nextCursor === null) return;
-                setPageCursors((prev) => [...prev.slice(0, currentPage), nextCursor]);
-                await loadPage(nextCursor, currentPage + 1);
-              }}
-              disabled={loading || nextCursor === null}
+              onClick={() => loadPage(currentPage + 1)}
+              disabled={loading || !hasNextPage}
               className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-ink hover:bg-canvas disabled:opacity-50"
             >
               Next
