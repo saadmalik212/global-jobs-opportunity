@@ -41,7 +41,7 @@ export default function BlogTabs() {
           Explore topics
         </p>
         <nav
-          className="blog-tabs -mx-4 flex gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0 sm:pb-1 md:block md:space-y-1 md:overflow-visible"
+          className="blog-tabs grid grid-cols-2 gap-2 md:block md:space-y-1"
           role="tablist"
         >
           {BLOG_TABS.map((tab) => {
@@ -53,7 +53,7 @@ export default function BlogTabs() {
                 role="tab"
                 aria-selected={isActive}
                 onClick={() => setActiveTab(tab.id)}
-                className={`blog-tab shrink-0 whitespace-nowrap rounded-xl px-3 py-2.5 text-left text-xs font-semibold transition sm:py-3 sm:text-sm md:block md:w-full ${
+                className={`blog-tab w-full rounded-xl px-3 py-2.5 text-left text-xs font-semibold leading-snug transition sm:text-sm md:py-3 ${
                   isActive
                     ? "bg-ink text-white shadow-[0_8px_18px_rgba(23,35,29,0.12)]"
                     : "text-ink/65 hover:bg-surface hover:text-ink"
