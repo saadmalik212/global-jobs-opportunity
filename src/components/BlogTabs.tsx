@@ -33,8 +33,7 @@ export default function BlogTabs() {
   const activeCategory = BLOG_TABS.find((tab) => tab.id === activeTab) ?? BLOG_TABS[0];
 
   return (
-    // Sidebar layout only kicks in from md (tablet landscape) up.
-    // Below that, tabs sit above the content as a horizontally-scrollable pill row.
+    
     <div className="blog-layout grid gap-6 sm:gap-8 md:grid-cols-[180px_minmax(0,1fr)] md:items-start lg:grid-cols-[220px_minmax(0,1fr)]">
       <aside className="blog-sidebar md:sticky md:top-20 lg:top-24" aria-label="Blog categories">
         <p className="mb-2 font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-muted sm:mb-3 sm:text-[11px]">

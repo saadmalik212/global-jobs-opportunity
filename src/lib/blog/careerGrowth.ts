@@ -8,6 +8,12 @@ export const CAREER_GROWTH_POSTS = BLOG_POSTS.filter((post) =>
     "how-to-optimize-linkedin-profile-for-remote-jobs",
   "how-to-avoid-remote-work-scams-in-pakistan",
   "top-platforms-to-find-remote-jobs-in-pakistan",
-  "receiving-international-payments-for-remote-work-in-pakistan"
+  "receiving-international-payments-for-remote-work-in-pakistan",
+  
+  "overcoming-imposter-syndrome-in-international-remote-teams",
+  "building-long-term-career-growth-in-remote-roles",
+  "mastering-cross-cultural-collaboration-for-remote-workers",
+  "how-to-manage-multiple-freelance-clients-without-burnout"
+
   ].includes(post.slug),
 );
