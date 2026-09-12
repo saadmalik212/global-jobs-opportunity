@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect  } from "next/navigation";
 import { fetchJobByIdOrSlug, fetchJobs } from "@/lib/jobs";
 import { timeAgo } from "@/lib/timeAgo";
 import { getJobMetaRows } from "@/lib/jobMeta";
@@ -80,6 +80,9 @@ function guessEmploymentType(jobType: string): string {
 export default async function JobDetailPage({ params }: Props) {
   const job = await fetchJobByIdOrSlug(params.id);
   if (!job) notFound();
+  if (job.slug && job.slug !== params.id) {
+  permanentRedirect(`/jobs/${job.slug}`);
+}
 
   const metaRows = getJobMetaRows(job);
   const canonicalUrl = `${SITE_URL}/jobs/${job.slug || job.id}`;
