@@ -5,6 +5,10 @@ import { SITE_NAME, SITE_URL, ATS_RESUME_EMAIL } from "@/lib/constants";
 export const metadata: Metadata = {
   title: `Privacy Policy | ${SITE_NAME}`,
   description: `How ${SITE_NAME} collects, uses, and protects your information.`,
+  robots: {
+    index: true,
+    follow: true,
+  },
   alternates: { canonical: `${SITE_URL}/privacy` },
 };
 

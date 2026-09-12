@@ -6,6 +6,10 @@ export const metadata: Metadata = {
   title: `Career Guides & Job Tips | ${SITE_NAME}`,
   description:
     "Practical guides on finding remote jobs, writing strong applications, and navigating the international job market from Pakistan.",
+  robots: {
+    index: true,
+    follow: true,
+  },
   alternates: { canonical: `${SITE_URL}/blog` },
 };
 

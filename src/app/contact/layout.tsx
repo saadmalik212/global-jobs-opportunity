@@ -11,6 +11,10 @@ export const metadata: Metadata = {
     "feedback",
     "job platform support",
   ],
+  robots: {
+    index: true,
+    follow: true,
+  },
   alternates: {
     canonical: `${SITE_URL}/contact`,
   },

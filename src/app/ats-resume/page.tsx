@@ -6,6 +6,10 @@ export const metadata: Metadata = {
   title: `ATS Resume Writing Service — $1 | ${SITE_NAME}`,
   description:
     "Get a professionally formatted, ATS-optimized resume for just $1 — built to pass automated screening and reach real recruiters, for any country.",
+  robots: {
+    index: true,
+    follow: true,
+  },
   alternates: { canonical: `${SITE_URL}/ats-resume` },
 };
 

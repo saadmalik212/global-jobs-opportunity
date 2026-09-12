@@ -5,12 +5,11 @@ import { SITE_URL } from "@/lib/constants";
 
 export const revalidate = 3600;
 
-// Defensive normalization — strips a trailing slash if SITE_URL ever
-// changes, so `${normalizedSiteUrl}${path}` never produces "//about".
+
 const normalizedSiteUrl = SITE_URL.replace(/\/+$/, "");
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticRoutes: MetadataRoute.Sitemap = ["", "/about", "/contact", "/terms", "/privacy", "/blog", "/ats-resume"].map(
+  const staticRoutes: MetadataRoute.Sitemap = ["", "/about", "/contact", "/terms-and-conditions", "/privacy", "/blog", "/ats-resume"].map(
     (path) => ({
       url: `${normalizedSiteUrl}${path}`,
       lastModified: new Date(),

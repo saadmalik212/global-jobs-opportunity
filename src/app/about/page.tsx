@@ -12,6 +12,10 @@ export const metadata: Metadata = {
     "career opportunities",
     "job search platform",
   ],
+  robots: {
+    index: true,
+    follow: true,
+  },
   alternates: {
     canonical: `${SITE_URL}/about`,
   },
