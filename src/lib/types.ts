@@ -16,6 +16,8 @@ export interface Job {
   experience: string;
   jobType: string;
   company: string;
+  workArrangement: string;
+  posted: string;
   salary: string;
   applicationCount: number;
   applyLink: string;

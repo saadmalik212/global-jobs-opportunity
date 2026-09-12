@@ -41,6 +41,8 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
   const [experience, setExperience] = useState(initialValues?.experience ?? "");
   const [jobType, setJobType] = useState(initialValues?.jobType ?? "");
   const [company, setCompany] = useState(initialValues?.company ?? "");
+  const [workArrangement, setWorkArrangement] = useState(initialValues?.workArrangement ?? "");
+  const [posted, setPosted] = useState(initialValues?.posted ?? "");
   const [salary, setSalary] = useState(initialValues?.salary ?? "");
   const [slug, setSlug] = useState(initialValues?.slug ?? "");
   const [metaTitle, setMetaTitle] = useState(initialValues?.metaTitle ?? "");
@@ -124,6 +126,8 @@ metaDescription: metaDescription.trim(),
         experience: experience.trim(),
         jobType: jobType.trim(),
         company: company.trim(),
+        workArrangement: workArrangement.trim(),
+        posted: posted.trim(),
         salary: finalSalary,
         applicationCount: initialValues?.applicationCount ?? 0,
         applyLink: applyLink.trim(),
@@ -222,6 +226,22 @@ metaDescription: metaDescription.trim(),
             value={company}
             onChange={(e) => setCompany(e.target.value)}
             placeholder="e.g. Systems Ltd"
+            className={inputClass}
+          />
+        </Field>
+        <Field label="Work Arrangement" hint="e.g. Remote, Hybrid, or On-site">
+          <input
+            value={workArrangement}
+            onChange={(e) => setWorkArrangement(e.target.value)}
+            placeholder="e.g. Remote"
+            className={inputClass}
+          />
+        </Field>
+        <Field label="Posted">
+          <input
+            type="date"
+            value={posted}
+            onChange={(e) => setPosted(e.target.value)}
             className={inputClass}
           />
         </Field>

@@ -54,6 +54,8 @@ function mapDoc(id: string, data: Record<string, unknown>): Job {
     experience: (data.experience as string) ?? "",
     jobType: (data.jobType as string) ?? "",
     company: (data.company as string) ?? "",
+    workArrangement: (data.workArrangement as string) ?? "",
+    posted: (data.posted as string) ?? "",
     salary: (data.salary as string) ?? "",
     applicationCount: Number(data.applicationCount ?? 0),
     applyLink: (data.applyLink as string) ?? "",
