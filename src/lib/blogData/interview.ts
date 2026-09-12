@@ -41,6 +41,162 @@ export const BLOG_POSTS_INTERVIEW: BlogPost[] = [
     ],
   },
   {
+    slug: "handling-salary-expectations-in-remote-interviews",
+    title: "How to Handle Salary Expectation Questions in Remote Interviews",
+    description:
+      "Learn how to anchor, negotiate, and discuss compensation confidently with global recruiters without under-valuing your expertise or pricing yourself out.",
+    publishedAt: "2026-09-14",
+    readingTime: "6 min read",
+    content: [
+      {
+        paragraphs: [
+          "Discussing compensation during international remote interviews requires a delicate balance between market awareness and self-advocacy. Foreign recruiters often ask about salary expectations early in the screening process to filter candidates, making it essential to respond strategically.",
+        ],
+      },
+      {
+        heading: "Defer quoting hard figures during initial screenings",
+        paragraphs: [
+          "When asked about expected compensation in the first interview, aim to redirect the conversation toward understanding the full scope of the role first. Politeness and professional framing allow you to gauge team expectations, performance bonuses, and work requirements before locking yourself into a rigid price range.",
+        ],
+      },
+      {
+        heading: "Anchor your expectations on global benchmark data",
+        paragraphs: [
+          "Base your desired range on objective international data platforms such as Levels.fyi, Wellfound, or open salary handbooks rather than local market averages. Demonstrating that your rate reflects global skill standards positions you as a high-value professional.",
+        ],
+      },
+      {
+        heading: "Focus on total compensation packages over base salary",
+        paragraphs: [
+          "Remote job offers frequently include equity, learning allowances, equipment stipends, flexible paid time off, and healthcare allowances. Frame salary conversations around total compensation so you can negotiate perks if a company operates on strict base-salary bands.",
+        ],
+      },
+      {
+        heading: "State a well-researched compensation bracket confidently",
+        paragraphs: [
+          "When pressed for a number, provide a target bracket where the bottom figure represents your true acceptable minimum. Stating a range demonstrates flexibility while protecting your financial baseline during final contract negotiations.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "cracking-system-design-interviews-for-remote-roles",
+    title: "How to Excel in System Design Interviews for Global Engineering Roles",
+    description:
+      "A practical framework for leading architectural discussions, defining trade-offs, and drawing clean diagrams during senior remote engineering evaluations.",
+    publishedAt: "2026-09-17",
+    readingTime: "8 min read",
+    content: [
+      {
+        paragraphs: [
+          "System design interviews for global remote positions assess how you architect scalable systems, make technical compromises, and communicate complex ideas asynchronously. Treating the session as a collaborative design meeting yields far better results than approaching it as a rigid test.",
+        ],
+      },
+      {
+        heading: "Establish functional and non-functional requirements early",
+        paragraphs: [
+          "Begin by clarifying system boundaries, scale requirements, read/write ratios, and latency tolerances. Asking targeted questions before jumping into architecture diagrams shows senior-level discipline and prevents wasted design efforts.",
+        ],
+      },
+      {
+        heading: "Use digital whiteboards effectively to drive clarity",
+        paragraphs: [
+          "Master collaborative online whiteboarding tools like Excalidraw, Miro, or Figma before your interview. Clean, well-labeled component diagrams—showing load balancers, database clusters, caching layers, and message queues—keep the conversation structured.",
+        ],
+      },
+      {
+        heading: "Articulate architectural trade-offs continuously",
+        paragraphs: [
+          "There are no perfect solutions in software architecture, only trade-offs. Explicitly discuss choices between SQL and NoSQL databases, REST vs. gRPC APIs, or strong consistency vs. eventual consistency to demonstrate deep engineering maturity.",
+        ],
+      },
+      {
+        heading: "Address bottlenecks, failure modes, and monitoring",
+        paragraphs: [
+          "Conclude your design by evaluating failure points. Explain how your proposed system handles database replication failures, traffic spikes, rate limiting, and observability using logging and metrics monitoring tools.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "demonstrating-soft-skills-in-one-way-video-interviews",
+    title: "How to Master One-Way Recorded Video Interview Screenings",
+    description:
+      "Strategies for recording engaging, structured, and confident responses on automated video screening platforms like HireVue or Willo.",
+    publishedAt: "2026-09-21",
+    readingTime: "6 min read",
+    content: [
+      {
+        paragraphs: [
+          "Many international companies utilize asynchronous one-way video interview platforms for early candidate screening. Presenting yourself clearly without a live human interviewer requires deliberate preparation, posture, and concise delivery.",
+        ],
+      },
+      {
+        heading: "Maintain simulated eye contact with the camera lens",
+        paragraphs: [
+          "Resist the temptation to look at your own image on screen while recording. Directing your visual focus directly into the camera lens creates natural engagement and projects confidence when reviewers evaluate your recording.",
+        ],
+      },
+      {
+        heading: "Structure responses within strict time limits",
+        paragraphs: [
+          "Asynchronous prompts usually grant between 1 to 3 minutes per answer. Structure your thoughts rapidly using a concise 3-part framework: address the core question immediately, share a brief supporting example, and summarize the key takeaway.",
+        ],
+      },
+      {
+        heading: "Project vocal warmth, energy, and pacing",
+        paragraphs: [
+          "Speaking to a screen can naturally lead to flat or monotone delivery. Consciously project enthusiasm, speak clearly at a steady pace, and use natural hand gestures to make your presentation feel human and articulate.",
+        ],
+      },
+      {
+        heading: "Practice responses using mock recording software",
+        paragraphs: [
+          "Record yourself answering common behavioral prompts using your webcam prior to opening the official interview link. Reviewing your test recordings helps identify filler words, pacing issues, or lighting adjustments needed.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "recovering-from-interview-mistakes-in-real-time",
+    title: "How to Recover Gracefully from Mistakes During Live Technical Interviews",
+    description:
+      "How to handle mind blanks, syntax errors, or flawed architectural assumptions without losing composure during remote technical evaluations.",
+    publishedAt: "2026-09-25",
+    readingTime: "7 min read",
+    content: [
+      {
+        paragraphs: [
+          "Hitting a roadblock, forgetting an algorithmic syntax, or making a flawed assumption during a live interview is completely normal. Interviewers rarely expect perfection; instead, they evaluate your resilience, adaptability, and composure under pressure.",
+        ],
+      },
+      {
+        heading: "Acknowledge the mistake calmly without panicking",
+        paragraphs: [
+          "If you notice an error in your logic or code execution, pause and state the oversight calmly. Phrases like 'I see an edge case here that breaks my current loop—let me adjust this logic' demonstrate problem awareness rather than panic.",
+        ],
+      },
+      {
+        heading: "Think out loud to involve the interviewer in your fix",
+        paragraphs: [
+          "Avoid going silent for extended periods when stuck. Verbalize your troubleshooting steps: explain what you expected to happen, why the current code fails, and what alternative data structures or approaches you are considering.",
+        ],
+      },
+      {
+        heading: "Ask clarifying questions to unblock logic loops",
+        paragraphs: [
+          "If you hit a complete dead end, ask a targeted question rather than giving up. Framing a question around technical constraints shows interviewers that you know how to leverage team resources when unblocking complex issues.",
+        ],
+      },
+      {
+        heading: "Refactor code systematically instead of making random guesses",
+        paragraphs: [
+          "Resist the urge to change lines of code randomly hoping for a quick fix. Trace your data flow line by line using simple test inputs to locate logic flaws systematically and implement structured corrections.",
+        ],
+      },
+    ],
+  },
+  {
     slug: "how-to-tailor-resume-for-international-remote-jobs",
     title: "How to Tailor Your Resume for International Remote Jobs",
     description:

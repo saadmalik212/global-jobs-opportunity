@@ -40,6 +40,163 @@ export const BLOG_POSTS_JOBTIPS: BlogPost[] = [
       },
     ],
   },
+
+  {
+    slug: "optimizing-linkedin-profile-for-international-remote-recruiting",
+    title: "Optimizing Your LinkedIn Profile for Inbound International Remote Recruitment",
+    description:
+      "How remote developers and tech professionals in South Asia can structure their LinkedIn profiles to rank higher in global recruiter searches and attract inbound overseas offers.",
+    publishedAt: "2026-09-12",
+    readingTime: "7 min read",
+    content: [
+      {
+        paragraphs: [
+          "Recruiter search algorithms on professional networks rely heavily on indexed keywords, structural completeness, and engagement signals. For remote professionals outside North America and Europe, optimizing your profile ensures you appear in international search queries without relying solely on manual job applications.",
+        ],
+      },
+      {
+        heading: "Structuring your headline for role-specific recruiter search queries",
+        paragraphs: [
+          "Avoid generic titles like 'Aspiring Software Engineer' or 'Tech Enthusiast.' Instead, combine your primary job title, specific tech stack, and explicit remote availability (e.g., 'Senior Full-Stack Engineer | React, Node.js, AWS | Open to Global Remote Roles'). Recruiters search using exact Boolean parameters, so explicit terminology directly impacts discoverability.",
+        ],
+      },
+      {
+        heading: "Managing location signals and time-zone preferences cleanly",
+        paragraphs: [
+          "Set your location settings accurately while utilizing profile preferences to indicate global remote flexibility. Explicitly state your preferred work arrangements—such as overlap with US Eastern or European time zones—in your summary to eliminate time-zone concerns early in the recruiter review process.",
+        ],
+      },
+      {
+        heading: "Writing an outcome-driven summary section instead of a biographical pitch",
+        paragraphs: [
+          "Structure your profile summary around measurable engineering and business achievements. Highlight system scalability improvements, pipeline optimizations, cost reductions, or team leadership experiences with concrete metrics, proving you deliver results in distributed team environments.",
+        ],
+      },
+      {
+        heading: "Strategic endorsement and featured section curation",
+        paragraphs: [
+          "Use the featured section to pin links to merged open-source pull requests, live web applications, system architecture diagrams, or technical articles you have published. Pinning verifiable artifacts builds immediate credibility with engineering managers evaluating your profile.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "building-a-remote-work-portfolio-that-proves-trust",
+    title: "Building a Remote Work Portfolio That Proves Reliability and Execution",
+    description:
+      "Move beyond basic code repositories by showcasing asynchronous documentation, system design decisions, and real-world impact to win international remote roles.",
+    publishedAt: "2026-09-18",
+    readingTime: "8 min read",
+    content: [
+      {
+        paragraphs: [
+          "International employers hire remote talent based on verified competence and self-sufficiency. A collection of basic tutorial applications rarely demonstrates how you approach complex production challenges, write clean documentation, or collaborate across distributed teams.",
+        ],
+      },
+      {
+        heading: "Shift from code repositories to case study post-mortems",
+        paragraphs: [
+          "Instead of merely linking to a GitHub repository, write short technical case studies for your major projects. Explain the business problem, technical constraints, architectural choices, trade-offs made, and performance results achieved upon deployment.",
+        ],
+      },
+      {
+        heading: "Showcase asynchronous documentation and decision records",
+        paragraphs: [
+          "Include examples of your written communication within your portfolio artifacts. Excerpts of well-formatted architectural decision records (ADRs), detailed pull request descriptions, or API documentation prove you can communicate technical concepts clearly without requiring real-time meetings.",
+        ],
+      },
+      {
+        heading: "Highlight production trade-offs and system scalability constraints",
+        paragraphs: [
+          "Demonstrate engineering maturity by discussing why you chose specific tools over alternatives. Explaining how you handled database indexing, caching strategies, rate limiting, or cloud deployment costs shows you build with production environments in mind.",
+        ],
+      },
+      {
+        heading: "Host functional live deployments with video walkthroughs",
+        paragraphs: [
+          "Ensure all featured portfolio projects have active live deployments hosted on modern cloud infrastructure. Accompany each project with a short, 2-minute video walkthrough explaining the architecture and user experience, giving hiring managers a complete preview of your work.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "managing-time-zone-overlaps-and-async-workflows",
+    title: "Managing Time-Zone Overlaps and Asynchronous Communication from South Asia",
+    description:
+      "A sustainable operational playbook for remote workers in UTC+5 collaborating with European and US teams without destroying personal health or sleep schedules.",
+    publishedAt: "2026-09-22",
+    readingTime: "7 min read",
+    content: [
+      {
+        paragraphs: [
+          "Working remotely in South Asia (UTC+5) for companies headquartered in Europe or North America requires careful time management. Establishing clear asynchronous workflows allows you to collaborate effectively without working exhaustive late-night hours.",
+        ],
+      },
+      {
+        heading: "Establishing core sync hours versus deep asynchronous focus blocks",
+        paragraphs: [
+          "Agree on a fixed 2-to-3-hour daily window for live meetings and active team collaboration with your manager. Reserve your remaining work hours for uninterrupted deep technical work during your local daytime, preventing burnout and ensuring sustained focus.",
+        ],
+      },
+      {
+        heading: "Writing high-context updates that eliminate back-and-forth messaging",
+        paragraphs: [
+          "When handing off tasks at the end of your workday, write comprehensive updates detailing what was completed, blockers encountered, pull request links, and planned next steps. High-context handoffs allow teammates in other time zones to continue work without waiting for live clarification.",
+        ],
+      },
+      {
+        heading: "Setting clear availability boundaries and notification protocols",
+        paragraphs: [
+          "Configure status indicators on team communication tools to show your working hours and current availability. Establishing boundaries around off-hours notifications protects your personal time while keeping response expectations predictable for your team.",
+        ],
+      },
+      {
+        heading: "Converting synchronous meeting culture into structured documentation habits",
+        paragraphs: [
+          "Proactively replace unnecessary status meetings with recorded screen recordings or concise written summaries. Transitioning routine updates to asynchronous formats saves time for the entire engineering team across all time zones.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "cold-outreach-strategies-for-unadvertised-remote-roles",
+    title: "Cold Outreach Strategies to Land Unadvertised International Remote Jobs",
+    description:
+      "How to bypass crowded job boards, identify growing remote-first companies, and pitch engineering managers directly with high-value micro-contributions.",
+    publishedAt: "2026-09-26",
+    readingTime: "7 min read",
+    content: [
+      {
+        paragraphs: [
+          "Submitting applications through public job portals often places your resume among thousands of applicants. Contacting engineering leaders directly with personalized, high-value outreach can uncover unadvertised opportunities and speed up hiring discussions.",
+        ],
+      },
+      {
+        heading: "Identifying growing remote-first companies before job postings go live",
+        paragraphs: [
+          "Track tech startups raising recent investment rounds, expanding their open-source repositories, or publishing engineering blog posts about infrastructure growth. Growing teams frequently need additional engineering bandwidth before formal job descriptions are posted publicly.",
+        ],
+      },
+      {
+        heading: "Finding the exact decision-maker instead of submitting to generic HR queues",
+        paragraphs: [
+          "Direct your outreach to Engineering Managers, Technical Directors, or CTOs who directly manage the product area you specialize in. Reaching team leaders directly ensures your background is evaluated by someone who understands the technical scope of the role.",
+        ],
+      },
+      {
+        heading: "Crafting a high-value cold pitch anchored on a micro-contribution",
+        paragraphs: [
+          "Before reaching out, audit the target company's public application, open-source repository, or technical documentation. Identify a minor issue, UX bottleneck, or broken link, and present a practical fix alongside a concise explanation of how your skills match their team goals.",
+        ],
+      },
+      {
+        heading: "Following up with value-add updates without being pushy",
+        paragraphs: [
+          "If you do not receive an immediate response, follow up after several days with additional insight—such as a link to a relevant technical solution or project update. Professional, spaced follow-ups demonstrate persistence and genuine interest in their product.",
+        ],
+      },
+    ],
+  },
   {
     slug: "preparing-your-home-setup-for-global-remote-jobs",
     title: "How to Setup a Reliable Home Office for Overseas Remote Work",

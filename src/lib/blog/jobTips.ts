@@ -10,6 +10,10 @@ export const JOB_TIPS_POSTS = BLOG_POSTS.filter((post) =>
     "how-to-tailor-resume-for-international-remote-jobs",
   "how-to-ace-remote-job-interviews-from-pakistan",
   "how-to-write-cover-letters-for-remote-jobs",
-  "preparing-your-home-setup-for-global-remote-jobs"
+  "preparing-your-home-setup-for-global-remote-jobs",
+  "optimizing-linkedin-profile-for-international-remote-recruiting",
+  "building-a-remote-work-portfolio-that-proves-trust",
+  "managing-time-zone-overlaps-and-async-workflows",
+  "cold-outreach-strategies-for-unadvertised-remote-roles",
   ].includes(post.slug),
 );

@@ -8,6 +8,10 @@ export const RESUME_ATS_POSTS = BLOG_POSTS.filter((post) =>
     "how-to-improve-linkedin-profile-for-remote-jobs",
     "how-to-create-a-remote-job-portfolio-with-no-experience",
     "how-to-write-a-resume-that-gets-noticed",
+    "optimizing-resume-summary-for-remote-roles",
+  "converting-onsite-experience-to-remote-ready-achievements",
+  "building-a-developer-github-readme-as-a-live-resume",
+  "using-loom-video-pitches-in-job-applications",
    
   ].includes(post.slug),
 );
