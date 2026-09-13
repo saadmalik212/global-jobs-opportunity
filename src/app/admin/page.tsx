@@ -3,43 +3,34 @@
 import { SITE_URL } from "@/lib/constants";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { deleteJob } from "@/lib/jobsClient";
+import { deleteJob, deleteJobsBulk } from "@/lib/jobsClient";
 import { Job } from "@/lib/types";
 import { timeAgo } from "@/lib/timeAgo";
 import { buildShareText } from "@/lib/shareText";
 import * as Sentry from "@sentry/nextjs";
 
-const PAGE_SIZE = 5;
-
 export default function AdminDashboard() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [copiedTextId, setCopiedTextId] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkDeleting, setBulkDeleting] = useState(false);
 
-  async function loadPage(page: number) {
+  async function loadJobs() {
     setLoading(true);
     try {
-      const res = await fetch(`/api/admin/jobs?page=${page}&pageSize=${PAGE_SIZE}`);
-      const { jobs: data, totalPages: pages, totalCount: count } = await res.json();
+      const res = await fetch(`/api/admin/jobs`);
+      const { jobs: data } = await res.json();
       setJobs(data);
-      setTotalPages(pages);
-      setTotalCount(count);
-      setCurrentPage(page);
+      setSelectedIds(new Set());
     } catch (err) {
       console.error("Failed to load jobs", err);
       Sentry.captureException(err);
     } finally {
       setLoading(false);
     }
-  }
-
-  async function loadJobs() {
-    await loadPage(1);
   }
 
   useEffect(() => {
@@ -52,14 +43,53 @@ export default function AdminDashboard() {
     try {
       await deleteJob(id);
       await fetch("/api/revalidate-jobs", { method: "POST" });
-      const remainingOnPage = jobs.length - 1;
-      if (remainingOnPage === 0 && currentPage > 1) {
-        await loadPage(currentPage - 1);
-      } else {
-        await loadPage(currentPage);
-      }
+      setJobs((prev) => prev.filter((j) => j.id !== id));
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
     } finally {
       setDeletingId(null);
+    }
+  }
+
+  function toggleSelect(id: string) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  }
+
+  function toggleSelectAll() {
+    if (selectedIds.size === jobs.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(jobs.map((j) => j.id)));
+    }
+  }
+
+  async function handleBulkDelete() {
+    if (selectedIds.size === 0) return;
+    if (!confirm(`${selectedIds.size} job posts delete karni hain? Ye action wapas nahi ho sakta.`)) return;
+
+    setBulkDeleting(true);
+    try {
+      await deleteJobsBulk(Array.from(selectedIds));
+      await fetch("/api/revalidate-jobs", { method: "POST" });
+      setJobs((prev) => prev.filter((j) => !selectedIds.has(j.id)));
+      setSelectedIds(new Set());
+    } catch (err) {
+      console.error("Bulk delete failed", err);
+      Sentry.captureException(err);
+      alert("Kuch jobs delete nahi ho saki — dobara try karein.");
+    } finally {
+      setBulkDeleting(false);
     }
   }
 
@@ -85,31 +115,22 @@ export default function AdminDashboard() {
     }
   }
 
-  function getPageNumbers(): (number | "...")[] {
-    const pages: (number | "...")[] = [];
-    const delta = 2;
-
-    for (let i = 1; i <= totalPages; i++) {
-      if (
-        i === 1 ||
-        i === totalPages ||
-        (i >= currentPage - delta && i <= currentPage + delta)
-      ) {
-        pages.push(i);
-      } else if (pages[pages.length - 1] !== "...") {
-        pages.push("...");
-      }
-    }
-    return pages;
-  }
-
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
         <h1 className="font-display text-2xl font-bold text-ink">
-          Job posts {totalCount > 0 && <span className="text-sm font-normal text-muted">({totalCount} total)</span>}
+          Job posts {jobs.length > 0 && <span className="text-sm font-normal text-muted">({jobs.length} total)</span>}
         </h1>
         <div className="flex items-center gap-3">
+          {selectedIds.size > 0 && (
+            <button
+              onClick={handleBulkDelete}
+              disabled={bulkDeleting}
+              className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:opacity-50"
+            >
+              {bulkDeleting ? "Deleting…" : `Delete selected (${selectedIds.size})`}
+            </button>
+          )}
           <button
             onClick={loadJobs}
             className="rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-ink hover:bg-canvas"
@@ -132,105 +153,78 @@ export default function AdminDashboard() {
           Abhi koi job post nahi — "New job post" se pehli job add karein.
         </div>
       ) : (
-        <>
-          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-canvas text-xs uppercase tracking-wide text-muted">
-                <tr>
-                  <th className="px-4 py-3">Title</th>
-                  <th className="px-4 py-3">Location</th>
-                  <th className="px-4 py-3">Applications</th>
-                  <th className="px-4 py-3">Posted</th>
-                  <th className="px-4 py-3 text-right">Actions</th>
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-canvas text-xs uppercase tracking-wide text-muted">
+              <tr>
+                <th className="px-4 py-3">
+                  <input
+                    type="checkbox"
+                    checked={jobs.length > 0 && selectedIds.size === jobs.length}
+                    onChange={toggleSelectAll}
+                    className="h-4 w-4 rounded border-border"
+                  />
+                </th>
+                <th className="px-4 py-3">Title</th>
+                <th className="px-4 py-3">Location</th>
+                <th className="px-4 py-3">Applications</th>
+                <th className="px-4 py-3">Posted</th>
+                <th className="px-4 py-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {jobs.map((job) => (
+                <tr key={job.id} className="border-t border-border">
+                  <td className="px-4 py-3">
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.has(job.id)}
+                      onChange={() => toggleSelect(job.id)}
+                      className="h-4 w-4 rounded border-border"
+                    />
+                  </td>
+                  <td className="px-4 py-3 font-medium text-ink">{job.title}</td>
+                  <td className="px-4 py-3 text-ink/80">{job.location}</td>
+                  <td className="px-4 py-3 font-semibold text-ink">
+                    {job.applicationCount ?? 0}
+                  </td>
+                  <td className="px-4 py-3 font-mono text-xs text-muted">
+                    {timeAgo(job.createdAt)}
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <div className="flex flex-wrap justify-end gap-3">
+                      <button
+                        onClick={() => handleCopyText(job)}
+                        className="text-primary hover:underline"
+                      >
+                        {copiedTextId === job.id ? "Copied!" : "Copy text"}
+                      </button>
+                      <button
+                        onClick={() => handleCopyLink(job)}
+                        className="text-primary hover:underline"
+                      >
+                        {copiedId === job.id ? "Copied!" : "Copy link"}
+                      </button>
+                      <Link
+                        href={`/admin/edit/${job.id}`}
+                        className="text-primary hover:underline"
+                      >
+                        Edit
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(job.id)}
+                        disabled={deletingId === job.id}
+                        className="text-red-600 hover:underline disabled:opacity-50"
+                      >
+                        {deletingId === job.id ? "Deleting…" : "Delete"}
+                      </button>
+                    </div>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {jobs.map((job) => (
-                  <tr key={job.id} className="border-t border-border">
-                    <td className="px-4 py-3 font-medium text-ink">{job.title}</td>
-                    <td className="px-4 py-3 text-ink/80">{job.location}</td>
-                    <td className="px-4 py-3 font-semibold text-ink">
-                      {job.applicationCount ?? 0}
-                    </td>
-                    <td className="px-4 py-3 font-mono text-xs text-muted">
-                      {timeAgo(job.createdAt)}
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <div className="flex flex-wrap justify-end gap-3">
-                        <button
-                          onClick={() => handleCopyText(job)}
-                          className="text-primary hover:underline"
-                        >
-                          {copiedTextId === job.id ? "Copied!" : "Copy text"}
-                        </button>
-                        <button
-                          onClick={() => handleCopyLink(job)}
-                          className="text-primary hover:underline"
-                        >
-                          {copiedId === job.id ? "Copied!" : "Copy link"}
-                        </button>
-                        <Link
-                          href={`/admin/edit/${job.id}`}
-                          className="text-primary hover:underline"
-                        >
-                          Edit
-                        </Link>
-                        <button
-                          onClick={() => handleDelete(job.id)}
-                          disabled={deletingId === job.id}
-                          className="text-red-600 hover:underline disabled:opacity-50"
-                        >
-                          {deletingId === job.id ? "Deleting…" : "Delete"}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {totalPages > 1 && (
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-              <button
-                onClick={() => loadPage(currentPage - 1)}
-                disabled={loading || currentPage === 1}
-                className="rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-ink hover:bg-canvas disabled:opacity-50"
-              >
-                ← Prev
-              </button>
-
-              {getPageNumbers().map((p, i) =>
-                p === "..." ? (
-                  <span key={`ellipsis-${i}`} className="px-2 text-sm text-muted">
-                    …
-                  </span>
-                ) : (
-                  <button
-                    key={p}
-                    onClick={() => loadPage(p)}
-                    disabled={loading}
-                    className={`min-w-[36px] rounded-lg border px-3 py-2 text-sm font-medium disabled:opacity-50 ${
-                      p === currentPage
-                        ? "border-primary bg-primary text-white"
-                        : "border-border bg-surface text-ink hover:bg-canvas"
-                    }`}
-                  >
-                    {p}
-                  </button>
-                )
-              )}
-
-              <button
-                onClick={() => loadPage(currentPage + 1)}
-                disabled={loading || currentPage === totalPages}
-                className="rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-ink hover:bg-canvas disabled:opacity-50"
-              >
-                Next →
-              </button>
-            </div>
-          )}
-        </>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

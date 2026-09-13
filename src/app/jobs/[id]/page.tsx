@@ -1,231 +1,267 @@
-"use client";
-
-import { SITE_URL } from "@/lib/constants";
-import { useEffect, useState } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { deleteJob, deleteJobsBulk } from "@/lib/jobsClient";
-import { Job } from "@/lib/types";
+import { notFound, permanentRedirect  } from "next/navigation";
+import { fetchJobByIdOrSlug, fetchJobs } from "@/lib/jobs";
 import { timeAgo } from "@/lib/timeAgo";
-import { buildShareText } from "@/lib/shareText";
-import * as Sentry from "@sentry/nextjs";
+import { getJobMetaRows } from "@/lib/jobMeta";
+import { getRelatedJobs } from "@/lib/relatedJobs";
+import { SITE_NAME, SITE_URL } from "@/lib/constants";
+import { getBreadcrumbSchema } from "@/lib/schema";
+import JobCard from "@/components/JobCard";
+import TrackableApplyLink from "@/components/TrackableApplyLink";
+import FollowChannelsBanner from "@/components/FollowChannelsBanner";
 
-export default function AdminDashboard() {
-  const [jobs, setJobs] = useState<Job[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [copiedTextId, setCopiedTextId] = useState<string | null>(null);
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const [bulkDeleting, setBulkDeleting] = useState(false);
+export const revalidate = 300;
 
-  async function loadJobs() {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/admin/jobs`);
-      const { jobs: data } = await res.json();
-      setJobs(data);
-      setSelectedIds(new Set());
-    } catch (err) {
-      console.error("Failed to load jobs", err);
-      Sentry.captureException(err);
-    } finally {
-      setLoading(false);
-    }
+interface Props {
+  params: { id: string };
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const job = await fetchJobByIdOrSlug(params.id);
+  if (!job) {
+    return { title: `Job not found — ${SITE_NAME}` };
   }
 
-  useEffect(() => {
-    loadJobs();
-  }, []);
+  const autoDescription = `Apply for ${job.title} in ${job.location}. ${job.experience || "Experience varies"} • ${job.jobType || "Various"}. Discover remote & global career opportunities on ${SITE_NAME}.`;
+  const description = job.metaDescription || autoDescription;
+  const title = job.metaTitle || `${job.title} — ${job.location} | ${SITE_NAME}`;
+  const canonicalUrl = `${SITE_URL}/jobs/${job.slug || job.id}`;
 
-  async function handleDelete(id: string) {
-    if (!confirm("Yeh job post delete karni hai?")) return;
-    setDeletingId(id);
-    try {
-      await deleteJob(id);
-      await fetch("/api/revalidate-jobs", { method: "POST" });
-      setJobs((prev) => prev.filter((j) => j.id !== id));
-      setSelectedIds((prev) => {
-        const next = new Set(prev);
-        next.delete(id);
-        return next;
-      });
-    } finally {
-      setDeletingId(null);
-    }
-  }
+  return {
+    title,
+    description,
+    keywords: [
+      job.title,
+      `${job.title} jobs`,
+      `${job.title} in ${job.location}`,
+      `${job.location} job opportunities`,
+      `${job.jobType} hiring`,
+      "remote job opportunity",
+      "apply now",
+      "careers 2026",
+    ],
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: SITE_NAME,
+      type: "article",
+      images: [
+        {
+          url: `${SITE_URL}/og-image.png`,
+          width: 1200,
+          height: 630,
+          alt: job.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [`${SITE_URL}/og-image.png`],
+    },
+  };
+}
 
-  function toggleSelect(id: string) {
-    setSelectedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
-  }
+function guessEmploymentType(jobType: string): string {
+  const t = jobType.toLowerCase();
+  if (t.includes("intern")) return "INTERN";
+  if (t.includes("part")) return "PART_TIME";
+  if (t.includes("contract")) return "CONTRACTOR";
+  if (t.includes("temp")) return "TEMPORARY";
+  return "FULL_TIME";
+}
 
-  function toggleSelectAll() {
-    if (selectedIds.size === jobs.length) {
-      setSelectedIds(new Set());
-    } else {
-      setSelectedIds(new Set(jobs.map((j) => j.id)));
-    }
-  }
+export default async function JobDetailPage({ params }: Props) {
+  const job = await fetchJobByIdOrSlug(params.id);
+  if (!job) notFound();
+  if (job.slug && job.slug !== params.id) {
+  permanentRedirect(`/jobs/${job.slug}`);
+}
 
-  async function handleBulkDelete() {
-    if (selectedIds.size === 0) return;
-    if (!confirm(`${selectedIds.size} job posts delete karni hain? Ye action wapas nahi ho sakta.`)) return;
+  const metaRows = getJobMetaRows(job);
+  const canonicalUrl = `${SITE_URL}/jobs/${job.slug || job.id}`;
 
-    setBulkDeleting(true);
-    try {
-      await deleteJobsBulk(Array.from(selectedIds));
-      await fetch("/api/revalidate-jobs", { method: "POST" });
-      setJobs((prev) => prev.filter((j) => !selectedIds.has(j.id)));
-      setSelectedIds(new Set());
-    } catch (err) {
-      console.error("Bulk delete failed", err);
-      Sentry.captureException(err);
-      alert("Kuch jobs delete nahi ho saki — dobara try karein.");
-    } finally {
-      setBulkDeleting(false);
-    }
-  }
+  const recentJobs = await fetchJobs(50);
+  const relatedJobs = getRelatedJobs(job, recentJobs, 4);
 
-  async function handleCopyLink(job: Job) {
-    const url = `${SITE_URL}/jobs/${job.slug || job.id}`;
-    try {
-      await navigator.clipboard.writeText(url);
-      setCopiedId(job.id);
-      setTimeout(() => setCopiedId((cur) => (cur === job.id ? null : cur)), 2000);
-    } catch {
-      window.prompt("Link copy nahi ho saka — manually copy kar lein:", url);
-    }
-  }
+  const isRemote = `${job.title} ${job.location} ${job.jobType}`
+    .toLowerCase()
+    .includes("remote");
 
-  async function handleCopyText(job: Job) {
-    const text = buildShareText(job);
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedTextId(job.id);
-      setTimeout(() => setCopiedTextId((cur) => (cur === job.id ? null : cur)), 2000);
-    } catch {
-      window.prompt("Text copy nahi ho saka — manually copy kar lein:", text);
-    }
-  }
+  const metaFieldsHtml = (job.metaFields ?? [])
+    .filter((field) => field.label.trim() && field.value.trim())
+    .map((field) => `<p><strong>${field.label.trim()}:</strong> ${field.value.trim()}</p>`)
+    .join("");
+
+  const fullDescriptionHtml = `
+    <p><strong>Job Title:</strong> ${job.title}</p>
+    <p><strong>Location:</strong> ${job.location}</p>
+    ${job.experience ? `<p><strong>Experience:</strong> ${job.experience}</p>` : ""}
+    ${job.company ? `<p><strong>Company:</strong> ${job.company}</p>` : ""}
+    ${job.salary ? `<p><strong>Salary:</strong> ${job.salary}</p>` : ""}
+    ${metaFieldsHtml}
+    <h3>Requirements:</h3>
+    <ul>
+      ${job.requirements.map((r) => `<li><strong>${r.title}:</strong> ${r.details}</li>`).join("")}
+    </ul>
+    <p>${job.noticeLine}</p>
+  `.replace(/\s+/g, ' ').trim();
+
+  const createdDate = new Date(job.createdAt);
+  const validThroughDate = new Date(createdDate.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
+
+  const jsonLd = {
+    "@context": "https://schema.org/",
+    "@type": "JobPosting",
+    title: job.title,
+    description: fullDescriptionHtml,
+    datePosted: createdDate.toISOString(),
+    validThrough: validThroughDate,
+    employmentType: guessEmploymentType(job.jobType),
+    hiringOrganization: {
+      "@type": "Organization",
+      name: job.company || SITE_NAME,
+      sameAs: SITE_URL,
+    },
+    jobLocationType: isRemote ? "TELECOMMUTE" : undefined,
+    applicantLocationRequirements: isRemote ? {
+      "@type": "Country",
+      name: "WORLDWIDE"
+    } : undefined,
+    jobLocation: isRemote
+      ? undefined
+      : {
+          "@type": "Place",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: job.location,
+          },
+        },
+    directApply: true,
+  };
+
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: "Home", url: SITE_URL },
+    { name: "Jobs", url: `${SITE_URL}/#jobs` },
+    { name: job.title, url: canonicalUrl },
+  ]);
 
   return (
-    <div>
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="font-display text-2xl font-bold text-ink">
-          Job posts {jobs.length > 0 && <span className="text-sm font-normal text-muted">({jobs.length} total)</span>}
-        </h1>
-        <div className="flex items-center gap-3">
-          {selectedIds.size > 0 && (
-            <button
-              onClick={handleBulkDelete}
-              disabled={bulkDeleting}
-              className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:opacity-50"
-            >
-              {bulkDeleting ? "Deleting…" : `Delete selected (${selectedIds.size})`}
-            </button>
-          )}
-          <button
-            onClick={loadJobs}
-            className="rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-ink hover:bg-canvas"
-          >
-            🔄 Refresh
-          </button>
-          <Link
-            href="/admin/new"
-            className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-dark"
-          >
-            + New job post
+    <section className="mx-auto max-w-7xl px-5 py-12 sm:px-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
+      <Link href="/#jobs" prefetch={false} className="mb-6 inline-block text-sm text-muted hover:text-primary">
+        ← Back to all jobs
+      </Link>
+
+      <article className="rounded-2xl border border-border bg-surface p-6 sm:p-8">
+        <div className="mb-2 flex items-start justify-between gap-3">
+          <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">{job.title}</h1>
+          <span className="shrink-0 rounded-full bg-primary-light px-2.5 py-1 font-mono text-[11px] font-medium text-primary-dark">
+            {timeAgo(job.createdAt)}
+          </span>
+        </div>
+
+        <p className="mb-4 rounded-lg bg-accent/10 px-3 py-2 text-xs font-medium text-ink/70">
+          ⚠️ {job.noticeLine}
+        </p>
+
+        {metaRows.length > 0 && (
+          <dl className="mb-5 space-y-1.5 text-sm">
+            {metaRows.map((row) => (
+              <div key={row.label} className="flex flex-wrap gap-x-1.5">
+                <dt className="font-medium text-muted">{row.label}:</dt>
+                <dd className="text-ink/85">{row.value}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+
+     {job.requirements.length > 0 && (
+  <div className="mb-5 space-y-3">
+    {job.requirements.map((req, i) => {
+      const lines = req.details.split(/\r?\n/).filter((line) => line.trim());
+
+      // Sirf ek line ho to Location/Salary jaisa flat "Label: Value" dikhao
+      if (lines.length <= 1) {
+        return (
+          <div key={i} className="flex flex-wrap gap-x-1.5 text-sm">
+           <span className="font-medium text-muted">{req.title}</span>
+            <span className="text-ink/85">{lines[0] ?? ""}</span>
+          </div>
+        );
+      }
+
+  
+      return (
+        <div key={i}>
+          <h2 className="mb-2 font-display text-base font-bold text-ink">{req.title}</h2>
+          <ul className="space-y-1.5">
+            {lines.map((line, lineIndex) => (
+              <li key={lineIndex} className="text-sm leading-relaxed text-ink/85">
+                {line.trim()}
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    })}
+  </div>
+)}
+
+        {job.applyLink && (
+          <p className="text-sm text-ink/85">
+            <span className="font-semibold text-ink">
+              {job.applyLinkLabel || "Apply Now:"}{" "}
+            </span>
+            <TrackableApplyLink
+              jobId={job.id}
+              applyLink={job.applyLink}
+              applyLinkDisplay={job.applyLinkDisplay}
+              className="text-primary underline decoration-primary/40 underline-offset-2 hover:text-primary-dark"
+            />
+          </p>
+        )}
+      </article>
+
+      {relatedJobs.length > 0 && (
+        <section className="mt-8">
+          <h2 className="mb-4 font-display text-lg font-bold text-ink">
+            Related Jobs
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {relatedJobs.map((rj) => (
+              <JobCard key={rj.id} job={rj} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      <div className="mt-8">
+        <FollowChannelsBanner />
+      </div>
+
+      <div className="mt-8 space-y-4">
+        <div className="rounded-2xl border border-border bg-surface p-4 text-center">
+          <Link href="/blog" prefetch={false} className="text-sm font-medium text-primary hover:underline">
+            📚 Read our career guides & job tips →
           </Link>
         </div>
       </div>
-
-      {loading ? (
-        <p className="text-muted">Loading…</p>
-      ) : jobs.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-border bg-surface p-10 text-center text-muted">
-          Abhi koi job post nahi — "New job post" se pehli job add karein.
-        </div>
-      ) : (
-        <div className="overflow-hidden rounded-2xl border border-border bg-surface">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-canvas text-xs uppercase tracking-wide text-muted">
-              <tr>
-                <th className="px-4 py-3">
-                  <input
-                    type="checkbox"
-                    checked={jobs.length > 0 && selectedIds.size === jobs.length}
-                    onChange={toggleSelectAll}
-                    className="h-4 w-4 rounded border-border"
-                  />
-                </th>
-                <th className="px-4 py-3">Title</th>
-                <th className="px-4 py-3">Location</th>
-                <th className="px-4 py-3">Applications</th>
-                <th className="px-4 py-3">Posted</th>
-                <th className="px-4 py-3 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {jobs.map((job) => (
-                <tr key={job.id} className="border-t border-border">
-                  <td className="px-4 py-3">
-                    <input
-                      type="checkbox"
-                      checked={selectedIds.has(job.id)}
-                      onChange={() => toggleSelect(job.id)}
-                      className="h-4 w-4 rounded border-border"
-                    />
-                  </td>
-                  <td className="px-4 py-3 font-medium text-ink">{job.title}</td>
-                  <td className="px-4 py-3 text-ink/80">{job.location}</td>
-                  <td className="px-4 py-3 font-semibold text-ink">
-                    {job.applicationCount ?? 0}
-                  </td>
-                  <td className="px-4 py-3 font-mono text-xs text-muted">
-                    {timeAgo(job.createdAt)}
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    <div className="flex flex-wrap justify-end gap-3">
-                      <button
-                        onClick={() => handleCopyText(job)}
-                        className="text-primary hover:underline"
-                      >
-                        {copiedTextId === job.id ? "Copied!" : "Copy text"}
-                      </button>
-                      <button
-                        onClick={() => handleCopyLink(job)}
-                        className="text-primary hover:underline"
-                      >
-                        {copiedId === job.id ? "Copied!" : "Copy link"}
-                      </button>
-                      <Link
-                        href={`/admin/edit/${job.id}`}
-                        className="text-primary hover:underline"
-                      >
-                        Edit
-                      </Link>
-                      <button
-                        onClick={() => handleDelete(job.id)}
-                        disabled={deletingId === job.id}
-                        className="text-red-600 hover:underline disabled:opacity-50"
-                      >
-                        {deletingId === job.id ? "Deleting…" : "Delete"}
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
+    </section>
   );
 }
