@@ -1,8 +1,9 @@
 "use client";
 
-import { collection, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, increment } from "firebase/firestore";
+
 import { db } from "./firebase";
 import { JobFormValues } from "./types";
+import { collection, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, increment, writeBatch } from "firebase/firestore";
 
 export async function trackJobApplication(jobId: string): Promise<void> {
   if (!jobId) return;
@@ -10,6 +11,13 @@ export async function trackJobApplication(jobId: string): Promise<void> {
   await updateDoc(ref, { applicationCount: increment(1), updatedAt: serverTimestamp() });
 }
 
+export async function deleteJobsBulk(ids: string[]): Promise<void> {
+  const batch = writeBatch(db);
+  ids.forEach((id) => {
+    batch.delete(doc(db, "jobs", id));
+  });
+  await batch.commit();
+}
 export async function createJob(values: JobFormValues): Promise<string> {
   const ref = await addDoc(collection(db, "jobs"), {
     ...values,
