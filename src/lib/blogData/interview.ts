@@ -2,6 +2,162 @@
 
 export const BLOG_POSTS_INTERVIEW: BlogPost[] = [
   {
+    slug: "preparing-for-live-pair-programming-in-remote-interviews",
+    title: "How to Excel in Live Remote Pair Programming and Debugging Interviews",
+    description:
+      "A pragmatic guide to thinking out loud, handling shared code environments, and collaborating effectively during remote pair programming assessments.",
+    publishedAt: "2026-09-14",
+    readingTime: "7 min read",
+    content: [
+      {
+        paragraphs: [
+          "Live pair programming sessions test far more than your ability to recall syntax under pressure. Overseas engineering leads conduct these rounds to evaluate how you communicate incomplete thoughts, incorporate live feedback, and navigate unfamiliar bugs inside a shared IDE or browser screen-share environment.",
+        ],
+      },
+      {
+        heading: "Thinking out loud without creating cognitive overload",
+        paragraphs: [
+          "Narrating your thought process allows the interviewer to follow your problem-solving trajectory even when your solution is incomplete. State your assumptions clearly, explain why you are choosing a specific data structure, and vocalize potential edge cases before writing a single line of code.",
+        ],
+      },
+      {
+        heading: "Treating the interviewer as a collaborative teammate",
+        paragraphs: [
+          "Avoid treating pair programming as a strict exam where you must work in silence until presenting a perfect final answer. Treat the interviewer as a senior peer—ask clarifying questions about performance trade-offs, discuss alternative refactoring approaches, and pause to confirm alignment before proceeding.",
+        ],
+      },
+      {
+        heading: "Debugging systematically when code fails unexpectedly",
+        paragraphs: [
+          "Syntax errors and failing unit tests are common during live coding assessments. Resist the urge to make random code changes in a panic. Instead, pause, trace execution steps using print statements or loggers, isolated test cases, and explain your logical troubleshooting strategy out loud.",
+        ],
+      },
+      {
+        heading: "Setting up your IDE, short-keys, and local environment beforehand",
+        paragraphs: [
+          "Technical friction during live coding wastes precious interview time. Ensure your development environment, extension plugins, terminal aliases, and audio setup are pre-configured, tested, and running smoothly prior to the call.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "answering-culture-fit-questions-for-async-first-companies",
+    title: "Demonstrating Async Readiness in Remote Culture Fit Interviews",
+    description:
+      "How to highlight documentation habits, self-direction, and proactive communication when interviewing with distributed, async-first engineering teams.",
+    publishedAt: "2026-09-20",
+    readingTime: "6 min read",
+    content: [
+      {
+        paragraphs: [
+          "Async-first remote organizations evaluate candidates through a distinct cultural lens. Rather than looking for loud vocal leaders or constant meeting participants, distributed teams seek self-starters who communicate with written precision, manage their own time, and document decisions transparently.",
+        ],
+      },
+      {
+        heading: "Framing previous projects around written documentation quality",
+        paragraphs: [
+          "When asked about past projects, emphasize how you created technical specs, API documentation, or architecture decision records (ADRs). Demonstrating that you document workflows so teammates in different time zones can work without waiting for live syncs instantly builds confidence.",
+        ],
+      },
+      {
+        heading: "Providing concrete examples of self-managed block resolutions",
+        paragraphs: [
+          "Prepare stories demonstrating what you do when blocked while senior engineers are offline. Highlight instances where you researched legacy codebases, read official documentation, wrote minimal reproducible test cases, or drafted structured Slack/Notion updates before asking for help.",
+        ],
+      },
+      {
+        heading: "Highlighting proactive status reporting and boundary management",
+        paragraphs: [
+          "Describe your personal routine for keeping managers informed without micro-management. Mentioning concise weekly async updates, structured pull request descriptions, and clear work-in-progress tagging demonstrates high professional maturity.",
+        ],
+      },
+      {
+        heading: "Discussing cross-cultural empathy and clear written tone",
+        paragraphs: [
+          "Remote culture fit rounds often assess tone and clarity in text communication. Explain how you use structured bullet points, explicit callouts, and empathetic phrasing in PR reviews or messages to prevent misinterpretation across cultural lines.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "building-an-interview-cheat-sheet-for-remote-technical-rounds",
+    title: "Optimizing Your Digital Workspace for Remote Technical Interviews",
+    description:
+      "How to structure multi-monitor notes, terminal environments, and whiteboard setups to minimize cognitive load during live coding evaluations.",
+    publishedAt: "2026-09-26",
+    readingTime: "7 min read",
+    content: [
+      {
+        paragraphs: [
+          "One major advantage of remote job interviews is total control over your physical and digital environment. Structuring your desktop layout strategically reduces anxiety, allows quick access to high-level framework references, and keeps you focused during high-stakes technical assessments.",
+        ],
+      },
+      {
+        heading: "Organizing reference materials across secondary displays",
+        paragraphs: [
+          "Position core references—such as common time complexity tables, system design cheat sheets, and bullet points of key personal projects—at eye level near your webcam. This arrangement lets you glance at notes naturally without appearing distracted or looking away from the camera.",
+        ],
+      },
+      {
+        heading: "Configuring a streamlined screen-sharing environment",
+        paragraphs: [
+          "Avoid sharing your entire desktop clutter during code walkthroughs. Pre-arrange a dedicated browser window with relevant documentation tabs open, expand your code editor font size for clarity, and disable desktop notifications to prevent interruptions.",
+        ],
+      },
+      {
+        heading: "Pre-testing digital whiteboard tools for system design rounds",
+        paragraphs: [
+          "System design interviews frequently rely on tools like Excalidraw, Miro, or Eraser.io. Practice drawing architecture diagrams—such as load balancers, database clusters, and message queues—using keyboard shortcuts beforehand so drawing mechanics do not slow down your presentation.",
+        ],
+      },
+      {
+        heading: "Establishing redundant technical hardware configurations",
+        paragraphs: [
+          "Hardware failures during technical interviews create unnecessary panic. Maintain a backup wireless internet hotspot, a pre-charged secondary headset, and keep your laptop connected to an uninterruptible power source throughout the interview.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "handling-salary-expectations-and-tier-rates-in-remote-interviews",
+    title: "Handling Salary Expectations and Location-Based Pay Tiers in Remote Interviews",
+    description:
+      "Strategies for framing compensation expectations, avoiding low-ball initial anchors, and evaluating global vs local pay tiers in international tech offers.",
+    publishedAt: "2026-09-30",
+    readingTime: "8 min read",
+    content: [
+      {
+        paragraphs: [
+          "Discussing compensation with international employers requires navigating complex pay structures, regional cost-of-living adjustments, and contractor tax realities. Understanding how global tech companies structure compensation prevents you from anchoring too low during early recruiter calls.",
+        ],
+      },
+      {
+        heading: "Deferring specific salary figures during early screening calls",
+        paragraphs: [
+          "When recruiters ask for your current salary or target expectations in the first call, avoid stating a fixed number prematurely. Politely pivot by asking for the pre-budgeted salary range for the position to ensure your expectations align with their internal pay bands.",
+        ],
+      },
+      {
+        heading: "Differentiating benchmark pay models: US-rate vs geo-adjusted tiers",
+        paragraphs: [
+          "Research whether the company utilizes benchmarked global rates (paying the same rate regardless of location) or geo-adjusted compensation tiers. Knowing their compensation philosophy helps you calculate realistic market value targets before final negotiations.",
+        ],
+      },
+      {
+        heading: "Factoring in total contractor overhead before quoting a target rate",
+        paragraphs: [
+          "Working as an independent overseas contractor involves expenses typically covered by traditional employers, including health insurance, hardware procurement, self-employment taxes, and uncompensated PTO. Calculate your base hourly or annual rate with these overhead costs included.",
+        ],
+      },
+      {
+        heading: "Framing compensation adjustments around value and scope",
+        paragraphs: [
+          "If an initial offer comes in below your target, anchor your counter-proposal on proven domain expertise, specialized tech stack mastery, and immediate project impact rather than personal living expenses or inflation factors.",
+        ],
+      },
+    ],
+  },
+  {
     slug: "best-entry-level-remote-jobs-to-start-your-career",
     title: "Best Entry-Level Remote Jobs to Start Your Career",
     description:

@@ -2,6 +2,162 @@
 
 export const BLOG_POSTS_RESUMEATS: BlogPost[] = [
   {
+    slug: "refactoring-onsite-engineering-experience-for-remote-roles",
+    title: "Refactoring Onsite Work Experience into Remote-Ready Achievements",
+    description:
+      "How to reframe local in-office work history into proof of async competence, independent decision-making, and distributed execution.",
+    publishedAt: "2026-11-25",
+    readingTime: "7 min read",
+    content: [
+      {
+        paragraphs: [
+          "Traditional resumes emphasize physical presence, in-person coordination, and synchronous team meetings. International remote engineering leads, however, evaluate candidates on written precision, autonomous execution, and async handoffs. Translating onsite roles into remote-ready achievements requires changing how you describe your daily work.",
+        ],
+      },
+      {
+        heading: "Framing verbal collaboration as structured asynchronous documentation",
+        paragraphs: [
+          "Instead of listing 'participated in daily standups' or 'attended architecture planning meetings', focus on the written artifacts you produced. Highlight instances where you created technical spec sheets, API schemas, or system runbooks that enabled team members to execute work without needing synchronous meetings.",
+        ],
+      },
+      {
+        heading: "Highlighting autonomous problem resolution over physical supervision",
+        paragraphs: [
+          "Remote managers want reassurance that you do not require constant supervision to remain productive. Reframe bullet points to show how you diagnosed production bugs, unblocked technical dependencies, or prioritized task backlogs independently before seeking senior escalation.",
+        ],
+      },
+      {
+        heading: "Quantifying deliverables by output and business impact rather than hours spent",
+        paragraphs: [
+          "In-office culture frequently conflates desk time with productivity. Remote resumes must pivot entirely to measurable outcomes. Replace vague responsibilities with concrete results—such as reducing page load latency by 35%, automating deployment pipelines, or refactoring legacy modules to reduce crash rates.",
+        ],
+      },
+      {
+        heading: "Emphasizing tool-driven workflow mastery and cross-departmental coordination",
+        paragraphs: [
+          "Showcase your familiarity with tools essential for remote teams, including Jira, GitHub Enterprise, Notion, and Slack. Describe how you coordinated multi-stage feature releases across frontend, backend, and QA teams using clear issue tracking and explicit pull request guidelines.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "transforming-a-github-profile-readme-into-a-live-technical-resume",
+    title: "Transforming a GitHub Profile README into a Live Technical Resume",
+    description:
+      "A blueprint for structuring your GitHub profile with interactive project demos, architecture diagrams, clean pin selection, and automated metrics.",
+    publishedAt: "2026-12-02",
+    readingTime: "8 min read",
+    content: [
+      {
+        paragraphs: [
+          "Standard PDF resumes make technical claims, but a well-architected GitHub profile provides instant verification. Overseas hiring managers and principal engineers frequently check an applicant's root GitHub profile before scheduling a technical screening call.",
+        ],
+      },
+      {
+        heading: "Pinning high-leverage repositories with active production deployments",
+        paragraphs: [
+          "Avoid pinning basic tutorial clones or abandoned sandbox experiments. Choose four to six repositories that reflect production-grade engineering, complete with hosted live demo links, clean directory structures, automated test suites, and detailed installation guides in the repository README.",
+        ],
+      },
+      {
+        heading: "Embedding architecture breakdown diagrams directly into repository READMEs",
+        paragraphs: [
+          "Technical maturity is demonstrated through system architecture understanding. Include visual flowcharts using Mermaid.js or Excalidraw diagrams illustrating data flow, database schemas, caching layers, and third-party API integrations inside your top project repositories.",
+        ],
+      },
+      {
+        heading: "Writing clean commit histories and descriptive pull request descriptions",
+        paragraphs: [
+          "Your commit history reveals your daily working habits. Maintain clear commit messages, avoid pushing monolithic single-commit updates, and use pull requests with detailed notes, screenshots, and checklist verifications to model professional team practices.",
+        ],
+      },
+      {
+        heading: "Keeping profile badges and dynamic stats clean, relevant, and noise-free",
+        paragraphs: [
+          "Resist cluttering your profile README with dozens of animated badges or irrelevant technology icons. Keep your summary concise, focusing on core programming languages, frameworks, cloud deployment tools, and verified open-source contributions.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "leveraging-loom-video-pitches-to-stand-out-in-remote-job-applications",
+    title: "Leveraging Loom Video Pitches to Stand Out in Remote Job Applications",
+    description:
+      "How to record concise, 90-second video introductions that showcase technical communication, enthusiasm, and async clarity without annoying recruiters.",
+    publishedAt: "2026-12-10",
+    readingTime: "6 min read",
+    content: [
+      {
+        paragraphs: [
+          "Including a short video pitch with an unadvertised application or cold message helps humanize your profile and demonstrates clear spoken English communication. However, unscripted or overly long videos can backfire if they fail to deliver immediate value.",
+        ],
+      },
+      {
+        heading: "Keeping video length strictly under 90 seconds",
+        paragraphs: [
+          "Recruiters and hiring managers operate under strict time constraints. Structure your video pitch to deliver maximum context within 60 to 90 seconds: state your core engineering focus in the first 15 seconds, highlight your relevant experience in the next 45 seconds, and close with a low-friction call to action.",
+        ],
+      },
+      {
+        heading: "Focusing the narrative on a micro-audit or specific solution rather than reading your resume",
+        paragraphs: [
+          "Never spend your video reading bullet points directly from your resume. Instead, share your screen to walk through a quick 30-second demo of a project built with the target company's stack, or share a brief, constructive observation about their public application.",
+        ],
+      },
+      {
+        heading: "Setting up professional lighting, audio clarity, and screen framing",
+        paragraphs: [
+          "Poor audio quality and distracting background noise undermine professional credibility. Use a dedicated microphone, position yourself in a well-lit area facing a light source, and keep your screen share focused strictly on relevant code or project demos.",
+        ],
+      },
+      {
+        heading: "Embedding the video link cleanly into cold messages and job form fields",
+        paragraphs: [
+          "Paste your Loom link with a clear thumbnail preview and descriptive hyperlink text, such as '1-Minute Video Intro & Code Walkthrough'. Avoid sending raw file attachments that might trigger spam filters or require manual downloads.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "crafting-a-high-impact-resume-summary-for-international-remote-positions",
+    title: "Crafting a High-Impact Resume Summary for International Remote Roles",
+    description:
+      "How to write a punchy 3-line professional summary that anchors your core tech stack, async autonomy, and domain expertise in sentence one.",
+    publishedAt: "2026-12-18",
+    readingTime: "7 min read",
+    content: [
+      {
+        paragraphs: [
+          "Most candidate resume summaries rely on generic buzzwords like 'passionate problem solver' or 'results-oriented engineer'. A high-converting summary immediately anchors your specific technical specialization, total years of hands-on experience, and ability to deliver in distributed team environments.",
+        ],
+      },
+      {
+        heading: "Replacing generic buzzwords with explicit tech stack tags",
+        paragraphs: [
+          "Lead immediately with your core specialization and primary tech stack. For example, replacing 'Experienced Software Developer' with 'Full-Stack Engineer with 5+ years specializing in React, Next.js, Node.js, and PostgreSQL' immediately confirms technical fit for automated screeners and recruiters.",
+        ],
+      },
+      {
+        heading: "Highlighting distributed experience and time zone adaptability upfront",
+        paragraphs: [
+          "Explicitly mention your experience collaborating with international teams across different time zones. Explicitly stating your daily availability overlap with US or European business hours addresses hiring managers' immediate operational concerns.",
+        ],
+      },
+      {
+        heading: "Matching core strengths directly to the employer's operational scale",
+        paragraphs: [
+          "Tailor your summary's second sentence to highlight experience relevant to the target company's stage—whether that involves scaling early-stage MVP prototypes, refactoring legacy monolithic codebases, or maintaining high-concurrency microservices.",
+        ],
+      },
+      {
+        heading: "Trimming unnecessary filler to maintain a clean 3-sentence limit",
+        paragraphs: [
+          "Keep your summary tightly focused and limited to three sentences. Eliminate self-evident statements about wanting to learn or grow, reserving precious resume header space for verified technical value and career achievements.",
+        ],
+      },
+    ],
+  },
+  {
     slug: "building-long-term-career-growth-in-remote-roles",
     title: "Building Long-Term Career Growth and Promotions in Remote Roles",
     description:

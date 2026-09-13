@@ -2,6 +2,10 @@ import { BLOG_POSTS } from "@/lib/blogPosts";
 
 export const JOB_TIPS_POSTS = BLOG_POSTS.filter((post) =>
   [
+    "navigating-usd-banking-and-tax-compliance-for-remote-developers-in-pakistan",
+  "building-a-proof-of-work-portfolio-for-us-remote-engineering-roles",
+  "mastering-async-communication-and-4-hour-us-timezone-overlaps",
+  "cold-outreach-to-engineering-managers-to-bypass-remote-ats-filters",
     "how-to-get-a-remote-job-from-pakistan-2026",
     "how-to-spot-a-legitimate-job-posting",
     "how-to-find-legitimate-work-from-home-jobs-in-pakistan",

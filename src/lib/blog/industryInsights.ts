@@ -2,6 +2,10 @@ import { BLOG_POSTS } from "@/lib/blogPosts";
 
 export const INDUSTRY_INSIGHTS_POSTS = BLOG_POSTS.filter((post) =>
   [
+    "managing-async-code-reviews-across-time-zones",
+  "passing-take-home-coding-challenges-for-remote-roles",
+  "navigating-equity-and-stock-options-for-remote-contractors",
+  "setting-up-a-compliant-home-office-for-us-and-eu-contracts",
     "top-remote-companies-hiring-software-engineers",
     "how-to-receive-international-payments-in-pakistan-2026",
     "global-tech-salary-trends-for-remote-developers",
