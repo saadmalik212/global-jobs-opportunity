@@ -2,6 +2,10 @@ import { BLOG_POSTS } from "@/lib/blogPosts";
 
 export const REMOTE_WORK_POSTS = BLOG_POSTS.filter((post) =>
   [
+    "architecting-fail-safe-power-and-dual-wan-internet-infrastructure",
+  "structuring-asynchronous-internal-wikis-to-eliminate-meeting-overhead",
+  "engineering-a-sustainable-remote-workplace-ergonomics-and-movement-routine",
+  "navigating-performance-reviews-and-promotions-in-asynchronous-engineering-orgs",
     "designing-zero-downtime-power-and-internet-redundancy-for-remote-work",
   "managing-foreign-exchange-risk-and-international-invoicing-for-remote-contractors",
   "building-an-async-knowledge-base-and-documentation-culture",

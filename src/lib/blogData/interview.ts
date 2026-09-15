@@ -158,6 +158,162 @@ export const BLOG_POSTS_INTERVIEW: BlogPost[] = [
     ],
   },
   {
+    slug: "debugging-production-incidents-in-live-remote-interviews",
+    title: "Debugging Production Incidents in Live Remote Engineering Interviews",
+    description:
+      "How to demonstrate structured troubleshooting, systematic diagnostic reasoning, and calm incident communication during live remote debugging rounds.",
+    publishedAt: "2027-02-16",
+    readingTime: "8 min read",
+    content: [
+      {
+        paragraphs: [
+          "Live debugging interviews simulate broken production environments rather than algorithmic puzzles. Hiring managers evaluate how calmly you isolate root causes under observation, how systematically you form diagnostic hypotheses, and how clearly you communicate your steps while navigating unfamiliar codebases.",
+        ],
+      },
+      {
+        heading: "Narrating your diagnostic hypothesis before running terminal commands",
+        paragraphs: [
+          "Avoid silently clicking through files or running random terminal commands. Verbally state what you expect to find before executing a diagnostic step—such as inspecting application logs, checking database connection pools, or testing API payload structures. This gives interviewers visibility into your mental troubleshooting model.",
+        ],
+      },
+      {
+        heading: "Isolating runtime variables systematically rather than making random edits",
+        paragraphs: [
+          "Resist the urge to make multiple code changes simultaneously in hopes of a quick fix. Change one variable at a time, verify the outcome against expected error outputs, and rollback unhelpful modifications. Demonstrating disciplined isolation proves you will not introduce compounding secondary bugs into production.",
+        ],
+      },
+      {
+        heading: "Communicating severity thresholds and simulated blast radiuses",
+        paragraphs: [
+          "Treat the interview scenario like a real incident by framing your fix around operational risk. Explain whether a proposed patch carries downtime risks, requires database migrations, or affects downstream service dependencies before applying changes.",
+        ],
+      },
+      {
+        heading: "Documenting post-mortem remediation steps during live debriefs",
+        paragraphs: [
+          "After resolving the immediate bug, summarize the underlying vulnerability to your interviewer. Outline preventative measures—such as adding regression tests, updating monitoring alerts, or refactoring brittle interfaces—to prove you focus on long-term system stability.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "reverse-engineering-remote-team-culture-during-interviews",
+    title: "Reverse-Engineering Remote Team Culture and On-Call Health During Interviews",
+    description:
+      "Targeted questions and subtle operational signals that reveal true async maturity, burnout risks, and on-call burdens before accepting a remote offer.",
+    publishedAt: "2027-02-22",
+    readingTime: "7 min read",
+    content: [
+      {
+        paragraphs: [
+          "Candidate evaluations work both ways, and remote engineering cultures often hide behind polished recruitment branding. Asking targeted operational questions allows you to evaluate a team's actual asynchronous maturity, documentation rigor, and on-call expectations before signing a contract.",
+        ],
+      },
+      {
+        heading: "Probing async documentation habits beyond public handbook claims",
+        paragraphs: [
+          "Ask interviewers where architectural decisions are recorded and how technical disputes are resolved across time zones. Teams with low documentation maturity rely on ad-hoc Zoom calls and fragmented Slack threads, leading to frequent operational bottlenecks for remote engineers.",
+        ],
+      },
+      {
+        heading: "Evaluating on-call rotation severity and incident frequency",
+        paragraphs: [
+          "Inquire about average weekly page counts, escalation pathways, and post-mortem cultures. A team where engineers are routinely paged outside regional working hours without clear mitigation protocols signals high technical debt and inevitable developer burnout.",
+        ],
+      },
+      {
+        heading: "Uncovering time zone pressure and implicit working hour expectations",
+        paragraphs: [
+          "Clarify required overlapping hours explicitly. Ask team members when their last late-night deployment occurred and how work progress is measured during asynchronous sprint cycles to determine whether flexibility is genuine or merely nominal.",
+        ],
+      },
+      {
+        heading: "Auditing tooling freedom and internal engineering autonomy",
+        paragraphs: [
+          "Explore how engineering teams prioritize technical debt alongside feature delivery. Ask about internal continuous deployment permissions, testing environments, and local setup requirements to evaluate developer tooling investment.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "structuring-live-code-walkthroughs-for-remote-technical-screenings",
+    title: "Structuring Live Code Walkthroughs for Senior Remote Technical Screenings",
+    description:
+      "A framework for guiding interviewers through your complex personal or production codebases during architectural presentation rounds.",
+    publishedAt: "2027-03-01",
+    readingTime: "8 min read",
+    content: [
+      {
+        paragraphs: [
+          "Modern remote interviews increasingly replace synthetic coding tests with live repository walkthroughs. Presenting a production-grade application allows you to showcase system design choices, data flow architecture, and real-world engineering discipline within your own code.",
+        ],
+      },
+      {
+        heading: "Establishing top-level architecture before diving into file trees",
+        paragraphs: [
+          "Begin your presentation with a high-level system overview before opening your IDE. Explain the primary business problem, component boundaries, database choices, and third-party integrations so your interviewers understand the macro system context.",
+        ],
+      },
+      {
+        heading: "Explaining key design trade-offs and non-happy path handling",
+        paragraphs: [
+          "Guide interviewers directly to the most complex modules in your codebase. Discuss why specific design patterns were chosen, how edge cases are caught, and how state management or error boundaries handle unexpected payload failures.",
+        ],
+      },
+      {
+        heading: "Demonstrating automated testing coverage and operational observability",
+        paragraphs: [
+          "Showcase your automated test suites, CI workflow files, and logging setups. Demonstrating unit, integration, and end-to-end tests proves that you engineer code for long-term maintainability and automated verification.",
+        ],
+      },
+      {
+        heading: "Addressing technical debt proactively during system tours",
+        paragraphs: [
+          "Acknowledge existing code limitations or performance bottlenecks candidly before the interviewer points them out. Explaining what you would refactor given additional sprint cycles demonstrates technical maturity and self-awareness.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "mastering-technical-articulation-in-cross-border-remote-interviews",
+    title: "Mastering Technical Articulation and Signal Clarity in Cross-Border Remote Interviews",
+    description:
+      "How non-native English developers can present technical depth clearly, eliminate verbal filler, and project senior authority over video calls.",
+    publishedAt: "2027-03-08",
+    readingTime: "7 min read",
+    content: [
+      {
+        paragraphs: [
+          "In cross-border interviews, technical articulation matters just as much as coding talent. Communicating complex architectural concepts with structure and clarity reassures overseas hiring teams that you can collaborate effectively across distributed environments.",
+        ],
+      },
+      {
+        heading: "Pacing your explanations around technical mental models rather than speed",
+        paragraphs: [
+          "Senior engineers prioritize clarity over speech velocity. Slow down your delivery, pause deliberately between key architectural points, and organize complex technical answers around simple mental frameworks.",
+        ],
+      },
+      {
+        heading: "Utilizing visual diagrams and screen annotations to reinforce complex ideas",
+        paragraphs: [
+          "When explaining abstract system architectures or complex data flows, use lightweight visual aids like digital whiteboards or sequence diagrams. Supporting spoken explanations with visual references bridges language gaps instantly.",
+        ],
+      },
+      {
+        heading: "Structuring responses using the Problem-Constraint-Solution framework",
+        paragraphs: [
+          "Frame behavioral and technical answers logically: define the initial engineering challenge, detail the technical or operational constraints encountered, and explain your specific implementation and measurable outcome.",
+        ],
+      },
+      {
+        heading: "Handling audio lag and technical disruptions with poise",
+        paragraphs: [
+          "Network latency and unexpected audio delays occur frequently in international video calls. Acknowledge audio glitches calmly, ask for clarification without hesitation, and maintain composure to project professional remote confidence.",
+        ],
+      },
+    ],
+  },
+  {
     slug: "best-entry-level-remote-jobs-to-start-your-career",
     title: "Best Entry-Level Remote Jobs to Start Your Career",
     description:

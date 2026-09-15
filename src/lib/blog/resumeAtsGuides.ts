@@ -2,6 +2,10 @@ import { BLOG_POSTS } from "@/lib/blogPosts";
 
 export const RESUME_ATS_POSTS = BLOG_POSTS.filter((post) =>
   [
+    "translating-onsite-architecture-whiteboarding-into-async-system-proposals",
+  "aligning-linkedin-engineering-profiles-with-verifiable-github-activity",
+  "embedding-interactive-terminal-recordings-in-remote-developer-portfolios",
+  "refactoring-corporate-enterprise-experience-for-fast-moving-remote-startups",
     "refactoring-onsite-engineering-experience-for-remote-roles",
   "transforming-a-github-profile-readme-into-a-live-technical-resume",
   "leveraging-loom-video-pitches-to-stand-out-in-remote-job-applications",

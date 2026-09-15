@@ -203,6 +203,162 @@ export const BLOG_POSTS_REMOTEWORK: BlogPost[] = [
     ],
   },
   {
+    slug: "architecting-fail-safe-power-and-dual-wan-internet-infrastructure",
+    title: "Architecting Fail-Safe Power and Dual-WAN Networks for Uninterrupted Remote Work",
+    description:
+      "A practical hardware breakdown on setting up lithium LiFePO4 UPS systems, auto-failover Dual-WAN routers, and cellular backup lines for zero-downtime engineering.",
+    publishedAt: "2027-04-12",
+    readingTime: "8 min read",
+    content: [
+      {
+        paragraphs: [
+          "Power outages and network drops are catastrophic for remote developers during live deployments or client demos. Building an enterprise-grade failover setup at home requires moving beyond basic desktop UPS units toward automated Dual-WAN routing and high-cycle energy storage.",
+        ],
+      },
+      {
+        heading: "Replacing lead-acid UPS units with dedicated LiFePO4 battery banks",
+        paragraphs: [
+          "Lead-acid UPS batteries deteriorate rapidly under frequent power cycles and provide limited runtime. Upgrading to Lithium Iron Phosphate (LiFePO4) power stations or online double-conversion UPS setups provides thousands of charge cycles, clean sine-wave output for sensitive workstation hardware, and extended multi-hour operational runtimes.",
+        ],
+      },
+      {
+        heading: "Configuring Dual-WAN routers for seamless automatic network failover",
+        paragraphs: [
+          "Relying on a single internet service provider introduces a critical single point of failure. Deploy a Dual-WAN gigabit router—such as MikroTik, Ubiquiti, or OpenWrt-compatible hardware—configured with automatic link health monitoring to failover from primary fiber connections to secondary broadband lines within seconds.",
+        ],
+      },
+      {
+        heading: "Integrating low-latency cellular and satellite backup channels",
+        paragraphs: [
+          "When terrestrial fiber networks experience regional fiber cuts, secondary broadband connections often fail simultaneously. Integrate an LTE/5G cellular gateway or satellite internet connection as an isolated tertiary link, keeping core SSH sessions, VPNs, and messaging clients alive during regional blackouts.",
+        ],
+      },
+      {
+        heading: "Isolating network equipment on dedicated uninterruptible power circuits",
+        paragraphs: [
+          "Powering high-draw workstation monitors and secondary peripherals on primary power lines can drain backup batteries quickly during outages. Connect only essential networking hardware—including routers, optical network terminals (ONTs), and primary laptops—to dedicated low-draw UPS channels to maximize network availability.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "structuring-asynchronous-internal-wikis-to-eliminate-meeting-overhead",
+    title: "Structuring Asynchronous Knowledge Bases to Eliminate Meeting Overhead",
+    description:
+      "How distributed teams build self-documenting wikis, standardized runbooks, and searchable decision repositories that reduce synchronous status meetings.",
+    publishedAt: "2027-04-18",
+    readingTime: "7 min read",
+    content: [
+      {
+        paragraphs: [
+          "Endless status meetings and fragmented chat channels erode deep work hours across distributed engineering organizations. Transforming team operations from real-time verbal updates to a structured, self-documenting knowledge base allows remote engineers to find critical system context asynchronously.",
+        ],
+      },
+      {
+        heading: "Organizing knowledge by system architecture rather than team hierarchy",
+        paragraphs: [
+          "Structuring company documentation around shifting departmental org charts creates orphan pages that quickly become outdated. Group knowledge repositories around stable architectural domains, service APIs, deployment runbooks, and onboarding guides to keep technical documentation discoverable across team re-organizations.",
+        ],
+      },
+      {
+        heading: "Enforcing 'write-first' RFC protocols for architectural discussions",
+        paragraphs: [
+          "Replace verbal brainstorming sessions with standardized Request for Comments (RFC) documents. Requiring proposals to detail technical motivation, system requirements, trade-offs, and alternative approaches before scheduling calls encourages deeper thinking and leaves an auditable decision trail.",
+        ],
+      },
+      {
+        heading: "Maintaining documentation hygiene through automated freshness audits",
+        paragraphs: [
+          "Stale documentation causes more confusion than missing documentation. Assign clear code-ownership tags to internal wiki pages, embed documentation updates directly into pull request checklists, and schedule automated monthly audits to archive superseded technical guides.",
+        ],
+      },
+      {
+        heading: "Creating self-serve onboarding paths that reduce manager hand-holding",
+        paragraphs: [
+          "Build step-by-step interactive onboarding pathways that guide new hires through environment setup, code repository architecture, and first production deployments independently. Self-serve onboarding builds employee confidence while freeing senior engineers from repetitive manual walkthroughs.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "engineering-a-sustainable-remote-workplace-ergonomics-and-movement-routine",
+    title: "Engineering Sustainable Workstation Ergonomics and Movement Protocols for Remote Engineers",
+    description:
+      "How remote software developers optimize desk geometry, monitor focal distances, active sitting postures, and daily physical movement to eliminate chronic strain.",
+    publishedAt: "2027-04-25",
+    readingTime: "8 min read",
+    content: [
+      {
+        paragraphs: [
+          "Spending eight to twelve hours daily seated before high-density displays leads to chronic lower back strain, neck fatigue, and repetitive strain injuries. Optimizing workspace physical mechanics requires treating workstation ergonomics as an engineered system of posture, lighting, and movement.",
+        ],
+      },
+      {
+        heading: "Adjusting desk height and focal distance to protect spinal alignment",
+        paragraphs: [
+          "Position your primary monitor directly at eye level, roughly an arm's length away, to prevent forward head posture and cervical neck strain. Set your desk height so your elbows rest naturally at a ninety-degree angle without elevating shoulder muscles during typing sessions.",
+        ],
+      },
+      {
+        heading: "Integrating sit-stand desk cycles with active postural variation",
+        paragraphs: [
+          "Standing stationary for hours creates lumbar pressure similar to prolonged sitting. Implement a structured sit-stand rotation—alternating forty-five minutes of ergonomic seated work with fifteen minutes of standing or active movement—to maintain spinal flexibility and circulation.",
+        ],
+      },
+      {
+        heading: "Mitigating digital eye strain through focal plane shifts and ambient lighting",
+        paragraphs: [
+          "Staring continuously at illuminated screens reduces blink rates and causes visual fatigue. Balance ambient room lighting to match screen brightness levels, and follow the 20-20-20 rule by periodically shifting your visual focus to distant objects across the room.",
+        ],
+      },
+      {
+        heading: "Designing micro-movement breaks to preserve wrist and forearm health",
+        paragraphs: [
+          "Prevent repetitive strain injuries like carpal tunnel syndrome by using ergonomic split keyboards and vertical mice that maintain neutral forearm positioning. Intersperse intense coding sessions with brief forearm stretches, wrist extension exercises, and short mobility walks throughout the day.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "navigating-performance-reviews-and-promotions-in-asynchronous-engineering-orgs",
+    title: "Navigating Performance Reviews and Promotions in Asynchronous Engineering Teams",
+    description:
+      "How distributed developers quantify impact, maintain asynchronous career visibility, and build compelling promotion packets without relying on office politics.",
+    publishedAt: "2027-05-02",
+    readingTime: "8 min read",
+    content: [
+      {
+        paragraphs: [
+          "In remote engineering organizations, physical presence and long hours at a desk are invisible to leadership. Securing promotions and salary advancements requires building a transparent, metric-backed portfolio of technical achievements and cross-functional impact that speaks for itself.",
+        ],
+      },
+      {
+        heading: "Maintaining a continuous 'brag doc' to track measurable achievements",
+        paragraphs: [
+          "Do not rely on memory when annual performance evaluations arrive. Maintain a running document log of completed projects, performance optimizations, bug resolution metrics, peer code reviews, and positive stakeholder feedback updated at the end of every sprint cycle.",
+        ],
+      },
+      {
+        heading: "Quantifying technical contributions in terms of business velocity and stability",
+        paragraphs: [
+          "Frame your achievements around business value rather than raw commit counts. Translate technical work into tangible organizational outcomes—such as reducing CI build times by twenty minutes, preventing service outages through proactive refactoring, or onboarding junior engineers efficiently.",
+        ],
+      },
+      {
+        heading: "Expanding cross-team impact through RFC authoring and mentorship",
+        paragraphs: [
+          "Senior engineering titles require demonstrating impact beyond individual ticket delivery. Lead technical proposals, author cross-departmental architecture standards, mentor junior team members, and drive open-source or tooling initiatives that benefit the broader engineering organization.",
+        ],
+      },
+      {
+        heading: "Aligning career progression goals explicitly during regular 1-on-1s",
+        paragraphs: [
+          "Use recurring 1-on-1 meetings with your engineering manager to review career tracks and performance expectations explicitly. Confirm specific technical competencies required for the next title level and agree on measurable milestone deliverables needed to secure promotion approvals.",
+        ],
+      },
+    ],
+  },
+  {
     slug: "power-and-internet-redundancy-for-remote-workers",
     title: "Building Power and Internet Redundancy for Uninterrupted Remote Work",
     description:

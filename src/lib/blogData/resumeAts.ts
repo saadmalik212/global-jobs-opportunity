@@ -197,6 +197,162 @@ export const BLOG_POSTS_RESUMEATS: BlogPost[] = [
     ],
   },
   {
+    slug: "translating-onsite-architecture-whiteboarding-into-async-system-proposals",
+    title: "Translating Onsite Architecture Whiteboarding into Async System Proposals",
+    description:
+      "How engineers convert physical whiteboarding experience into structured, async architectural decision records and version-controlled diagrams for international remote hiring.",
+    publishedAt: "2027-05-10",
+    readingTime: "8 min read",
+    content: [
+      {
+        paragraphs: [
+          "In-office technical interviews and daily engineering routines rely heavily on spontaneous whiteboarding sessions where engineers sketch component boundaries and data flows in real time. Remote engineering teams, however, evaluate candidates on their ability to document system architecture asynchronously through clear technical writing, version-controlled diagrams, and structured decision frameworks.",
+        ],
+      },
+      {
+        heading: "Converting physical whiteboard sketches into version-controlled text diagrams",
+        paragraphs: [
+          "Replace hand-drawn architectural sketches with plain-text diagramming tools like Mermaid.js or PlantUML embedded directly inside repository markdown files. Rendering system components as code allows engineering managers to review diffs, inspect data flow logic, and track schema revisions directly inside pull requests.",
+        ],
+      },
+      {
+        heading: "Structuring Architectural Decision Records to demonstrate trade-off evaluation",
+        paragraphs: [
+          "Instead of stating what database or microservice framework was chosen, write explicit Architectural Decision Records (ADRs) that document the context, constraints, considered alternatives, and accepted trade-offs. Showing why a relational database was selected over a document store despite scaling complexity demonstrates senior-level system judgment.",
+        ],
+      },
+      {
+        heading: "Highlighting cross-functional consensus building in resume bullet points",
+        paragraphs: [
+          "Reframe past onsite meeting leadership into asynchronous alignment outcomes. Frame resume entries around how your written RFC proposals gathered feedback across multi-disciplinary teams, reduced architectural ambiguities, and prevented post-deployment integration failures.",
+        ],
+      },
+      {
+        heading: "Publishing open-source system design RFCs as tangible portfolio assets",
+        paragraphs: [
+          "Create a public GitHub repository dedicated to system architecture RFCs for real-world application scenarios. Include explicit throughput calculations, API contract specifications, caching strategies, and database indexing models to provide hiring teams with verifiable proof of your system design depth.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "aligning-linkedin-engineering-profiles-with-verifiable-github-activity",
+    title: "Aligning LinkedIn Engineering Profiles with Verifiable GitHub Activity",
+    description:
+      "A practical blueprint for engineering candidates to link high-level LinkedIn career achievements directly to open-source commits and public code reviews.",
+    publishedAt: "2027-05-17",
+    readingTime: "7 min read",
+    content: [
+      {
+        paragraphs: [
+          "Recruiters browse LinkedIn to evaluate candidate titles and career trajectories, but engineering directors verify technical capability by inspecting raw code quality, git commit hygiene, and pull request communication styles. Connecting high-level profile summaries directly to public GitHub artifacts bridges the gap between resume claims and technical reality.",
+        ],
+      },
+      {
+        heading: "Replacing vague achievement claims with direct repository links",
+        paragraphs: [
+          "Instead of listing generic accomplishments like 'optimized database query performance,' link directly to a public GitHub pull request or benchmark repository demonstrating the exact refactoring, EXPLAIN ANALYZE execution plan improvements, and resulting latency reductions.",
+        ],
+      },
+      {
+        heading: "Curating pinned GitHub repositories to match LinkedIn experience entries",
+        paragraphs: [
+          "Ensure your pinned GitHub repositories reflect the exact technology stacks and architectural domains highlighted in your LinkedIn experience section. Aligning public repository codebases with listed professional roles creates immediate credibility during technical candidate evaluations.",
+        ],
+      },
+      {
+        heading: "Demonstrating code review quality and pull request communication styles",
+        paragraphs: [
+          "Senior remote roles require polite, precise, and thorough code review capabilities. Share public pull request discussions where you provided constructive code reviews, identified edge cases, or explained complex refactoring logic to demonstrate your collaborative engineering culture.",
+        ],
+      },
+      {
+        heading: "Structuring featured sections around production micro-applications",
+        paragraphs: [
+          "Use LinkedIn's Featured section to link live production deployments, hosted API documentation endpoints, and comprehensive GitHub README files. Providing immediate, interactive access to running applications eliminates friction for technical reviewers assessing your work.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "embedding-interactive-terminal-recordings-in-remote-developer-portfolios",
+    title: "Embedding Interactive Terminal Recordings in Remote Developer Portfolios",
+    description:
+      "How backend and DevOps engineers use lightweight CLI recordings, reproducible shell scripts, and sandbox environments to prove system administration capabilities.",
+    publishedAt: "2027-05-24",
+    readingTime: "8 min read",
+    content: [
+      {
+        paragraphs: [
+          "Backend, infrastructure, and systems engineers often struggle to display their technical contributions through traditional graphical portfolio websites. Capturing command-line workflows, CLI tooling executions, and infrastructure deployments using lightweight interactive terminal recordings offers an effective way to prove hands-on technical competence.",
+        ],
+      },
+      {
+        heading: "Capturing lightweight terminal sessions with vector-based recording tools",
+        paragraphs: [
+          "Avoid embedding heavy, unindexable video files or animated GIFs that load slowly and lack selectable text. Utilize terminal recording tools like asciinema to capture command-line sessions as lightweight vector data, allowing hiring managers to copy commands directly from the playback window.",
+        ],
+      },
+      {
+        heading: "Providing reproducible Docker Compose and shell execution scripts",
+        paragraphs: [
+          "Accompany every terminal recording with a clean, single-command setup script or `docker-compose.yml` file. Enabling an evaluating engineer to launch your local database migration, microservice suite, or CLI tool with a single terminal command proves engineering discipline.",
+        ],
+      },
+      {
+        heading: "Showcasing real-time log analysis and debugging methodologies",
+        paragraphs: [
+          "Record short terminal sessions demonstrating how you isolate system bottlenecks, analyze application logs, trace HTTP request lifecycles, and debug runtime exceptions. Showing your methodical troubleshooting process reveals how you operate during live system outages.",
+        ],
+      },
+      {
+        heading: "Structuring backend portfolio README files for rapid technical evaluation",
+        paragraphs: [
+          "Organize backend repository documentation with clear prerequisites, environment variable templates, configuration flags, and testing commands. Well-structured documentation demonstrates respect for fellow engineers' time and reflects strong asynchronous collaboration habits.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "refactoring-corporate-enterprise-experience-for-fast-moving-remote-startups",
+    title: "Refactoring Corporate Enterprise Experience for Fast-Moving Remote Startups",
+    description:
+      "How developers from traditional corporate environments reframe enterprise process compliance into agility, cross-functional ownership, and rapid code execution.",
+    publishedAt: "2027-05-31",
+    readingTime: "8 min read",
+    content: [
+      {
+        paragraphs: [
+          "Early-stage remote startups often hesitate to hire developers with purely traditional corporate or enterprise backgrounds, fearing they depend heavily on rigid management structures, specialized team silos, and slow release cycles. Refactoring your professional background requires emphasizing cross-functional autonomy and high-velocity shipping capabilities.",
+        ],
+      },
+      {
+        heading: "Translating corporate compliance into system reliability metrics",
+        paragraphs: [
+          "Instead of describing corporate approval chains as bureaucratic overhead, frame them as experience in building resilient, highly available systems. Highlight your understanding of automated CI/CD guardrails, security compliance standards, and risk mitigation strategies that protect production environments.",
+        ],
+      },
+      {
+        heading: "Reframing slow release cycles into meticulous testing and risk mitigation",
+        paragraphs: [
+          "Demonstrate how working under strict enterprise deployment windows taught you to write comprehensive integration tests, configure automated rollback mechanisms, and maintain strict backward compatibility across API updates.",
+        ],
+      },
+      {
+        heading: "Highlighting individual end-to-end execution within large organizations",
+        paragraphs: [
+          "Focus resume bullet points on projects where you drove features independently from initial technical requirements gathering to production deployment. Emphasize instances where you bridged communication gaps between product managers, design teams, and backend infrastructure engineers.",
+        ],
+      },
+      {
+        heading: "Demonstrating proactive self-direction and async task prioritization",
+        paragraphs: [
+          "Show startup founders that you do not require daily hand-holding or micro-management to remain productive. Highlight how you independently prioritize backlog tickets, clarify ambiguous requirements asynchronously, and ship functional features continuously.",
+        ],
+      },
+    ],
+  },
+  {
     slug: "optimizing-resume-summary-for-remote-roles",
     title: "Crafting a High-Impact Resume Summary for Global Remote Roles",
     description:

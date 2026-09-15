@@ -2,6 +2,10 @@ import { BLOG_POSTS } from "@/lib/blogPosts";
 
 export const CAREER_GROWTH_POSTS = BLOG_POSTS.filter((post) =>
   [
+    "transitioning-from-freelancing-to-direct-b2b-engineering-retainers",
+  "integrating-local-llms-and-ai-assistants-into-remote-developer-workflows",
+  "dismantling-cultural-imposter-syndrome-in-us-and-eu-engineering-teams",
+  "building-an-inflation-hedged-wealth-portfolio-for-usd-remote-earners",
     "mastering-cross-cultural-collaboration-for-remote-workers",
     "how-to-manage-multiple-freelance-clients-without-burnout",
     "transitioning-from-freelancing-to-full-time-remote-contracts",

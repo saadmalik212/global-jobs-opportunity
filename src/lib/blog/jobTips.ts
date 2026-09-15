@@ -2,6 +2,10 @@ import { BLOG_POSTS } from "@/lib/blogPosts";
 
 export const JOB_TIPS_POSTS = BLOG_POSTS.filter((post) =>
   [
+    "bypassing-recruiter-gatekeepers-with-value-first-engineering-audits",
+  "structuring-dual-currency-tax-and-banking-pipelines-for-cross-border-contractors",
+  "engineering-proof-of-work-case-studies-that-replace-traditional-resumes",
+  "optimizing-4-hour-us-time-zone-overlaps-for-maximum-deep-work-and-visibility",
     "navigating-usd-banking-and-tax-compliance-for-remote-developers-in-pakistan",
   "building-a-proof-of-work-portfolio-for-us-remote-engineering-roles",
   "mastering-async-communication-and-4-hour-us-timezone-overlaps",

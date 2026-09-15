@@ -2,6 +2,10 @@ import { BLOG_POSTS } from "@/lib/blogPosts";
 
 export const INDUSTRY_INSIGHTS_POSTS = BLOG_POSTS.filter((post) =>
   [
+    "optimizing-ci-cd-pipelines-for-distributed-engineering-teams",
+  "navigating-w8ben-and-cross-border-tax-compliance-for-contractors",
+  "writing-production-grade-architecture-decision-records-for-async-teams",
+  "evaluating-global-health-insurance-and-perks-for-remote-developers",
     "managing-async-code-reviews-across-time-zones",
   "passing-take-home-coding-challenges-for-remote-roles",
   "navigating-equity-and-stock-options-for-remote-contractors",

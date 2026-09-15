@@ -2,6 +2,10 @@ import { BLOG_POSTS } from "@/lib/blogPosts";
 
 export const INTERVIEW_POSTS = BLOG_POSTS.filter((post) =>
   [
+    "debugging-production-incidents-in-live-remote-interviews",
+  "reverse-engineering-remote-team-culture-during-interviews",
+  "structuring-live-code-walkthroughs-for-remote-technical-screenings",
+  "mastering-technical-articulation-in-cross-border-remote-interviews",
     "preparing-for-live-pair-programming-in-remote-interviews",
   "answering-culture-fit-questions-for-async-first-companies",
   "building-an-interview-cheat-sheet-for-remote-technical-rounds",
