@@ -46,7 +46,7 @@ export default function JobForm({ initialValues, onSubmit, submitLabel }: Props)
   const [salary, setSalary] = useState(initialValues?.salary ?? "");
   const [slug, setSlug] = useState(initialValues?.slug ?? "");
   const [metaTitle, setMetaTitle] = useState(initialValues?.metaTitle ?? "");
-const [metaDescription, setMetaDescription] = useState(initialValues?.metaDescription ?? "");
+  const [metaDescription, setMetaDescription] = useState(initialValues?.metaDescription ?? "");
   const [salaryPreset, setSalaryPreset] = useState(() => {
     const currentSalary = initialValues?.salary ?? "";
     return SALARY_OPTIONS.some((option) => option.value === currentSalary)
@@ -120,9 +120,9 @@ const [metaDescription, setMetaDescription] = useState(initialValues?.metaDescri
       await onSubmit({
         title: title.trim(),
         location: location.trim(),
-          slug: slug.trim(),
-         metaTitle: metaTitle.trim(),
-metaDescription: metaDescription.trim(),
+        slug: slug.trim(),
+        metaTitle: metaTitle.trim(),
+        metaDescription: metaDescription.trim(),
         experience: experience.trim(),
         jobType: jobType.trim(),
         company: company.trim(),
@@ -168,32 +168,32 @@ metaDescription: metaDescription.trim(),
         />
       </Field>
       <Field label="Custom Slug (URL)" hint="Optional — job ka custom URL jaise /jobs/your-slug-here. Khali chhodne par default ID-based URL use hoga.">
-  <input
-    value={slug}
-    onChange={(e) => setSlug(e.target.value)}
-    placeholder="e.g. graphic-designer-lahore"
-    className={inputClass}
-  />
-</Field>
+        <input
+          value={slug}
+          onChange={(e) => setSlug(e.target.value)}
+          placeholder="e.g. graphic-designer-lahore"
+          className={inputClass}
+        />
+      </Field>
 
-<Field label="Meta Title (optional)" hint="Google search mein jo title dikhega — khali chhodne par auto-generate hoga">
-  <input
-    value={metaTitle}
-    onChange={(e) => setMetaTitle(e.target.value)}
-    placeholder="Backend Programmer — Mississauga | Global Jobs"
-    className={inputClass}
-  />
-</Field>
+      <Field label="Meta Title (optional)" hint="Google search mein jo title dikhega — khali chhodne par auto-generate hoga">
+        <input
+          value={metaTitle}
+          onChange={(e) => setMetaTitle(e.target.value)}
+          placeholder="Backend Programmer — Mississauga | Global Jobs"
+          className={inputClass}
+        />
+      </Field>
 
-<Field label="Meta Description (optional)" hint="Google search snippet mein jo text dikhega — khali chhodne par auto-generate hoga">
-  <textarea
-    value={metaDescription}
-    onChange={(e) => setMetaDescription(e.target.value)}
-    rows={2}
-    placeholder="Apply for the Backend Programmer position in Mississauga, Canada..."
-    className={inputClass}
-  />
-</Field>
+      <Field label="Meta Description (optional)" hint="Google search snippet mein jo text dikhega — khali chhodne par auto-generate hoga">
+        <textarea
+          value={metaDescription}
+          onChange={(e) => setMetaDescription(e.target.value)}
+          rows={2}
+          placeholder="Apply for the Backend Programmer position in Mississauga, Canada..."
+          className={inputClass}
+        />
+      </Field>
 
       <Field label="Location" hint="City / country keywords go here — used for filter matching, e.g. “Lahore” or “Remote, Dubai”">
         <input
@@ -368,7 +368,7 @@ metaDescription: metaDescription.trim(),
                 <input
                   value={req.title}
                   onChange={(e) => updateRequirement(i, "title", e.target.value)}
-              placeholder="e.g. Skills: or Deadline?"
+                  placeholder="e.g. Skills: or Deadline?"
                   className={`${inputClass} font-medium`}
                 />
                 {requirements.length > 1 && (

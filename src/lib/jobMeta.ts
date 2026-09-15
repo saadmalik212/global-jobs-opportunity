@@ -5,14 +5,15 @@ export interface JobMetaRow {
   value: string;
 }
 
-
 export function getJobMetaRows(job: Job): JobMetaRow[] {
   const rows: JobMetaRow[] = [];
   if (job.location) rows.push({ label: "Location", value: job.location });
+  if (job.workArrangement) rows.push({ label: "Work Arrangement", value: job.workArrangement }); 
   if (job.experience) rows.push({ label: "Experience", value: job.experience });
   if (job.jobType) rows.push({ label: "Job Type", value: job.jobType });
   if (job.company) rows.push({ label: "Company", value: job.company });
   if (job.salary) rows.push({ label: "Salary", value: job.salary });
+  if (job.posted) rows.push({ label: "Posted", value: job.posted }); 
 
   const customRows = (job.metaFields ?? [])
     .filter((field) => field.label.trim() && field.value.trim())
