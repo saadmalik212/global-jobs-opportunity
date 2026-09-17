@@ -2,7 +2,6 @@ export const PAKISTAN_DEMAND_CITIES = [
   "Lahore",
   "Islamabad",
   "Karachi",
-  "Faisalabad",
 ] as const;
 
 export const TARGET_COUNTRIES = [
@@ -10,7 +9,6 @@ export const TARGET_COUNTRIES = [
   "Canada",
   "Australia",
   "United Kingdom",
-  "Germany",
   "Dubai (UAE)",
   "Saudi Arabia",
   "Qatar",
